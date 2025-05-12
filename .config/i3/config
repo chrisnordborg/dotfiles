@@ -256,7 +256,7 @@ for_window [class="^.*"] border pixel 1		#to apply this per-window
 
 # Set random wallpaper from ~/customInstall/wallpapers/
 exec_always --no-startup-id sh -c 'feh --bg-scale "$(find ~/dotfiles/wallpapers/ -type f | shuf -n 1)"'
-
+bindsym $mod+shift+w exec --no-startup-id sh -c 'feh --bg-scale "$(find ~/dotfiles/wallpapers/ -type f | shuf -n 1)"'
 # Start polybar
 #exec_always --no-startup-id ~/.config/polybar/launch.sh
 

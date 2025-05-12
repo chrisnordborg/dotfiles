@@ -173,6 +173,10 @@ sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/
 sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo snap install code
 
+# Github
+git config --global user.email "nordborgchristian@gmail.com"
+git config --global user.name "Christian Nordborg"
+
 
     #Developer environment
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
