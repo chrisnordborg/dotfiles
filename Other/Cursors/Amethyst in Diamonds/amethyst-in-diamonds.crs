@@ -1,0 +1,30 @@
+﻿[Arrow]
+Path=Right Amethyst in Diamonds.cur
+
+[AppStarting]
+Path=Right Amethyst in Diamonds Background.ani
+
+[SizeAll]
+Path=Amethyst in Diamonds Move.cur
+
+[Wait]
+Path=Amethyst in Diamonds Busy.ani
+
+[No]
+Path=Amethyst in Diamonds Unavail.cur
+
+[SizeNWSE]
+Path=Amethyst in Diamonds Diag1.cur
+
+[SizeNESW]
+Path=Amethyst in Diamonds Diag2.cur
+
+[SizeWE]
+Path=Amethyst in Diamonds Hori.cur
+
+[SizeNS]
+Path=Amethyst in Diamonds Vert.cur
+
+[Hand]
+Path=Amethyst in Diamonds link.cur
+

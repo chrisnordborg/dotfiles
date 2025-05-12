@@ -1,0 +1,84 @@
+Using Command Line Arguments in Bash
+In Bash scripting, command line arguments can be used to pass information to a script at runtime, making it more flexible and interactive. Here’s how you can use command line arguments in a Bash script:
+
+Basic Usage
+Command line arguments are stored in special variables, starting from $0 to $n:
+
+$0 contains the name of the script itself.
+$1, $2, $3, etc., contain the first, second, third, and subsequent arguments passed to the script.
+Example Script
+Consider a simple script test.sh that takes two arguments:
+
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo "please specify 2 command line arguments"
+    exit 1
+fi
+
+touch $1
+echo $2 > $1
+
+To run this script, you would pass two arguments:
+
+$ ./test.sh hello_world.txt "Hello World!"
+
+This script will create a file named hello_world.txt and write "Hello World!" into it.
+
+Handling Multiple Arguments
+If you need to handle a variable number of arguments, you can use $@ or $*:
+
+$@ treats each argument as a separate item.
+$* treats all arguments as a single string.
+For example, to print all arguments:
+
+#!/bin/bash
+for arg in "$@"
+do
+    echo "$arg"
+done
+
+Using Flags
+Flags can be used to pass arguments with specific options. For example:
+
+#!/bin/bash
+while getopts c:s:d: flag
+do
+    case "${flag}" in
+        d) district=${OPTARG};;
+        s) state=${OPTARG};;
+        c) country=${OPTARG};;
+    esac
+done
+echo "District: $district"
+echo "State: $state"
+echo "Country: $country"
+
+You can run this script with flags:
+
+$ ./script.sh -c INDIA -d BANGALORE -s KARNATAKA
+
+This script will output:
+
+District: BANGALORE
+State: KARNATAKA
+Country: INDIA
+
+Shift Operator
+The shift command can be used to move through the arguments:
+
+#!/bin/bash
+echo "First argument is-->$1"
+shift
+echo "Second argument is-->$1"
+
+Running the script:
+
+$ ./script.sh apple banana
+
+Output:
+
+First argument is-->apple
+Second argument is-->banana
+
+These examples demonstrate how to use command line arguments effectively in Bash scripts.

@@ -1,0 +1,28 @@
+alias \
+\
+c="clear" \
+v="nvim" \
+f="fff" \
+cat="bat" \
+l="ls -lh --color=auto --group-directories-first" \
+ls="ls -h --color=auto --group-directories-first" \
+la="ls -lah --color=auto --group-directories-first" \
+grep="grep --color=auto" \
+shell="exec $SHELL -l" \
+fk="sudo !!" \
+mv="mv -i" \
+rm="rm -Iv" \
+df="df -h" \
+du="du -h -d 1" \
+k="killall" \
+p="ps aux | grep $1" \
+zshconf="nvim ~/.zshrc" \
+aliases="nvim ~/.config/shell/aliases" \
+ohmyzsh="nvim ~/.oh-my-zsh" \
+wp='feh --bg-scale "$(find ~/dotfiles/wallpapers/ -type f | shuf -n 1)"' \
+i3conf="nvim ~/.config/i3/config" \
+tbh="bash ~/dotfiles/.config/scripts/toggle_bluetooth_headsets_OnOff.sh" \
+budot="bash ~/dotfiles/.config/scripts/backupdotfiles.sh" \
+kittyconf="nvim ~/.config/kitty/kitty.conf" \
+bumusic="bash ~/dotfiles/.config/scripts/backupmusic.sh" \
+backupall="bash ~/dotfiles/.config/scripts/backup.sh" \ 

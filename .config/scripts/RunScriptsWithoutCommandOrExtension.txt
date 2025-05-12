@@ -1,0 +1,44 @@
+How do I run a shell script without using "sh" or "bash" commands?
+
+I have a shell script which I want to run without using the "sh" or "bash" commands. For example:
+
+Instead of: sh script.sh
+I want to use: script.sh
+
+How can I do this?
+P.S. (i) I don't use shell script much and I tried reading about aliases, but I did not understand how to use them.
+
+(ii) I also read about linking the script with another file in the PATH variables. I am using my university server and I don't have permissions to create a file in those locations.
+----------------------------------------------------------
+Add a "shebang" at the top of your file:
+
+#!/bin/bash
+And make your file executable (chmod +x script.sh).
+
+Finally, modify your path to add the directory where your script is located:
+
+export PATH=$PATH:/appropriate/directory
+(typically, you want $HOME/bin for storing your own scripts)
+
+----------------------------------------------------------
+These are the prerequisites of directly using the script name:
+
+Add the shebang line (#!/bin/bash) at the very top.
+Use chmod u+x scriptname to make the script executable (where scriptname is the name of your script).
+Place the script under /usr/local/bin folder.
+Note: I suggest placing it under /usr/local/bin because most likely that path will be already added to your PATH variable.
+Run the script using just its name, scriptname.
+If you don't have access to /usr/local/bin then do the following:
+
+Create a folder in your home directory and call it bin.
+
+Do ls -lA on your home directory, to identify the start-up script your shell is using. It should be either .profile or .bashrc.
+
+Once you have identified the start up script, add the following line:
+
+PATH="$PATH:$HOME/bin"
+Once added, source your start-up script or log out and log back in.
+
+To source, put . followed by a space and then your start-up script name, e.g. . .profile or . .bashrc
+
+Run the script using just its name, scriptname.

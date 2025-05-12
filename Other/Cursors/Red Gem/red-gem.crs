@@ -1,0 +1,42 @@
+﻿[Arrow]
+Path=Redgem.cur
+
+[UpArrow]
+Path=Redgem Alternate Select.cur
+
+[NWPen]
+Path=Red gem Handwriting.cur
+
+[Help]
+Path=Red gem Help Select.cur
+
+[Hand]
+Path=Red gem Link Select.cur
+
+[SizeAll]
+Path=Red gem Move.cur
+
+[Crosshair]
+Path=Red gem Precision Select.cur
+
+[SizeNWSE]
+Path=Red gem Resize D1.cur
+
+[SizeNESW]
+Path=Red gem Resize D2.cur
+
+[SizeNS]
+Path=Red gem Resize Up Down.cur
+
+[SizeWE]
+Path=Red gem Resize Left Right.cur
+
+[No]
+Path=Red gem Unavailable.cur
+
+[AppStarting]
+Path=Red gem Working.ani
+
+[Wait]
+Path=Red gem Busy.ani
+
