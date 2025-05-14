@@ -172,22 +172,24 @@ sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/
 sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo snap install code
 
-# Github
+# github
 git config --global user.email "nordborgchristian@gmail.com"
 git config --global user.name "Christian Nordborg"
 ssh-keygen -t ed25519 -C "nordborgchristian@gmail.com"
 cd ~/dotfiles
 git remote set-url origin git@github.com:chrisnordborg/dotfiles.git
-
+#Copy public key
+cat ~/.ssh/id_ed25519.pub
+read -p "Copy the key and add a new SSH-key on Gihub.com, go to Settings > SSH keys > New SSH key. Press any key to continue.
+# Starting the agent
+# eval "$(ssh-agent -s)"
+# Add private key to ssh agent
+#ssh-add ~/.ssh/id_ed25519
 
     #Developer environment
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
 sudo apt update
 sudo apt install make gcc ripgrep unzip git xclip neovim
-# Starting the agent
-# eval "$(ssh-agent -s)"
-# Add private key to ssh agent
-ssh-add ~/.ssh/id_ed25519
 
 
 }
