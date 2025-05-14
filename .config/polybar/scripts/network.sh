@@ -2,7 +2,10 @@
 # network.sh - Returns network status and IP address
 
 # Get the network interface (replace 'eno1' with your interface name)
-INTERFACE="eno1"
+# for desktop pc with ethernet connection 
+#INTERFACE="eno1"
+# for laptop pc with wifi connection
+INTERFACE="wlp2s0"
 
 # Check if the interface is up and connected
 if ip link show "$INTERFACE" | grep -q "state UP"; then
