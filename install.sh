@@ -7,7 +7,7 @@
 # Author: Christian Nordborg
 # TODO: move scripts / create links to the correct places.
 #	handle bluetooth-dongle
-
+# Adding a new comment for testing.
 
 sudo apt update
 # Use -y at the end to answer Yes to all the prompts, needing only to answer yes once.
@@ -16,7 +16,6 @@ sudo apt update
 install_basic() {
     echo "Installing basic utilities..."
     mkdir ~/dotfiles
-
     sudo apt install -y libreoffice timeshift rhythmbox gimp stow
     dpkg -s brave &> /dev/null && echo "Brave is already installed" || sudo snap install brave
     dpkg -s discord &> /dev/null && echo "Discord is already installed" || sudo snap install discord
@@ -176,13 +175,19 @@ sudo snap install code
 # Github
 git config --global user.email "nordborgchristian@gmail.com"
 git config --global user.name "Christian Nordborg"
+ssh-keygen -t ed25519 -C "nordborgchristian@gmail.com"
+cd ~/dotfiles
+git remote set-url origin git@github.com:chrisnordborg/dotfiles.git
 
 
     #Developer environment
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
 sudo apt update
 sudo apt install make gcc ripgrep unzip git xclip neovim
-
+# Starting the agent
+# eval "$(ssh-agent -s)"
+# Add private key to ssh agent
+ssh-add ~/.ssh/id_ed25519
 
 
 }
