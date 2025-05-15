@@ -21,9 +21,9 @@ fi
 if ip link show "$INTERFACE" | grep -q "state UP"; then
     IP_ADDRESS=$(ip addr show "$INTERFACE" | grep "inet " | awk '{print $2}' | cut -d/ -f1)
     if [[ -n "$IP_ADDRESS" ]]; then
-        echo "$SYMBOL $IP_ADDRESS"
+        echo "$SYMBOL$IP_ADDRESS  "
     else
-        echo "Offline"
+        echo "Offline  "
     fi
 else
     echo "Offline"

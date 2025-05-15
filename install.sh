@@ -34,6 +34,9 @@ install_basic() {
 
 }
 
+
+
+
 # Function to install gaming utilities
 install_gaming() {
     echo "Installing gaming utilities..."
@@ -60,7 +63,7 @@ sudo apt install libnvidia-gl-550:i386
 
 
 
-# Function to install work applications
+# Function to install developer applications
 install_developer() {
     echo "Installing developer applications..."
 
@@ -131,9 +134,11 @@ install_developer() {
     chmod +x ~/.config/polybar/scripts/date.sh
     chmod +x ~/.config/polybar/scripts/memory.sh
 
+    # Extract DevaVuSansM Nerd Font
+    unzip ~/dotfiles/DejaVuSansMono.zip -d /usr/share/fonts/
 
     # picom for transparent windows and terminal
-    sudo apt install -y libconfig-dev libdbus-1-dev libegl-dev libev-dev libgl-dev libepoxy-dev libpcre2-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev meson ninja-build uthash-dev cmake
+    sudo apt install -y picom libconfig-dev libdbus-1-dev libegl-dev libev-dev libgl-dev libepoxy-dev libpcre2-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev meson ninja-build uthash-dev cmake
     meson setup --buildtype=release build
     ninja -C build
     ninja -C build install

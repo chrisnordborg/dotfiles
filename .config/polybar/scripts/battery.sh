@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BAT="/sys/class/power_supply/BAT0"
+BAT="/sys/class/power_supply/BAT1"
 if [ ! -d "$BAT" ]; then
     exit 0
 fi
@@ -22,4 +22,4 @@ else
     icon=""
 fi
 
-echo "$icon ${capacity}%"
+echo "$icon${capacity}%"
