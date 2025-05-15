@@ -3,10 +3,11 @@
 
 # Detect the active interface (default route)
 INTERFACE=$(ip route get 8.8.8.8 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i=="dev") print $(i+1); exit}')
+OFFLINETEXT="Offline   "
 
 # If no active interface found
 if [[ -z "$INTERFACE" ]]; then
-    echo "Offline"
+    echo $OFFLINETEXT
     exit 0
 fi
 
@@ -21,12 +22,12 @@ fi
 if ip link show "$INTERFACE" | grep -q "state UP"; then
     IP_ADDRESS=$(ip addr show "$INTERFACE" | grep "inet " | awk '{print $2}' | cut -d/ -f1)
     if [[ -n "$IP_ADDRESS" ]]; then
-        echo "$SYMBOL$IP_ADDRESS  "
+        echo "$SYMBOL$IP_ADDRESS   "
     else
-        echo "Offline  "
+        echo $OFFLINETEXT
     fi
 else
-    echo "Offline"
+    echo $OFFLINETEXT
 fi
 
 
