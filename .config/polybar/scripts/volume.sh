@@ -5,7 +5,7 @@ volume=$(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1)
 mute=$(amixer get Master | grep -Po '\[off\]')
 
 if [[ $mute ]]; then
-    echo " Muted"
+    echo " Muted   "
 else
     if [ "$volume" -lt 30 ]; then
         icon=""
@@ -14,5 +14,5 @@ else
     else
         icon=""
     fi
-    echo "$icon $volume%  "
+    echo "$icon $volume%   "
 fi
