@@ -187,7 +187,7 @@ exec kitty
 #start picom (terminal transparency)
 exec picom -b
 exec bash ~/.config/polybar/launch.sh
-
+exec onedrive --monitor
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
