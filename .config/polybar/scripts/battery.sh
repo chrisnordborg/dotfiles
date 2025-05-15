@@ -22,4 +22,4 @@ else
     icon=""
 fi
 
-echo "$icon${capacity}%"
+echo "$icon ${capacity}%  "
