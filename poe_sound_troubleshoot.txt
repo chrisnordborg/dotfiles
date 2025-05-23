@@ -32,4 +32,19 @@ systemctl --user restart pipewire pipewire-pulse
 🔄 4. Restarted the Game After PipeWire Restart
 Since audio connections are initialized at launch, restarting the game was necessary for changes to take effect.
 
+#################################################################################
+Error: "Out-of-range adapter index" on startup of Path of Exile.
+
+alt 1: 
+In Steam:
+Right-click Path of Exile (in the left pane of Library) → Properties → Compatibility.
+Enable “Force the use of a specific Steam Play compatibility tool”.
+Try different versions. (This time Hotfix and experimental resulted in same error, but 9.0-4 worked).
+
+
+alt 2:
+Cause: Purging and re-installing a later version of Nvidia drivers.
+
+This resets PoE’s Wine prefix — it will regenerate the next time you launch it via Steam. (Don’t worry, this doesn’t delete the game itself.)
+rm -rf /home/alpha/snap/steam/common/.steam/steam/steamapps/compatdata/238960
 
