@@ -268,3 +268,7 @@ bindsym $mod+shift+w exec --no-startup-id sh -c 'feh --bg-scale "$(find ~/dotfil
 # Start polybar
 #exec_always --no-startup-id ~/.config/polybar/launch.sh
 
+# Auto-disable NUM LOCK upon startup.
+#exec --no-startup-id sh -c "sleep 2 && xdotool key Num_Lock"
+exec --no-startup-id numlockx on
+

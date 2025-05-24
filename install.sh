@@ -133,6 +133,8 @@ install_developer() {
     chmod +x ~/.config/polybar/scripts/cpu.sh
     chmod +x ~/.config/polybar/scripts/date.sh
     chmod +x ~/.config/polybar/scripts/memory.sh
+    # This is to auto-disable NUM LOCK upon startup.
+    sudo apt install -y xdotool
 
     # Extract DevaVuSansM Nerd Font
     unzip ~/dotfiles/DejaVuSansMono.zip -d /usr/share/fonts/
