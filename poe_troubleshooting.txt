@@ -1,36 +1,32 @@
 ✅ Summary of Fixes Applied
 🔧 1. Installed pavucontrol
 Allowed you to raise the game’s volume, which was muted by default.
-
-bash
-Copy
-Edit
-sudo apt install pavucontrol
 Used it to monitor and adjust game audio routing via the Playback and Output Devices tabs.
+    sudo apt install pavucontrol
 
 
 🛠 2. Created a PipeWire Config Override to Set Sample Rate and Buffer Size
 Created the file:
 
-~/.config/pipewire/pipewire.conf.d/99-buffer.conf
-With these contents:
-
-context.properties = {
+echo "context.properties = {
     default.clock.rate          = 48000
     default.clock.allowed-rates = [ 48000 44100 ]
     default.clock.quantum       = 1024
     default.clock.min-quantum   = 1024
     default.clock.max-quantum   = 1024
-}
+}" > ~/.config/pipewire/pipewire.conf.d/99-buffer.conf
 
 Effect: Standardized the sample rate and set a stable buffer size (quantum) to eliminate audio distortion and timing issues.
 
-🔁 3. Restarted PipeWire After Config Changes
 
-systemctl --user restart pipewire pipewire-pulse
+🔁 3. Restarted PipeWire After Config Changes
+    systemctl --user restart pipewire pipewire-pulse
+
 
 🔄 4. Restarted the Game After PipeWire Restart
 Since audio connections are initialized at launch, restarting the game was necessary for changes to take effect.
+
+
 
 #################################################################################
 Error: "Out-of-range adapter index" on startup of Path of Exile.
