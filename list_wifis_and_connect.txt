@@ -1,0 +1,27 @@
+
+1. List available Wi-Fi networks
+nmcli device wifi list
+This shows nearby Wi-Fi networks, including SSIDs, signal strength, and security type.
+
+
+2. Connect to a Wi-Fi network
+nmcli device wifi connect "<SSID>" password "<password>"
+
+Replace <SSID> with the name of the Wi-Fi network and <password> with the correct password. For example:
+nmcli device wifi connect "HomeWiFi" password "mypassword123"
+If the connection is successful, it will auto-connect next time.
+
+
+3. Check your network connection
+nmcli connection show --active
+This will display your active network connections.
+
+
+4. If unsure which Wi-Fi interface to use
+nmcli device status
+This will show devices like wlan0, wlp3s0, etc., and their statuses.
+
+Optional: Manually specify interface (if needed)
+nmcli device wifi connect "<SSID>" password "<password>" ifname <interface>
+Replace <interface> with your Wi-Fi device name (like wlp3s0).
+
