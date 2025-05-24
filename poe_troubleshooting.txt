@@ -44,3 +44,102 @@ Cause: Purging and re-installing a later version of Nvidia drivers.
 This resets PoE’s Wine prefix — it will regenerate the next time you launch it via Steam. (Don’t worry, this doesn’t delete the game itself.)
 rm -rf /home/alpha/snap/steam/common/.steam/steam/steamapps/compatdata/238960
 
+----------------------------------------------------------------------------------
+
+1. Upgrade Proton GE via ProtonUp-Qt
+Sometimes crashes and rendering issues are fixed in later GE versions.
+
+1. Install Flatpak (if not installed)
+sudo apt install flatpak
+2
+. Add Flathub (only if it's not added already)
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+3. Install ProtonUp-Qt
+flatpak install flathub net.davidotek.pupgui2
+
+4. Run ProtonUp-Qt
+flatpak run net.davidotek.pupgui2
+
+
+Install the latest version (e.g., Proton-GE 9.5, if available)
+
+In Steam → PoE → Properties → Compatibility → select that version
+Then launch again and test. If things improve, stick with it.
+
+2. Try Different Proton Versions
+Not all Proton versions behave the same:
+
+Try Proton 8.x (official) if GE 9.x is buggy.
+
+Proton Experimental may offer newer DXVK/VKD3D but can be less stable for PoE.
+
+Some users report best stability with Proton GE 8-27 or GE 8-25 for Path of Exile.
+
+To install older GE versions:
+
+Open ProtonUp-Qt
+
+Click "Add version"
+
+Choose Proton-GE 8-27 or another from the dropdown.
+
+
+3. Enable Esync + Fsync (if supported)
+In Steam Launch Options for PoE, add:
+
+PROTON_NO_ESYNC=0 PROTON_NO_FSYNC=0 %command%
+These improve performance and may reduce stuttering or crashes (assuming your kernel supports it — most Ubuntu 22.04+ setups with systemd do).
+
+
+4. Tweak Vulkan Settings / DXVK HUD for Debugging
+To debug rendering issues:
+
+DXVK_HUD=1 %command%
+This shows a small overlay with DXVK/Vulkan stats in the corner. You can watch FPS, GPU usage, and frame times while rendering bugs happen.
+
+
+5. Switch Rendering Backend In-Game
+Once in the game:
+
+Open Options → Graphics
+Set Renderer to DirectX11 instead of Vulkan
+Even though it’s "Windows-style", DX11 via DXVK often works better than Vulkan in Wine/Proton for some PoE builds.
+
+6. Clean Shader Cache (Optional)
+Sometimes bad shader cache causes rendering bugs. Clear it:
+
+rm -rf ~/.steam/steamapps/shadercache/238960
+
+----------------------------------------------------------------------------------
+alt 4:
+🔹 2. Download Proton-GE
+Go to the official page:
+👉 https://github.com/GloriousEggroll/proton-ge-custom/releases
+
+Download a version known to work well with PoE, like:
+
+Proton-GE-Proton8-27.tar.gz (stable) (I downloaded 8-28)
+
+Or try latest: Proton-GE-Proton10-3.tar.gz
+
+Download it to your ~/Downloads folder.
+
+
+🔹 3. Extract It to the Correct Location
+Assuming you downloaded Proton-GE-Proton8-28.tar.gz, run:
+
+tar -xvf ~/Downloads/Proton-GE-Proton9-5.tar.gz -C ~/.steam/root/compatibilitytools.d/
+This will create a folder like:
+
+~/.steam/root/compatibilitytools.d/Proton-GE-Proton9-5/
+
+
+🔹4. Restart Steam
+Close and reopen Steam.
+
+🔹 5. Use the New Proton-GE in Steam
+Go to Path of Exile → Properties → Compatibility
+Enable: “Force the use of a specific Steam Play compatibility tool”
+Select: Proton-GE-Proton9-5 (or whatever version you installed)
+
