@@ -48,3 +48,50 @@ Cause: Purging and re-installing a later version of Nvidia drivers.
 This resets PoE’s Wine prefix — it will regenerate the next time you launch it via Steam. (Don’t worry, this doesn’t delete the game itself.)
 rm -rf /home/alpha/snap/steam/common/.steam/steam/steamapps/compatdata/238960
 
+alt 3:
+Install flatpak:
+sudo apt install flatpak
+
+Add flatpak:
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+Install ProtonUp-Qt:
+flatpak install flathub net.davidotek.pupgui2
+
+Open ProtonUp-Qt
+flatpak run net.davidotek.pupgui2
+
+Install the latest version (e.g., Proton-GE 9.5, if available)
+Restart Steam
+In Steam → PoE → Properties → Compatibility → select that version
+
+
+alt 4:
+🔹 1. Create the directory Steam expects
+mkdir -p ~/.steam/root/compatibilitytools.d
+
+🔹 2. Download Proton-GE
+Go to the official page:
+👉 https://github.com/GloriousEggroll/proton-ge-custom/releases
+
+Download a version known to work well with PoE, like:
+
+Proton-GE-Proton8-27.tar.gz (stable) (8-28 is the one I downloaded last)
+Or try latest: Proton-GE-Proton10-3.tar.gz
+
+Download it to your ~/Downloads folder.
+
+🔹 3. Extract It to the Correct Location
+Assuming you downloaded Proton-GE-Proton8-28.tar.gz, run:
+
+tar -xvf ~/Downloads/Proton-GE-Proton9-5.tar.gz -C ~/.steam/root/compatibilitytools.d/
+This will create a folder like:
+~/.steam/root/compatibilitytools.d/Proton-GE-Proton9-5/
+
+🔹 4. Restart Steam
+Close and reopen Steam.
+
+🔹 5. Use the New Proton-GE in Steam
+Go to Path of Exile → Properties → Compatibility
+Enable: “Force the use of a specific Steam Play compatibility tool”
+Select: Proton-GE-Proton8-28 (or whatever version you installed)
