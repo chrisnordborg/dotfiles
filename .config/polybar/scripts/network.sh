@@ -3,7 +3,7 @@
 
 # Detect the active interface (default route)
 INTERFACE=$(ip route get 8.8.8.8 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i=="dev") print $(i+1); exit}')
-OFFLINETEXT="Offline   "
+OFFLINETEXT="Offline     "
 
 # If no active interface found
 if [[ -z "$INTERFACE" ]]; then
