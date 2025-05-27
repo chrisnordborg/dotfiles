@@ -15,6 +15,7 @@ alias du="du -h -d 1" \
 alias k="killall" \
 alias p="ps aux | grep $1" \
 alias zshconf="nvim ~/.zshrc" \
+alias nvconf="nvim ~/.config/nvim/init.lua"
 alias kittyconf="nvim ~/.config/kitty/kitty.conf" \
 alias picomconf="nvim ~/.config/picom/picom.conf" \
 #alias aliases="nvim ~/.config/shell/aliases" \

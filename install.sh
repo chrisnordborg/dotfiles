@@ -153,6 +153,28 @@ install_developer() {
     sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
     sudo snap install -y code
 
+    # Kotlin
+    # Build the language server and install it in ./server/build/install/server.
+    git clone https://github.com/fwcd/kotlin-language-server.git
+    cd kotlin-language-server
+    # The Kotlin language server requires Java 11.
+    sudo apt install -y openjdk-11-jdk
+    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    export PATH="$JAVA_HOME/bin:$PATH"
+    
+    ./gradlew :server:installDist
+    # You may want to move it to a global location, e.g.:
+    sudo mv server/build/install/server /opt/kotlin-language-server
+
+    # If you often work with Java 11:
+    # sudo update-alternatives --config java
+    # And select Java 11 as the default.
+
+
+
+    # Java
+    # Run the following in NeoVim
+    # :MasonInstall jdtls
 }
 
 
