@@ -165,10 +165,10 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 # Set assigned workspaces for applications
 # use command xprop and activate the application to get the 'WM_CLASS(STRING)' second value
 # and use as the class name below.
-assign [class="Brave"] $ws1
+assign [class="kitty"] $ws1
 #assign [class="Gnome-terminal"] $ws2
-assign [class="kitty"] $ws2
-#assign [class=""] $ws3
+#assign [class=""] $ws2
+assign [class="Brave"] $ws3
 assign [class="obsidian"] $ws4
 #assign [class=""] $ws5
 #assign [class=""] $ws6
