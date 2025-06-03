@@ -60,3 +60,13 @@ makepkg -i
 
 # install additionals
 sudo pacman -S tree
+
+
+####################################
+#install simple-hyperland
+
+#install zsh and make default
+sudo pacman -S zsh
+chsh -s /bin/zsh
+
+
