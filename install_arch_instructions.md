@@ -51,6 +51,11 @@ ssh-add ~/.ssh/idUNDERSCORErsa
 #ensure you have openssh-client installed`
 
 
+# install dots
+sudo pacman -S git
+git clone git@github.com:chrisnordborg/dotfiles.git ~/
+
+
 # install brave
 cd .
 git clone https://aur.archlinux.org/brave-bin.git
@@ -59,14 +64,27 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -S tree
+sudo pacman -S tree bat
 
 
 ####################################
 #install simple-hyperland
 
-#install zsh and make default
-sudo pacman -S zsh
+#copy over wallpapers
+cp -r ~/dotfiles/wallpapers/* ~/simple-hyprland/assets/backgrounds/*
+
+#install zsh
+sudo pacman -S zsh fzf zoxide thefuck
+#check path of shell
+echo $SHELL
+#make default
 chsh -s /bin/zsh
+
+
+sudo pacman -S git
+#back up previous config
+mv ~/.zshrc ~/.zshrc.bak
+
+
 
 

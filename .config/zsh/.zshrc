@@ -1,82 +1,97 @@
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-     
-# source global shell alias & variables files
-[ -f "$XDG_CONFIG_HOME/shell/aliases" ] && source "$XDG_CONFIG_HOME/shell/aliases"
-[ -f "$XDG_CONFIG_HOME/shell/vars" ] && source "$XDG_CONFIG_HOME/shell/vars"
+# Base file taken from shiroyasha9 on gihub, or Dreams of Autonomy on Youtube.
 
-# cmp opts
-zstyle ':completion:*' menu select # tab opens cmp menu
-zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} ma=0\;33 # colorize cmp menu
-# zstyle ':completion:*' file-list true # more detailed list
-zstyle ':completion:*' squeeze-slashes false # explicit disable to allow /*/ expansion
-
-# main opts
-setopt append_history inc_append_history share_history # better history
-# on exit, history appends rather than overwrites; history is appended as soon as cmds executed; history shared across sessions
-setopt auto_menu menu_complete # autocmp first menu match
-setopt autocd # type a dir to cd
-setopt auto_param_slash # when a dir is completed, add a / instead of a trailing space
-setopt no_case_glob no_case_match # make cmp case insensitive
-setopt globdots # include dotfiles
-setopt extended_glob # match ~ # ^
-setopt interactive_comments # allow comments in shell
-unsetopt prompt_sp # don't autoclean blanklines
-stty stop undef # disable accidental ctrl s
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 
+if [[ -f "/opt/homebrew/bin/brew" ]] then
+  # If you're using macOS, you'll want this enabled
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
-# The following lines were added by compinstall
+# Paths
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+#export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
-zstyle ':completion:*' completer _expand _complete _ignored _match _correct _approximate _prefix
-zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
-zstyle :compinstall filename '/home/archer/.config/zsh/.zshrc'
+# Set the directory we want to store zinit and plugins
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
+# Download Zinit, if it's not there yet
+if [ ! -d "$ZINIT_HOME" ]; then
+   mkdir -p "$(dirname $ZINIT_HOME)"
+   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
 
-# To ruch zsh-newuser-install gain, run the following
-# autoload -Uz zsh-newuser-install
-# #zsh-newuser-install -f
+# Source/Load zinit
+source "${ZINIT_HOME}/zinit.zsh"
 
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.config/zsh/.histfile
-HISTSIZE=100
-SAVEHIST=100
-bindkey -v
-# End of lines configured by zsh-newuser-install
-HISTCONTROL=ignoreboth # consecutive duplicates & commands starting with space are not saved
+# Source/Load NVM
+#source $(brew --prefix nvm)/nvm.sh
 
-# Set up prompt
-NEWLINE=$'\n'
-PROMPT="${NEWLINE}%K{#2E3440}%F{#E5E9F0}$(date +%_I:%M%P) %K{#3b4252}%F{#ECEFF4} %n %K{#4c566a} %~ %f%k ❯ "
-# PROMPT="${NEWLINE}%K{$COL0}%F{$COL1}$(date +%_I:%M%P) %K{$COL0}%F{$COL2} %n %K{$COL3} %~ %f%k ❯ " # pywal colors, from postrun script
-echo -e "${NEWLINE}\033[48;2;46;52;64;38;2;216;222;233m $0 \033[0m\033[48;2;59;66;82;38;2;216;222;233m $(uptime -p | cut -c 4-) \033[0m\033[48;2;76;86;106;38;2;216;222;233m $(uname -r) \033[0m"
+# Add in Powerlevel10k
+zinit ice depth=1; zinit light romkatv/powerlevel10k
 
+# Add in zsh plugins
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
+zinit ice depth=1; zinit light jeffreytse/zsh-vi-mode
 
-#####################
-#####   BIND   #####
-#####################
-bindkey "^i" beginning-of-line
-bindkey "^a" end-of-line
-bindkey "^k" kill-line
-bindkey "^b" backward-word
-bindkey "^w" forward-word
-bindkey "^J" history-search-forward
-bindkey "^K" history-search-backward
-bindkey '^R' fzf-history-widget
-
-
-#####################
-#####  ALIASES  #####
-#####################
+# Add in snippets
+zinit snippet OMZL::git.zsh
+zinit snippet OMZP::git
+zinit snippet OMZP::sudo
+zinit snippet OMZP::archlinux
+zinit snippet OMZP::aws
+zinit snippet OMZP::kubectl
+zinit snippet OMZP::kubectx
+zinit snippet OMZP::command-not-found
 
 
+# Load completions
+autoload -Uz compinit && compinit
+
+zinit cdreplay -q
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Keybindings
+bindkey '^[[Z' autosuggest-accept
+
+# History
+HISTSIZE=5000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+setopt correct
+
+# Completion styling
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+
+# Aliases
+alias pn='pnpm'
 alias c="clear"
 alias v="nvim"
 alias f="fff"
@@ -93,7 +108,8 @@ alias df="df -h"
 alias du="du -h -d 1"
 alias k="killall"
 alias p="ps aux | grep $1"
-alias zshconf="nvim ~/.zshrc"
+alias zshsource="source ~/.config/zsh/.zshrc"
+alias zshconf="nvim ~/.config/zsh/.zshrc"
 alias nvconf="nvim ~/.config/nvim/init.lua"
 alias kittyconf="nvim ~/.config/kitty/kitty.conf"
 alias picomconf="nvim ~/.config/picom/picom.conf"
@@ -112,3 +128,85 @@ alias backupdot="bash ~/dotfiles/.config/scripts/backupdotfiles.sh"
 alias backupmusic="bash ~/dotfiles/.config/scripts/backupmusic.sh"
 alias backupall="bash ~/dotfiles/.config/scripts/backup.sh" 
 
+
+# Shell integrations
+eval "$(fzf --zsh)"
+eval "$(zoxide init --cmd cd zsh)"
+eval $(thefuck --alias)
+
+# bun completions
+#[ -s "/Users/shiroyasha/.bun/_bun" ] && source "/Users/shiroyasha/.bun/_bun"
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+
+#key[F1]        = '^[[[A'
+#key[F2]        = '^[[[B'
+#key[F3]        = '^[[[C'
+#key[F4]        = '^[[[D'
+#key[F5]        = '^[[[E'
+#key[F6]        = '^[[17~'
+#key[F7]        = '^[[18~'
+#key[F8]        = '^[[19~'
+#key[F9]        = '^[[20~'
+#key[F10]       = '^[[21~'
+#key[F11]       = '^[[23~'
+#key[F12]       = '^[[24~'
+#
+#key[Shift-F1]  = '^[[25~'
+#key[Shift-F2]  = '^[[26~'
+#key[Shift-F3]  = '^[[28~'
+#key[Shift-F4]  = '^[[29~'
+#key[Shift-F5]  = '^[[31~'
+#key[Shift-F6]  = '^[[32~'
+#key[Shift-F7]  = '^[[33~'
+#key[Shift-F8]  = '^[[34~'
+#
+#key[Insert]    = '^[[2~'
+#key[Delete]    = '^[[3~'
+#key[Home]      = '^[[1~'
+#key[End]       = '^[[4~'
+#key[PageUp]    = '^[[5~'
+#key[PageDown]  = '^[[6~'
+#key[Up]        = '^[[A'
+#key[Down]      = '^[[B'
+#key[Right]     = '^[[C'
+#key[Left]      = '^[[D'
+#
+#key[Bksp]      = '^?'
+#key[Bksp-Alt]  = '^[^?'
+#key[Bksp-Ctrl] = '^H'    console only.
+#
+#key[Esc]       = '^['
+#key[Esc-Alt]   = '^[^['
+#
+#key[Enter]     = '^M'
+#key[Enter-Alt] = '^[^M'
+#
+#key[Tab] = '^I' or '\t' unique form! can be bound, but does# not 'showkey -a'.
+#key[Tab-Alt]   = '^[\t'
+#
+#
+#COMBINATIONS USING THE WHITE KEYS:
+#
+#Anomalies:
+#'Ctrl+`' == 'Ctrl+2', and 'Ctrl+1' == '1' in xterm.
+#Several 'Ctrl+number' combinations are void at console, but# return codes in xterm. OTOH Ctrl+Bksp returns '^H' at cons#ole, but is identical to plain 'Bksp' in xterm. There are n#o doubt more of these little glitches however, in the main:
+#
+#White key codes are easy to understand, each of these 'norm#al' printing keys has six forms:
+#
+#A            = 'a'    (duhhh)
+#A-Shift      = 'A'    (who would have guessed?)
+#A-Alt        = '^[a'
+#A-Ctrl       = '^A'
+#A-Alt-Ctrl   = '^[^A'
+#A-Alt-Shift  = '^[A'
+#A-Ctrl-Shift = '^A'   (Shift has no effect)
+#
+#Don't forget that:
+#
+#/-Shift-Ctrl = Bksp      = '^?'
+#[-Ctrl       = Esc       = '^['
+#M-Ctrl       = Enter     = '^M'
+#I-Ctrl       = Tab       = '^I' or '\t'
