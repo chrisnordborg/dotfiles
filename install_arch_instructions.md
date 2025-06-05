@@ -64,7 +64,7 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -S tree bat
+sudo pacman -S tree bat feh
 
 
 ####################################
