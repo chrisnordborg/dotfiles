@@ -7,7 +7,7 @@ install.sh
 install_arch_instructions.md
 list_wifis_and_connect.txt
 Obsidian-1.8.10.AppImage
-.oh-my-zsh/
+.oh-my-zsh
 playerctl-2.4.1_amd64.deb
 Music/*
 OneDrive/*
