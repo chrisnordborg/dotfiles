@@ -64,8 +64,12 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -S tree bat feh
-
+sudo pacman -Syu tree bat feh neofetch rhythmbox obsidian
+cd 
+git clone https://github.com/dylanaraps/neofetch
+cd neofetch
+sudo make install
+cd
 
 ####################################
 #install simple-hyperland
