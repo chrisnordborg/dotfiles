@@ -1,10 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 folder="$HOME/OneDrive/Obsidian/Alpha/_New Notes/"
-menu="tofi -c ~/.config/tofi/configA"
 
 newnote() {
-  name="$(tofi -c ~/.config/tofi/configA --prompt 'New note: ')"
+  name="$(tofi -c ~/.config/tofi/configA --prompt 'New note: ')" || exit 0
   [ -z "$name" ] && name="$(date +%F_%T | tr ':' '-')"
   setsid -f "$TERMINAL" -e nvim "$folder$name.md" >/dev/null 2>&1
 }
