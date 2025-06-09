@@ -64,7 +64,7 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -Syu tree bat feh neofetch rhythmbox obsidian
+sudo pacman -Syu tree bat feh neofetch rhythmbox
 cd 
 git clone https://github.com/dylanaraps/neofetch
 cd neofetch
@@ -77,7 +77,7 @@ cd
 #copy over wallpapers
 cp -r ~/dotfiles/wallpapers/* ~/simple-hyprland/assets/backgrounds/*
 
-#install zsh
+# install zsh
 sudo pacman -S zsh fzf zoxide thefuck
 #check path of shell
 echo $SHELL
@@ -89,6 +89,11 @@ sudo pacman -S git
 #back up previous config
 mv ~/.zshrc ~/.zshrc.bak
 
+# install obsidian and sync
+sudo pacman -S pactl jq tofi notify-send pipewire-pulse
+# (insert instructions to copy and run AppImage
 
-
-
+# Enable and start service
+systemctl --user daemon-reexec
+systemctl --user daemon-reload
+systemctl --user enable --now pipewire-pulse.service
