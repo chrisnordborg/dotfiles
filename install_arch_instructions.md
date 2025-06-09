@@ -2,8 +2,8 @@
 setxkbmap -layout se
 
 # Setup wifi
-systemctl enable networkmanager
-systemctl start networkmanager
+systemctl enable NetworkManager
+systemctl start NetworkManager
 nmcli device wifi list
 
 # open wifi without password
@@ -90,7 +90,7 @@ sudo pacman -S git
 mv ~/.zshrc ~/.zshrc.bak
 
 # install obsidian and sync
-sudo pacman -S pactl jq tofi notify-send pipewire-pulse
+sudo pacman -S pactl jq tofi notify-send pipewire-pulse dmesg
 # (insert instructions to copy and run AppImage
 
 # Enable and start service
