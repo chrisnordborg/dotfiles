@@ -64,7 +64,7 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -Syu tree bat feh neofetch rhythmbox
+sudo pacman -Syu tree bat feh neofetch rhythmbox rofi
 cd 
 git clone https://github.com/dylanaraps/neofetch
 cd neofetch
