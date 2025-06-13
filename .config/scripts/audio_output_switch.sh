@@ -2,7 +2,21 @@
 options=$(pactl -f json list sinks | jq -r '.[] | .description')
 
 # Prompt user with Tofi
-selection=$(echo "$options" | tofi -c ~/.config/tofi/configA --prompt-text="Set audio output: ")
+#selection=$(printf "%s\n" "$timestamp" "" cho "$options" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
+
+# Case-insensitive pattern matching
+shopt -s nocasematch
+
+btscan="[Scan for bluetooth headset]"
+
+selection=$(echo -e "$options\n$btscan" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
+
+# Scan for bluetooth headsets
+if [[ "$selection" == *"$btscan"* ]]; then
+    bash $HOME/dotfiles/.config/scripts/toggle_bluetooth_headsets_OnOff.sh
+    exit 
+fi
+
 
 # Get the sink name corresponding to the selected description
 sink_name=$(pactl -f json list sinks | jq -r --arg desc "$selection" '.[] | select(.description == $desc) | .name')
