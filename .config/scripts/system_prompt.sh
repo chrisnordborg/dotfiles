@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 res=$(echo \
-"lock
-exit
-poweroff
+"poweroff
 reboot
+lock
+exit
 suspend" \
-| tofi -c ~/.config/tofi/configA "system")
+| tofi --height 225 --width 225 -c ~/.config/tofi/configA )
 #| rofi -dmenu -p "system")
 
 which systemctl &>/dev/null
@@ -18,10 +18,12 @@ fi
 
 case $res in
 "lock")
-    sleep 0.5; # wait for picom fade --- not sure how to do this via script
+    hyprlock
+    #sleep 0.5; # wait for picom fade --- not sure how to do this via script
     #~/.scripts/i3lock_launch;;
 "exit")
-    xdotool search "" windowkill %@  --maxdepth; bspc quit;;
+    
+    #xdotool search "" windowkill %@  --maxdepth; bspc quit;;
 "poweroff")
     $login_manager poweroff;;
 "reboot")
