@@ -1,6 +1,6 @@
 #!/bin/sh
 
-temp="1. Temperature (Celcius Fahrenheit)"
+temp="1. Temperature (Celcius Fahrenheit Kelvin)"
 conc="[Not Ready]2. Concentration (mmol mg/dL)"
 currency="[Not Ready]3. Currency Money (Dollar SEK)"
 distance="4[Not Ready]. Distance (miles KM)"
