@@ -63,7 +63,7 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -Syu tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim bluez bluez-utils bluez-deprecated-tools pulseaudio-bluetooth
+sudo pacman -Syu tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim 
 # start bluetooth
 sudo systemctl start bluetooth.service
 bluetoothctl
@@ -130,6 +130,9 @@ make
 sudo vim /etc/pacman.conf
 # uncomment each of [core] [extra] and [multilib] lines, as well as their respective first line below each of them.
 sudo pacman -Syu
+
+
+sudo pacman -S pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber
 
 # Enable and start service
 systemctl --user daemon-reexec

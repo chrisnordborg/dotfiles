@@ -35,7 +35,8 @@ compinit
 
 
 # History file location and limits
-HISTFILE=~/.config/zsh/.histfile
+#HISTFILE=~/.config/zsh/.histfile
+HISTFILE=~/.histfile
 HISTSIZE=1000          # Number of commands kept in memory
 SAVEHIST=1000          # Number of commands saved to file
 
@@ -112,7 +113,9 @@ alias df="df -h"
 alias du="du -h -d 1"
 alias k="killall"
 alias p="ps aux | grep $1"
-alias zshconf="nvim ~/.config/zsh/.zshrc"
+#alias zshconf="nvim ~/.config/zsh/.zshrc"
+alias zshconf="nvim ~/.zshrc"
+alias zshsource="source ~/.zshrc"
 alias nvconf="nvim ~/.config/nvim/init.lua"
 alias kittyconf="nvim ~/.config/kitty/kitty.conf"
 alias picomconf="nvim ~/.config/picom/picom.conf"
