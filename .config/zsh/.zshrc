@@ -84,8 +84,10 @@ bindkey "^b" backward-word
 bindkey "^w" forward-word
 bindkey "^J" history-search-forward
 bindkey "^K" history-search-backward
-bindkey '^R' fzf-history-widget
+#bindkey '^R' fzf-history-widget
 
+# Load fzf key bindings (Arch Linux default path)
+[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
 
 #####################
 #####  ALIASES  #####
