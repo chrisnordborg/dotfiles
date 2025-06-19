@@ -63,8 +63,21 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -Syu tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim
-
+sudo pacman -Syu tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim bluez bluez-utils bluez-deprecated-tools pulseaudio-bluetooth
+# start bluetooth
+sudo systemctl start bluetooth.service
+bluetoothctl
+scan on
+# (tab completion on the MAC-address works)
+pair [MAC-address]
+trust [MAC-address]
+pair [MAC-address]
+# alt
+echo -e "pair [MAC-address]\ntrust [MAC-address]\npair[MAC-address]" | bluetoothctl
+# JBL Live Pro 2
+echo -e "pair 84:D3:52:0B:D4:A3\ntrust 84:D3:52:0B:D4:A3" | bluetoothctl
+# Shokz OpenRun Mini
+echo -e "pair A8:F5:E1:86:64:FA\ntrust A8:F5:E1:86:64:FA" | bluetoothctl
 
 cd 
 git clone https://github.com/dylanaraps/neofetch
