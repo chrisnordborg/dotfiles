@@ -5,8 +5,8 @@
 ZSH_THEME="robbyrussell"
      
 # source global shell alias & variables files
-[ -f "$XDG_CONFIG_HOME/shell/aliases" ] && source "$XDG_CONFIG_HOME/shell/aliases"
-[ -f "$XDG_CONFIG_HOME/shell/vars" ] && source "$XDG_CONFIG_HOME/shell/vars"
+#[ -f "$XDG_CONFIG_HOME/shell/aliases" ] && source "$XDG_CONFIG_HOME/shell/aliases"
+#[ -f "$XDG_CONFIG_HOME/shell/vars" ] && source "$XDG_CONFIG_HOME/shell/vars"
 
 # cmp opts
 zstyle ':completion:*' menu select # tab opens cmp menu
@@ -110,7 +110,7 @@ alias i3conf="nvim ~/.config/i3/config"
 alias i3statusconf="nvim ~/.config/i3/i3status.conf"
 alias polybarconf="nvim ~/.config/polybar/config.ini"
 alias launchpoly="~/.config/polybar/launch.sh"
-alias zshconf="nvim ~/.config/zsh/.zshrc"
+alias zshconf="nvim ~/.zshrc"
 alias hyprconf="nvim ~/.config/hypr/hyprland.conf"
 alias tbh="bash ~/dotfiles/.config/scripts/toggle_bluetooth_headsets_OnOff.sh"
 alias backupdot="bash ~/dotfiles/.config/scripts/backupdotfiles.sh"
