@@ -16,8 +16,6 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} ma=0\;33 # colorize cmp me
 zstyle ':completion:*' squeeze-slashes false # explicit disable to allow /*/ expansion
 
 # main opts
-setopt append_history inc_append_history share_history # better history
-# on exit, history appends rather than overwrites; history is appended as soon as cmds executed; history shared across sessions
 setopt auto_menu menu_complete # autocmp first menu match
 setopt autocd # type a dir to cd
 setopt auto_param_slash # when a dir is completed, add a / instead of a trailing space
@@ -32,20 +30,34 @@ stty stop undef # disable accidental ctrl s
 zstyle ':completion:*' completer _expand _complete _ignored _match _correct _approximate _prefix
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
 zstyle :compinstall filename '/home/archer/.config/zsh/.zshrc'
-
 autoload -Uz compinit
 compinit
 
 
+# History file location and limits
 HISTFILE=~/.config/zsh/.histfile
-HISTSIZE=100
-SAVEHIST=100
+HISTSIZE=1000          # Number of commands kept in memory
+SAVEHIST=1000          # Number of commands saved to file
+
+# History behavior options
+setopt append_history         # Append to history file instead of overwriting
+setopt inc_append_history     # Save each command to the history file immediately
+setopt share_history          # Share command history across all zsh sessions
+# on exit, history appends rather than overwrites; history is appended as soon as cmds executed; history shared across sessions
+
+# Better filtering and usability
+setopt hist_ignore_all_dups   # Remove older duplicate commands
+setopt hist_ignore_dups       # Ignore consecutive duplicates
+setopt hist_save_no_dups      # Don't write duplicate commands to the file
+setopt hist_reduce_blanks     # Remove extra whitespace before saving
+setopt hist_ignore_space      # Don't save commands starting with a space
+setopt hist_verify            # Show the command before executing when expanded from history
+
 
 # -e to bind to EMACS mode
 bindkey -e
 # -v to bind to vim mode (but thit changes ESC and TAB behaviour to break tab completion among other things.
 #bindkey -v
-HISTCONTROL=ignoreboth # consecutive duplicates & commands starting with space are not saved
 
 # Set up prompt
 NEWLINE=$'\n'
@@ -99,7 +111,6 @@ alias du="du -h -d 1"
 alias k="killall"
 alias p="ps aux | grep $1"
 alias zshconf="nvim ~/.config/zsh/.zshrc"
-alias zshsource="source ~/.config/zsh/.zshrc"
 alias nvconf="nvim ~/.config/nvim/init.lua"
 alias kittyconf="nvim ~/.config/kitty/kitty.conf"
 alias picomconf="nvim ~/.config/picom/picom.conf"
