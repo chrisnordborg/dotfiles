@@ -56,6 +56,10 @@ echo -e "${NEWLINE}\033[48;2;46;52;64;38;2;216;222;233m $0 \033[0m\033[48;2;59;6
 #PS1='%F{blue}%B%~%b%f %F{green}❯%f '
 #precmd () { print -Pn "\e]2;%-3~\a"; }
 
+# Save current directory on shell exit
+precmd() {
+    echo "$PWD" > /tmp/last_terminal_dir
+}
 
 #####################
 #####   BIND   #####
