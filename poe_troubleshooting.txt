@@ -3,7 +3,7 @@
 Allowed you to raise the game’s volume, which was muted by default.
 Used it to monitor and adjust game audio routing via the Playback and Output Devices tabs.
     sudo apt install pavucontrol
-
+    sudo apt install pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber
 
 🛠 2. Created a PipeWire Config Override to Set Sample Rate and Buffer Size
 Created the file:
@@ -26,7 +26,9 @@ Effect: Standardized the sample rate and set a stable buffer size (quantum) to e
 🔄 4. Restarted the Game After PipeWire Restart
 Since audio connections are initialized at launch, restarting the game was necessary for changes to take effect.
 
-
+If this doesn't work, in Steam, right click Path of exile, go to Settings > General > Launch Options and paste the following:
+	SDL_AUDIODRIVER=pulse %command%
+Restart Path of Exile.
 
 #################################################################################
 Error: "Out-of-range adapter index" on startup of Path of Exile.

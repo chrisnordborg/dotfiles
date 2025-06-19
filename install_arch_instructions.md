@@ -125,12 +125,13 @@ cd 2020../2020../usb/bluetooth_usb_driver
 make clean
 make
 
+cp ~/dotfiles/main.conf /etc/bluetooth/main.conf
+
 
 # steam
 sudo vim /etc/pacman.conf
 # uncomment each of [core] [extra] and [multilib] lines, as well as their respective first line below each of them.
 sudo pacman -Syu
-
 
 sudo pacman -S pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber
 
