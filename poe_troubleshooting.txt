@@ -31,6 +31,47 @@ If this doesn't work, in Steam, right click Path of exile, go to Settings > Gene
 Restart Path of Exile.
 
 #################################################################################
+If the sound is low-quality (old radio-like), try the following:
+Fix: Enable A2DP and Modern Bluetooth Codecs in WirePlumber
+1. Check or create the following config file:
+sudo nano /etc/wireplumber/bluetooth.lua.d/51-bluez-config.lua
+If the file doesn’t exist, create it.
+
+Paste the following config:
+bluez_monitor.properties = {
+  ["with-logind"] = true,
+  ["bluez5.enable-sbc-xq"] = true,
+  ["bluez5.enable-msbc"] = true,
+  ["bluez5.enable-hw-volume"] = true,
+  ["bluez5.enable-a2dp"] = true,
+  ["bluez5.enable-hfp-hf"] = true,
+  ["bluez5.enable-hfp-ag"] = true,
+  ["bluez5.codecs"] = { "sbc", "aac", "ldac", "aptx", "aptx-hd", "msbc", "cvsd" }
+}
+This enables:
+All major Bluetooth audio codecs (A2DP and HFP)
+Both input/output profiles
+a2dp-sink support
+
+2. Restart WirePlumber & PipeWire
+systemctl --user restart wireplumber pipewire pipewire-pulse
+3. Reconnect Your Headset
+bluetoothctl
+Then in the prompt:
+disconnect A8:F5:E1:86:64:FA
+connect A8:F5:E1:86:64:FA
+Or turn your headset off and on again.
+
+4. Check Available Profiles Again
+pactl list cards | grep -A100 bluez_card.A8_F5_E1_86_64_FA
+Look for:
+Profile a2dp-sink: High Fidelity Playback (A2DP Sink)
+Once you confirm it’s available:
+pactl set-card-profile bluez_card.A8_F5_E1_86_64_FA a2dp-sink
+
+
+
+#################################################################################
 Error: "Out-of-range adapter index" on startup of Path of Exile.
 
 alt 1: 

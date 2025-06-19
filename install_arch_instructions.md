@@ -126,7 +126,8 @@ make clean
 make
 
 cp ~/dotfiles/main.conf /etc/bluetooth/main.conf
-
+sudo mkdir -p /etc/wireplumber/bluetooth.lua.d
+cp ~/dotfiles/51-bluez-config.lua /etc/wireplumber/bluetooth.lua.d/
 
 # steam
 sudo vim /etc/pacman.conf
