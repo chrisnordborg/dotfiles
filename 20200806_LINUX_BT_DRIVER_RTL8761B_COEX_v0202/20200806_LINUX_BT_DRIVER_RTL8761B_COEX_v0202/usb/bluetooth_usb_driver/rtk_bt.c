@@ -30,7 +30,11 @@
 #include <linux/usb.h>
 #include <linux/dcache.h>
 #include <net/sock.h>
-#include <asm/unaligned.h>
+/* Uncomment this if installing on debian/ubuntu  */
+/* #include <asm/unaligned.h>*/
+
+/* Uncomment this if installing on arch linux */
+#include <linux/unaligned.h>
 
 #include "rtk_bt.h"
 #include "rtk_misc.h"

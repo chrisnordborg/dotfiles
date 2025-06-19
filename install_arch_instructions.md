@@ -24,15 +24,14 @@ sudo systemctl start sshd
 #enable start on boot
 sudo systemctl enable sshd
 #generate SSH key on client machine
-ssh-keygen -t rsa -b 4096 -C
-"nordborgchristian@gmail.com"
-cat ~/.ssh/idUNDERSCORErsa.pub
+ssh-keygen -t rsa -b 4096 -C "nordborgchristian@gmail.com"
+cat ~/.ssh/id_rsa.pub
 #add SSH key on your github account
 
 #if you already cloned a repository, you can change the remote url
-git remote set-url origin gitATgithub.com:username/repository.git
+git remote set-url origin git@github.com:username/repository.git
 #test connection
-ssh -T gitATgithub.com
+ssh -T git@github.com
 
 # if error "... port 22: Connection timed out"
 # add the following to ~/.ssh/config
@@ -43,7 +42,7 @@ ssh -T gitATgithub.com
 #use ssh-agent to mange ssh keys and avoid needing to enter your passphrase every time
 eval "DOLLAR(ssh-agent -s)"
 #add private key to agent
-ssh-add ~/.ssh/idUNDERSCORErsa
+ssh-add ~/.ssh/id_rsa
 
 #if you're using an x11 environment you can add 
 #eval "DOLLAR(ssh-agent -s)"
@@ -64,7 +63,9 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -Syu tree bat feh neofetch rhythmbox bc
+sudo pacman -Syu tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim
+
+
 cd 
 git clone https://github.com/dylanaraps/neofetch
 cd neofetch
@@ -90,8 +91,32 @@ sudo pacman -S git
 mv ~/.zshrc ~/.zshrc.bak
 
 # install obsidian and sync
-sudo pacman -S pactl jq tofi notify-send pipewire-pulse dmesg
-# (insert instructions to copy and run AppImage
+sudo pacman -S pactl jq tofi notify-send pipewire-pulse dmesg dmd gdc
+git clone https://github.com/abraunegg/onedrive.git ~/
+cd onedrive
+./configure
+make
+sudo make install
+onedrive
+# copy the URL in the terminal and paste in in a browser. Log in and copy the browser URL and paste it into the terminal
+mkdir -p ~/OneDrive
+cp config ~/.config/onedrive/config
+
+onedrive --monitor
+
+# bluetooth dongle
+sudo pacman -S linux-headers
+#cp -r ~/dotfiles/2020... ~/Downloads/
+cd 2020../2020../usb/bluetooth_usb_driver
+# the local Makefile was renamed and a new Makefile was created, as well as a changed to the includes in the rtk_bt.c was made.
+make clean
+make
+
+
+# steam
+sudo vim /etc/pacman.conf
+# uncomment each of [core] [extra] and [multilib] lines, as well as their respective first line below each of them.
+sudo pacman -Syu
 
 # Enable and start service
 systemctl --user daemon-reexec

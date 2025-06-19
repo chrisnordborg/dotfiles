@@ -1,15 +1,15 @@
-ifneq ($(KERNELRELEASE),)
-	obj-m := rtk_btusb.o
-	rtk_btusb-y = rtk_coex.o rtk_misc.o rtk_bt.o
-else
-	PWD := $(shell pwd)
-	KVER := $(shell uname -r)
-	KDIR := /lib/modules/$(KVER)/build
+obj-m += rtk_btusb.o
+
+rtk_btusb-objs := rtk_bt.o rtk_coex.o rtk_misc.o
 
 all:
-	$(MAKE) -C $(KDIR) M=$(PWD) modules
+	$(MAKE) -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 
 clean:
-	rm -rf *.o *.mod.c *.mod.o *.ko *.symvers *.order *.a
+	$(MAKE) -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 
-endif
+install:
+	sudo cp rtk_btusb.ko /lib/modules/$(shell uname -r)/kernel/drivers/bluetooth/
+	sudo depmod
+	echo "rtk_btusb installed!"
+
