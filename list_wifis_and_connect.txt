@@ -25,3 +25,5 @@ Optional: Manually specify interface (if needed)
 nmcli device wifi connect "<SSID>" password "<password>" ifname <interface>
 Replace <interface> with your Wi-Fi device name (like wlp3s0).
 
+Sören:
+nmcli device wifi connect "60:38:E0:11:F3:76" password "05stjmyxr1"
