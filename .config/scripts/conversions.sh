@@ -2,7 +2,7 @@
 
 temp="1. Temperature (Celcius Fahrenheit Kelvin)"
 conc="2. Concentration (mmol mg/dL)"
-currency="[Not Ready]3. Currency Money (Dollar SEK)"
+currency="3. Currency (SEK USD EUR GBP NOK)"
 distance="4. Distance (miles km)"
 
 menu="tofi -c $HOME/.config/tofi/configA --require-match=false --width 700"
