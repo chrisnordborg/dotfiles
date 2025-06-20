@@ -1,9 +1,9 @@
 #!/bin/sh
 
 temp="1. Temperature (Celcius Fahrenheit Kelvin)"
-conc="[Not Ready]2. Concentration (mmol mg/dL)"
+conc="2. Concentration (mmol mg/dL)"
 currency="[Not Ready]3. Currency Money (Dollar SEK)"
-distance="4[Not Ready]. Distance (miles KM)"
+distance="4. Distance (miles km)"
 
 menu="tofi -c $HOME/.config/tofi/configA --require-match=false --width 700"
 scriptFolder="$HOME/.config/scripts"
@@ -16,7 +16,6 @@ choice=$(
     "$distance" \
   | $menu --prompt "Choose converter: ")
 
-#choice=$( "Temperature (Celcius Fahrenheit)" | $menu --prompt "Choose converter: " ' <<< ' 2>/dev/null)
 case "$choice" in
     "$temp") 
         bash $scriptFolder/convert_temperature.sh

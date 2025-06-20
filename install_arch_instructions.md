@@ -63,7 +63,9 @@ makepkg -i
 
 
 # install additionals
-sudo pacman -Syu tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim 
+# bc for handling calculations in scripts
+# jq for parsing json
+sudo pacman -Syu tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim jq
 # start bluetooth
 sudo systemctl start bluetooth.service
 bluetoothctl
