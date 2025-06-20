@@ -55,10 +55,11 @@ setopt hist_ignore_space      # Don't save commands starting with a space
 setopt hist_verify            # Show the command before executing when expanded from history
 
 
-# -e to bind to EMACS mode
+# -e to bind to EMACS mode, and -v to bind to vim mode (but thit changes ESC and TAB behaviour to break tab completion among other things.
 bindkey -e
-# -v to bind to vim mode (but thit changes ESC and TAB behaviour to break tab completion among other things.
-#bindkey -v
+# bind DEL button to delete-char instead of ~
+bindkey '\e[3~' delete-char
+
 
 # Set up prompt
 NEWLINE=$'\n'
