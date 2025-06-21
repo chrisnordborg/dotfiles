@@ -12,7 +12,8 @@
     ],
     //"modules-center": ["hyprland/window"],
     "modules-right": [
-        "tray",
+        "custom/timer",
+	"tray",
         "memory",
         "cpu",
         "network",
@@ -31,6 +32,14 @@
         "all-outputs": true,
         "on-click": "activate",
         "format": "{icon}"
+    },
+
+    "custom/timer": {
+        "exec": "cat /tmp/waybar_timer.txt",
+        "interval": 1,
+        "format": "⏱ {output}",
+        "return-type": "json",  // <-- This line is now required again!
+        "on-click": "~/.config/scripts/timer.sh"
     },
 
     "tray": {
