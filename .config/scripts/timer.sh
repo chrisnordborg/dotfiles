@@ -52,8 +52,8 @@ stop_timer() {
 
 main() {
     local choice
-    choice=$(printf "Stop Timer" | $TOFI_MENU --num-results 10 --prompt "Timer (minutes): ")
-    #choice=$(printf "Stop Timer\n5\n10\n15\n25\n30\n60" | $TOFI_MENU --num-results 10 --prompt "Timer (minutes): ")
+    choice=$(printf "Stop Timer" | $TOFI_MENU --height 80 --width 350 --prompt "Timer (minutes): ")
+    
     # Cancel if empty
     [ -z "$choice" ] && exit
 

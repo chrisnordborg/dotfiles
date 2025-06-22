@@ -60,6 +60,14 @@ window#waybar {
     /* border: 1px solid #181825; */
 }
 
+#custom-timer.work {
+  background: #1e1e2e;
+}
+
+#custom-timer.break {
+  background: #204020;
+}
+
 #custom-timer.warning {
   background: #b52020;
   color: #ffffff;
