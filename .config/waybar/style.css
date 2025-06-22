@@ -42,20 +42,7 @@ window#waybar {
     border-radius: 10px;
 }
 
-.custom.timer {
-    background-color: #1e1e2e;
-    padding: 0px 10px;
-    margin: 3px 0px;
-    margin-top: 5px;
-    border-radius: 6px;
-}
-.custom.timer.warning {
-    background-color: #b52020;
-    color: #ffffff;
-    font-weight: bold;
-}
-
-
+#custom-timer,
 #window,
 #clock,
 #battery,
@@ -71,6 +58,12 @@ window#waybar {
     margin: 3px 0px;
     margin-top: 5px;
     /* border: 1px solid #181825; */
+}
+
+#custom-timer.warning {
+  background: #b52020;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 #backlight {

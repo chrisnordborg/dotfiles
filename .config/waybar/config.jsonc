@@ -10,9 +10,11 @@
         "clock",
         "hyprland/workspaces"
     ],
-    //"modules-center": ["hyprland/window"],
+    "modules-center": [
+	/* "hyprland/window"], */
+	"custom/timer"
+    ],
     "modules-right": [
-        "custom/timer",
 	"tray",
         "memory",
         "cpu",
@@ -37,7 +39,7 @@
     "custom/timer": {
         "exec": "cat /tmp/waybar_timer.txt",
         "interval": 1,
-        "format": "⏱ {output}",
+        "format": "⏱ {text} ",
         "return-type": "json",  // <-- This line is now required again!
         "on-click": "~/.config/scripts/timer.sh"
     },
