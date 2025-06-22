@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ "$1" = "--reset" ]; then
+    echo "Resetting Bluetooth..."
+    sudo systemctl restart bluetooth
+    sleep 2
+fi
+
 declare -A headsets=(
   ["A8:F5:E1:86:64:FA"]="Shokz OpenRun Mini"
   ["84:D3:52:0B:D4:A3"]="JBL Live Pro 2"
@@ -8,40 +14,39 @@ declare -A headsets=(
   ["C0:28:8D:AA:99:55"]="Jaybird Vista 2"
 )
 
-# Prefer order
 ordered_macs=("A8:F5:E1:86:64:FA" "84:D3:52:0B:D4:A3" "14:3F:A6:C2:9D:9A" "30:50:75:F2:8B:F8" "C0:28:8D:AA:99:55")
 
 rfkill unblock bluetooth
 bluetoothctl power on
+sleep 1
 
 # Disconnect if already connected
 for mac in "${ordered_macs[@]}"; do
-    if timeout 1s bluetoothctl info "$mac" | grep -q 'Connected: yes'; then
-        echo "Turning off \"${headsets[$mac]}\""
-        bluetoothctl disconnect "$mac"
+    if bluetoothctl info "$mac" | grep -q 'Connected: yes'; then
+        bluetoothctl disconnect "$mac" >&2
+        echo "Disconnected: ${headsets[$mac]}"
         exit 0
     fi
 done
 
-echo "===================================="
-echo "Connecting to headset..."
-
+# Try to connect quickly
 for mac in "${ordered_macs[@]}"; do
-    echo "Trying \"${headsets[$mac]}\" ($mac)..."
+    echo "Trying to connect to ${headsets[$mac]} ($mac)..." >&2
+    echo -e "connect $mac" | bluetoothctl >&2
 
-    bluetoothctl <<EOF
-power on
-connect $mac
-EOF
+    # Poll for a matching sink for up to 10 seconds
+    for i in $(seq 1 10); do
+        sink=$(pactl list short sinks | grep -i "${mac//:/_}" | awk '{print $2}')
+        if [ -n "$sink" ]; then
+            pacmd set-default-sink "$sink"
+            echo "Connected: ${headsets[$mac]}"
+            exit 0
+        fi
+        sleep 1
+    done
 
-    sleep 2  # Give system time to register sink
-
-    sink=$(pactl list short sinks | grep bluez | awk '{print $2}')
-    if [ -n "$sink" ]; then
-        pacmd set-default-sink "$sink" && echo "OK default sink: $sink"
-        exit 0
-    fi
-    echo "-- Could not find bluetooth sink"
-    echo "------------------------------"
+    echo "No sink found for ${headsets[$mac]}" >&2
 done
 
+echo "No Bluetooth headsets connected."
+exit 1
