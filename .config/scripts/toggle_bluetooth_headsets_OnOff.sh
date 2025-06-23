@@ -1,5 +1,5 @@
 #!/bin/bash
-notify-send "begin"
+
 if [ "$1" = "--reset" ]; then
     echo "Resetting Bluetooth..."
     sudo systemctl restart bluetooth
