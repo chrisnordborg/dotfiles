@@ -21,7 +21,6 @@ fi
 # If user chose to scan for Bluetooth headset
 if [ "$clean_selection" = "$scanbt" ]; then
     # Run Bluetooth toggle script, capture lines that start with "Connected:" or "Disconnected:"
-	notify-send "begin"
     output=$(bash $togglebt | grep -E '^Connected:|^Disconnected:')
 
     # If output is non-empty, show notification
