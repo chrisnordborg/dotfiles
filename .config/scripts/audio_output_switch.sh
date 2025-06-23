@@ -5,13 +5,20 @@ options=$(pactl -f json list sinks | jq -r '.[] | .description')
 # Case-insensitive matching enabled
 shopt -s nocasematch
 
-btscan="[Scan for bluetooth headset]"
+scanbt="[Scan for bluetooth headset]"
+togglebt="$HOME/.config/scripts/toggle_bluetooth_headsets_OnOff.sh"
 
-selection=$(echo -e "$options\n$btscan" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
+selection=$(echo -e "$options\n$scanbt" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
 clean_selection=$(printf "%s" "$selection" | tr -d '\n\r')
 
+if [ "$1" = "--reset" ]; then
+    echo "Resetting Bluetooth..."
+    sudo systemctl restart bluetooth
+    sleep 2
+fi
+
 # If user chose to scan for Bluetooth headset
-if [ "$clean_selection" = "$btscan" ]; then
+if [ "$clean_selection" = "$scanbt" ]; then
     # Run Bluetooth toggle script, capture lines that start with "Connected:" or "Disconnected:"
     output=$(bash ~/.config/scripts/toggle_bluetooth_headsets_OnOff.sh | grep -E '^Connected:|^Disconnected:')
 
