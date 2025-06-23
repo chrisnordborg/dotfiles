@@ -38,7 +38,7 @@ for mac in "${ordered_macs[@]}"; do
     for i in $(seq 1 10); do
         sink=$(pactl list short sinks | grep -i "${mac//:/_}" | awk '{print $2}')
         if [ -n "$sink" ]; then
-            pacmd set-default-sink "$sink"
+            pactl set-default-sink "$sink"
             echo "Connected: ${headsets[$mac]}"
             exit 0
         fi
