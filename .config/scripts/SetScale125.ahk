@@ -24,7 +24,6 @@ Send("{Down 1}")            ; Go to 125% in the dropdown
 
 ; Select the new scaling value
 Send("{Enter}")
-;Sleep(500)
-
+Sleep(500)
 ; Optional: Close Settings window
 Send("!{F4}")
