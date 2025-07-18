@@ -1,13 +1,13 @@
 #!/bin/sh
 
-BaseDir="/mnt/phone"
+BaseDir="/mnt/external_devices"
 MountCmd="simple-mtpfs"
 UnmountCmd="fusermount -u"
 
-# Ensure base directory exists and is user-owned (only if not mounted)
+# Ensure base directory exists and is user-owned
 mkdir -p "$BaseDir"
 if ! mountpoint -q "$BaseDir"; then
-  chown "$USER":"$USER" "$BaseDir"
+  chown "$USER:$USER" "$BaseDir"
   chmod 755 "$BaseDir"
 fi
 
@@ -19,21 +19,21 @@ if [ -z "$DeviceList" ]; then
   exit 1
 fi
 
-# Add special options to the device list
-MenuList="$DeviceList\n!Unmount All Mounted Devices"
+# Define special action string (NO variable interpolation in menu!)
+UNMOUNT_ALL_STR="!Unmount All Mounted External Devices"
 
-# Use tofi (fallback to dmenu if you want)
+# Build full menu
+MenuList="$DeviceList\n$UNMOUNT_ALL_STR"
+
+# Launch menu
 menu="tofi -c $HOME/.config/tofi/configA --height 300 --width 800 --require-match=false"
-Selection=$(echo -e "$MenuList" | $menu --prompt "Select device or action: ")
+Selection=$(echo -e "$MenuList" | $menu --prompt "Select device or action: " | tr -d '\r\n')
 
-# Exit if no selection
+# Exit if user presses Escape or cancels
 [ -z "$Selection" ] && notify-send "Android Mount" "No selection made" && exit 1
 
-# Handle special actions first
-if [ "$Selection" = "!Cancel" ]; then
-  notify-send "Android Mount" "Operation cancelled"
-  exit 0
-elif [ "$Selection" = "!Unmount All Mounted Devices" ]; then
+# Handle "Unmount All" special option
+if [ "$Selection" = "$UNMOUNT_ALL_STR" ]; then
   for dir in "$BaseDir"/*; do
     if mountpoint -q "$dir"; then
       $UnmountCmd "$dir"
@@ -43,17 +43,22 @@ elif [ "$Selection" = "!Unmount All Mounted Devices" ]; then
   exit 0
 fi
 
-# Parse device info
-Id="${Selection%%:*}"              # Device number (e.g., 0)
-RawName="${Selection##*: }"        # Raw device name (e.g., Samsung Galaxy A55)
-Name="$(echo "$RawName" | tr ' /' '_')"  # Clean name for folder
+# Otherwise: assume user selected a valid device
+if ! echo "$Selection" | grep -q '^[0-9]\+:.*'; then
+  notify-send "Android Mount" "Invalid device selection: $Selection"
+  exit 1
+fi
 
+# Extract ID and Name safely
+Id="${Selection%%:*}"
+RawName="${Selection##*: }"
+Name="$(echo "$RawName" | tr ' /' '_')"
 MountDir="$BaseDir/$Name"
 
-# Ensure mountpoint exists and is user-owned (only if not mounted)
+# Create and fix ownership
 mkdir -p "$MountDir"
 if ! mountpoint -q "$MountDir"; then
-  chown "$USER":"$USER" "$MountDir"
+  chown "$USER:$USER" "$MountDir"
   chmod 755 "$MountDir"
 fi
 
@@ -61,6 +66,11 @@ fi
 if mountpoint -q "$MountDir"; then
   $UnmountCmd "$MountDir" && notify-send "Android Mount" "$Name unmounted"
 else
-  # Mount with allow_other and nonempty options (make sure user_allow_other is enabled in /etc/fuse.conf)
-  $MountCmd -o allow_other -o nonempty --device "$Id" "$MountDir" && notify-send "Android Mount" "$Name\n   mounted at\n$MountDir"
+  if Output=$($MountCmd -o allow_other -o nonempty --device "$Id" "$MountDir" 2>&1); then
+    notify-send "Android Mount" "$Name mounted at $MountDir"
+  else
+    ShortMsg=$(echo "$Output" | head -n 5)
+    notify-send -t 8000 "Android Mount Error" "Failed to mount $Name\n\n$ShortMsg"
+    exit 1
+  fi
 fi
