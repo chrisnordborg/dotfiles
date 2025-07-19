@@ -142,3 +142,9 @@ sudo pacman -S pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber
 systemctl --user daemon-reexec
 systemctl --user daemon-reload
 systemctl --user enable --now pipewire-pulse.service
+
+
+# Transfer files from android phone
+sudo pacman -S zenity android-tools 
+yay -S simple-mptfs jmtpfs
+# Enable user_allow_other in /etc/fuse.conf
