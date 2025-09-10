@@ -148,3 +148,21 @@ systemctl --user enable --now pipewire-pulse.service
 sudo pacman -S zenity android-tools 
 yay -S simple-mptfs jmtpfs
 # Enable user_allow_other in /etc/fuse.conf
+
+# Android studio
+yay -S android-studio
+
+# Kotling development
+## snap
+git clone https://aur.archlinux.org/snapd.git
+cd snapd
+makepkg -si
+## enable systemd unit main snap communcation socket
+sudo systemctl enable --now snapd.socket
+## enable AppArmor
+sudo systemctl enable --now snapd.apparmor.service
+## enable slaccic snap support
+sudo ln -s /var/lib/snapd/snap /snap
+reboot
+## install kotlin
+sudo snap install kotrlin --classic
