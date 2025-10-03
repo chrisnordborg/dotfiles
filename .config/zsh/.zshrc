@@ -1,3 +1,4 @@
+export PATH=/usr/lib/qt6/bin:/usr/lib/qt6/bin:/home/archer/.config/scripts:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/android-sdk/platform-tools:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -136,5 +137,5 @@ alias backupdot="bash ~/dotfiles/.config/scripts/backupdotfiles.sh"
 alias backupmusic="bash ~/dotfiles/.config/scripts/backupmusic.sh"
 alias backupall="bash ~/dotfiles/.config/scripts/backup.sh" 
 alias cppoefilter="cp ~/Downloads/*.filter ~/.local/share/Steam/steamapps/compatdata/238960/pfx/drive_c/users/steamuser/My\ Documents/My\ Games/Path\ of\ Exile/"
-export PATH=/usr/lib/qt6/bin:/usr/lib/qt6/bin:/home/archer/.config/scripts:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/android-sdk/platform-tools:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
 
+export QT_QPA_PLATFORM=xcb

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #volume=$(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1)
+	#amixer is installed with alsa-utils.
 volume=$(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1)
 mute=$(amixer get Master | grep -Po '\[off\]')
 

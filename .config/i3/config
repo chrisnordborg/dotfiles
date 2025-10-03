@@ -106,7 +106,7 @@ bindsym $mod+Control+h split h
 bindsym $mod+Control+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -180,12 +180,15 @@ assign [class="steam"] $ws10
 # Start applications
 #bindsym $mod+Return exec i3-sensible-terminal
 #bindsym $mod+Return exec gnome-terminal
-bindsym $mod+Return exec kitty
+# the added & is to open it inside a new window, and not a tab.
+bindsym $mod+Return exec kitty --detach &
+
+#bindsym $mod+a exec bash  
+bindsym $mod+f exec nautilus
 bindsym $mod+b exec brave
 bindsym $mod+g exec steam
 bindsym $mod+o exec obsidian
 bindsym $mod+m exec rhythmbox
-bindsym $mod+n exec nautilus
 
 # Autostart applications
 exec brave
