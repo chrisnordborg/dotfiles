@@ -6,7 +6,7 @@
 # Description: This is my personal installation script for a clean OS install. Currently reworking it to be distro-independet.
 # Author: Christian Nordborg
 
-
+# to add libnotify (notify-send), alsa-utils, xcolor , xclip, xsel (these two for clipboard management between OS and nvim; use wl-clipboard for wayland).
 
 # Initializing which package manager to used based on your system.
 OS = $(hostnamectl | grep "Operating System")

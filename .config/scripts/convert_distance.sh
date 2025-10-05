@@ -4,8 +4,25 @@
 command -v bc >/dev/null || { notify-send "Error: bc not found"; exit 1; }
 
 # Get user input
-menu="tofi -c $HOME/.config/tofi/configA --height 40 --width 330 --require-match=false"
-dist="$(echo "" | $menu --prompt "Enter a distance: ")"
+SB="#a3be8c"
+NF="#d8dee9"
+FN="monospace-16"
+PROMPT="Enter a distance:"
+launcher=$1
+
+case $launcher in
+    dmenu)
+        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        ;;
+    tofi)
+	menu_cmd="tofi -c $HOME/.config/tofi/configA --height 40 --width 330 --require-match=false \"$PROMPT\""
+        ;;
+    *)
+        notify-send "You have to choose a launcher!"
+        exit 1
+        ;;
+esac
+dist=$(eval "$menu_cmd") || exit 0
 [ -z "$dist" ] && exit
 
 # Validate input is a number

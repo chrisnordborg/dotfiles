@@ -14,7 +14,25 @@ restartbt="[Restart Bluetooth]"
 shopt -s nocasematch
 
 # Prompt user
-selection=$(echo -e "$options\n$scanbt\n$restartbt" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
+launcher=$1
+SB="#a3be8c"
+NF="#d8dee9"
+FN="monospace-16"
+case $launcher in 
+	dmenu)
+		selection=$(echo -e "$options\n$scanbt\n$restartbt" | dmenu -l 8 -c -fn $FN -sb $SB -nf $NF -p "Set audio output:") || exit 0
+		;;
+	tofi)
+		selection=$(echo -e "$options\n$scanbt\n$restartbt" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
+		;;
+	*)
+		notify-send "You have to select a launcher!"
+		exit
+		;;
+esac
+
+
+
 clean_selection=$(printf "%s" "$selection" | tr -d '\n\r')
 
 # Handle Bluetooth restart

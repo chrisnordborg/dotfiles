@@ -1,28 +1,43 @@
 #!/bin/bash
 
+SB="#a3be8c"
+NF="#d8dee9"
+FN="monospace-16"
+launcher=$1
+
+currencies=(SEK USD EUR GBP NOK)
+currency_list_pipe=$(IFS="|"; echo "${currencies[*]}")
+PROMPT="Enter amount with currency (e.g. 100 ${currency_list_pipe}):"
+
 format_number() {
   local number="$1"
-  # Round to nearest integer by adding 0.5 and truncating
   rounded=$(echo "($number + 0.5)/1" | bc)
   echo "$rounded" | rev | sed 's/.../& /g' | rev | sed 's/^ //'
 }
 
-# Dependencies check
 for cmd in curl jq bc; do
   command -v $cmd >/dev/null || { notify-send "Error: $cmd not found"; exit 1; }
 done
 
-# List of supported currencies (uppercase only)
-currencies=(SEK USD EUR GBP NOK)
+case $launcher in
+    dmenu)
+        menu_cmd="echo '             ' | dmenu -l 1 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        ;;
+    tofi)
+        menu_cmd="tofi -c $HOME/.config/tofi/configA --height 40 --width 800 --require-match=false --prompt \"$PROMPT\""
+        ;;
+    *)
+        notify-send "You have to choose a launcher!"
+        exit 1
+        ;;
+esac
 
-# Detect and parse user input
-menu="tofi -c $HOME/.config/tofi/configA --height 40 --width 800 --require-match=false"
-currency_list_comma=$(IFS=, ; echo "${currencies[*]}" | sed 's/,/|/g')
-input=$(echo "" | $menu --prompt "Enter amount with currency (e.g. 100 ${currency_list_comma}): ")
+input=$(eval "$menu_cmd") || exit 0
 [ -z "$input" ] && exit
 
-# Normalize input and extract number + currency
-input=${input^^} # uppercase
+input=${input^^}   # uppercase
+input=$(echo "$input" | tr -d ' ')  # remove spaces
+
 amount=$(echo "$input" | grep -oE '[0-9]+([.][0-9]+)?')
 currency=$(echo "$input" | grep -oE '[A-Z]{3}' | head -n1)
 
@@ -36,23 +51,23 @@ if [[ ! " ${currencies[@]} " =~ " $currency " ]]; then
   exit 1
 fi
 
-# Cache setup
 cache_file="/tmp/fx_rates.json"
-cache_expiry=3600  # in seconds (1 hour)
+cache_expiry=3600
 now=$(date +%s)
 
-# Refresh cache if needed
 if [[ ! -f $cache_file || $(($(date +%s) - $(stat -c %Y "$cache_file"))) -ge $cache_expiry ]]; then
-  echo "{}" > "$cache_file"  # reset
+  echo "{}" > "$cache_file"
   for base in "${currencies[@]}"; do
-    response=$(curl -s "https://api.frankfurter.app/latest?from=$base&to=$(IFS=,; echo "${currencies[*]/$base}")")
-    jq ". + {\"$base\": $(echo "$response" | jq '.rates') }" "$cache_file" > "$cache_file.tmp" && mv "$cache_file.tmp" "$cache_file"
+    targets=("${currencies[@]/$base}")
+    target_list=$(IFS=,; echo "${targets[*]}")
+    response=$(curl -s "https://api.frankfurter.app/latest?from=$base&to=$target_list")
+    if [[ -n "$response" ]]; then
+        jq ". + {\"$base\": $(echo "$response" | jq '.rates') }" "$cache_file" > "$cache_file.tmp" && mv "$cache_file.tmp" "$cache_file"
+    fi
   done
 fi
 
-# Build output
 output="$amount $currency converts to:\n"
-
 for target in "${currencies[@]}"; do
   [[ "$currency" == "$target" ]] && continue
   rate=$(jq -r --arg base "$currency" --arg tgt "$target" '.[$base][$tgt]' "$cache_file")
@@ -64,3 +79,4 @@ for target in "${currencies[@]}"; do
 done
 
 notify-send -t 10000 -h string:bgcolor:#586e75 "$(echo -e "$output")"
+

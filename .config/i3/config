@@ -34,27 +34,6 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
-# Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-
-# Media Player controls
-bindsym XF86AudioPlay exec playerctl play-pause
-bindsym XF86AudioStop exec playerctl stop
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
-
-# Print screen
-#bindsym Print exec --no-startup-id maim "/home/$USER/Pictures/$(date)"
-bindsym $mod+Print exec gnome-screenshot -a
-
-# Save screenshot to ~/Pictures with timestamp
-bindsym Print exec --no-startup-id scrot '~/Pictures/screenshot_%Y-%m-%d_%H-%M-%S.png'
-
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -67,13 +46,6 @@ tiling_drag modifier titlebar
 # kill focused window
 bindsym $mod+q kill
 
-# start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run
-# A more modern dmenu replacement is rofi:
-# bindcode $mod+40 exec "rofi -modi drun,run -show drun"
-# There also is i3-dmenu-desktop which only displays applications shipping a
-# .desktop file. It is a wrapper around dmenu, so you need that installed.
-# bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+h focus left
@@ -162,38 +134,110 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
+# Come back to your last workspaces with the same keystroke.
+workspace_auto_back_and_forth yes
+
+
+
+# Applications
+set $terminal "kitty"
+set $fileManager "nautilus"
+set $menu "dmenu"
+set $browser "brave"
+set $musicPlayer "rhytmbox"
+set $notes "obsidian"
+set $editor "intellij"
+set $colorPicker "xcolor"
+set $gameClient "steam"
+
+#bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec gnome-terminal
+# the added & is to open it inside a new window, and not a tab.
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec --no-startup-id dmenu_run
+# A more modern dmenu replacement is rofi:
+# bindcode $mod+40 exec "rofi -modi drun,run -show drun"
+# There also is i3-dmenu-desktop which only displays applications shipping a
+# .desktop file. It is a wrapper around dmenu, so you need that installed.
+# bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
+
+
+bindsym $mod+Return exec kitty --detach &
+
+bindsym $mod+f exec $fileManager
+bindsym $mod+b exec $browser
+bindsym $mod+g exec $gameClient
+bindsym $mod+o exec $notes
+bindsym $mod+m exec $musicPlayer
+bindsym $mod+p exec sh -c '$colorPicker | tee >(xclip -selection clipboard) | xargs -I{} notify-send "Picked color: {}"'
+bindsym $mod+Shift+a exec bash ~/.config/scripts/audio_output_switch.sh $menu 
+bindsym $mod+Shift+c exec bash ~/.config/scripts/conversions.sh $menu
+bindsym $mod+Shift+v exec bash ~/.config/scripts/adb_transfer.sh $menu
+bindsym $mod+Shift+d exec bash ~/.config/scripts/mount_devices.sh $menu
+bindsym $mod+Shift+n exec bash ~/.config/scripts/create_note.sh $menu
+bindsym $mod+Shift+p exec bash ~/.config/scripts/pomodoro.sh $menu
+bindsym $mod+Shift+t exec bash ~/.config/scripts/timer.sh $menu
+
+
+# Print screen
+set $newPicPath "/mnt/HDD/Pictures/Screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
+set $takeScreenshot "grimblast --notify copysave"
+
+#bindsym Print exec --no-startup-id maim "/home/$USER/Pictures/$(date)"
+#bindsym $mod+Print exec gnome-screenshot -a
+
+# Save screenshot to ~/Pictures with timestamp
+bindsym Print exec --no-startup-id scrot '~/Pictures/screenshot_%Y-%m-%d_%H-%M-%S.png'
+
+
+# entire screen + clipboard
+#bindsym --release Print exec grimblast --notify copysave screen
+# current active window only + clipboard
+bindsym $mod+Print exec $takeScreenshot active 
+# select area to take screenshot
+bindsym $mod+Shift+Print exec $takeScreenshot -- freeze area $newPicPath 
+
+
+# Use pactl to adjust volume in PulseAudio.
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+# Media Player controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioStop exec playerctl stop
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# Screen brightness
+bindsym XF86MonBrightnessUp exec brightnessctl s +5%
+bindsym XF86MonBrightnessDown exec brightnessctl 5%-
+
 # Set assigned workspaces for applications
 # use command xprop and activate the application to get the 'WM_CLASS(STRING)' second value
 # and use as the class name below.
-assign [class="kitty"] $ws1
+assign [class=$terminal] $ws1
 #assign [class="Gnome-terminal"] $ws2
 #assign [class=""] $ws2
-assign [class="Brave"] $ws3
-assign [class="obsidian"] $ws4
+assign [class=$browser] $ws3
+assign [class=$notes] $ws4
 #assign [class=""] $ws5
 #assign [class=""] $ws6
 #assign [class=""] $ws7
 #assign [class=""] $ws8
-assign [class="Rhythmbox"] $ws9
-assign [class="steam"] $ws10
+assign [class=$musicPlayer] $ws9
+assign [class=$gameClient] $ws10
 
-# Start applications
-#bindsym $mod+Return exec i3-sensible-terminal
-#bindsym $mod+Return exec gnome-terminal
-# the added & is to open it inside a new window, and not a tab.
-bindsym $mod+Return exec kitty --detach &
 
-#bindsym $mod+a exec bash  
-bindsym $mod+f exec nautilus
-bindsym $mod+b exec brave
-bindsym $mod+g exec steam
-bindsym $mod+o exec obsidian
-bindsym $mod+m exec rhythmbox
+
 
 # Autostart applications
-exec brave
+exec $browser
 #exec gnome-terminal
-exec kitty
+exec $terminal
 #start picom (terminal transparency)
 exec picom -b
 exec bash ~/.config/polybar/launch.sh
@@ -201,11 +245,14 @@ exec onedrive --monitor
 
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+Shift+m reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+# Randomize wallpaper
+bindsym $mod+shift+w exec --no-startup-id sh -c 'feh --bg-scale "$(find ~/dotfiles/wallpapers/ -type f | shuf -n 1)"'
+
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -260,16 +307,13 @@ bindsym $mod+r mode "resize"
 #new_window 1pixel
 #new_window normal	#default title bar
 #new_window none		#remove title bar completely (if supported)
-for_window [class="^.*"] border pixel 1		#to apply this per-window
 
-# Set wallpaper
-#exec_always feh --bg-scale ~/customInstall/wallpapers/Crater.png
+#to apply this per-window
+for_window [class="^.*"] border pixel 1	
+
 
 # Set random wallpaper from ~/customInstall/wallpapers/
 exec_always --no-startup-id sh -c 'feh --bg-scale "$(find ~/dotfiles/wallpapers/ -type f | shuf -n 1)"'
-bindsym $mod+shift+w exec --no-startup-id sh -c 'feh --bg-scale "$(find ~/dotfiles/wallpapers/ -type f | shuf -n 1)"'
-# Start polybar
-#exec_always --no-startup-id ~/.config/polybar/launch.sh
 
 # Auto-disable NUM LOCK upon startup.
 #exec --no-startup-id sh -c "sleep 2 && xdotool key Num_Lock"
