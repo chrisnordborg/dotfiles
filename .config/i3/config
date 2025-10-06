@@ -144,11 +144,13 @@ set $terminal "kitty"
 set $fileManager "nautilus"
 set $menu "dmenu"
 set $browser "brave"
+set $browser_class "Brave-browser"
 set $musicPlayer "rhytmbox"
 set $notes "obsidian"
 set $editor "intellij"
 set $colorPicker "xcolor"
 set $gameClient "steam"
+
 
 # Set assigned workspaces for applications
 # use command xprop and activate the application to get the 'WM_CLASS(STRING)' second value
@@ -156,7 +158,7 @@ set $gameClient "steam"
 assign [class=$terminal] $ws1
 #assign [class="Gnome-terminal"] $ws2
 #assign [class=""] $ws2
-assign [class=$browser] $ws3
+assign [class=$browser_class] $ws3
 assign [class=$notes] $ws4
 #assign [class=""] $ws5
 #assign [class=""] $ws6
@@ -164,9 +166,6 @@ assign [class=$notes] $ws4
 #assign [class=""] $ws8
 assign [class=$musicPlayer] $ws9
 assign [class=$gameClient] $ws10
-#bindsym $mod+Return exec i3-sensible-terminal
-#bindsym $mod+Return exec gnome-terminal
-# the added & is to open it inside a new window, and not a tab.
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id dmenu_run
@@ -178,7 +177,7 @@ bindsym $mod+d exec --no-startup-id dmenu_run
 
 
 
-
+# the added & is to open it inside a new window, and not a tab.
 bindsym $mod+Return exec kitty --detach &
 
 bindsym $mod+f exec $fileManager
@@ -196,23 +195,23 @@ bindsym $mod+Shift+p exec bash ~/.config/scripts/pomodoro.sh $menu
 bindsym $mod+Shift+t exec bash ~/.config/scripts/timer.sh $menu
 
 
-# Print screen
-set $newPicPath "/mnt/HDD/Pictures/Screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
-set $takeScreenshot "grimblast --notify copysave"
+# Screenshoting
+#set $screenshots_dir "/mnt/HDD/Pictures/Screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
+#set $screenshots_dir "/mnt/HDD/Pictures/Screenshots/"
 
-#bindsym Print exec --no-startup-id maim "/home/$USER/Pictures/$(date)"
-#bindsym $mod+Print exec gnome-screenshot -a
+# Full screen to file
+bindsym --release Print exec --no-startup-id bash ~/.config/scripts/multi_press_print.sh
+#bindsym Print exec --no-startup-id flameshot full -c --path $screenshots_dir
+# Area selection (opens GUI)
+#bindsym --release $mod+Print exec --no-startup-id flameshot gui --clipboard
+#bindsym $mod+Print exec flameshot gui 
+#-p $screenshots_dir
+# Active window only
+#bindsym --release $mod+Shift+Print exec --no-startup-id flameshot screen -p $screenshots_dir
+#bindsym $mod+Shift+Print exec --no-startup-id maim -i $(xdotool getactivewindow) "$screenshot_dir/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png" && notify-send "📸 Window screenshot saved"
+# Save screenshot to ~/Pictures with timestamp (no dependencies)
+# bindsym Print exec --no-startup-id scrot '~/Pictures/screenshot_%Y-%m-%d_%H-%M-%S.png'
 
-# Save screenshot to ~/Pictures with timestamp
-bindsym Print exec --no-startup-id scrot '~/Pictures/screenshot_%Y-%m-%d_%H-%M-%S.png'
-
-
-# entire screen + clipboard
-#bindsym --release Print exec grimblast --notify copysave screen
-# current active window only + clipboard
-bindsym $mod+Print exec $takeScreenshot active 
-# select area to take screenshot
-bindsym $mod+Shift+Print exec $takeScreenshot -- freeze area $newPicPath 
 
 
 # Use pactl to adjust volume in PulseAudio.
@@ -235,15 +234,14 @@ bindsym XF86MonBrightnessDown exec brightnessctl 5%-
 
 
 
-
 # Autostart applications
-exec $browser
-#exec gnome-terminal
 exec $terminal
 #start picom (terminal transparency)
 exec picom -b
+exec $browser
 exec bash ~/.config/polybar/launch.sh
 exec onedrive --monitor
+exec --no-startup-id flameshot
 
 
 # reload the configuration file

@@ -62,7 +62,7 @@ start_timer() {
 	    fi
 
 	    # New: output for Polybar
-	    echo "$text" > /tmp/status_bar_timer.txt
+	    echo "|| $text ||" > /tmp/status_bar_timer.txt
 
             sleep 1
             ((total_seconds--))

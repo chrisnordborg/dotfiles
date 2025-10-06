@@ -7,6 +7,8 @@
 # Author: Christian Nordborg
 
 # to add libnotify (notify-send), alsa-utils, xcolor , xclip, xsel (these two for clipboard management between OS and nvim; use wl-clipboard for wayland).
+#add flameshot, maim, xdotool for screenshoting
+
 
 # Initializing which package manager to used based on your system.
 OS = $(hostnamectl | grep "Operating System")
