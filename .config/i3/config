@@ -191,28 +191,11 @@ bindsym $mod+Shift+c exec bash ~/.config/scripts/conversions.sh $menu
 bindsym $mod+Shift+v exec bash ~/.config/scripts/adb_transfer.sh $menu
 bindsym $mod+Shift+d exec bash ~/.config/scripts/mount_devices.sh $menu
 bindsym $mod+Shift+n exec bash ~/.config/scripts/create_note.sh $menu
-bindsym $mod+Shift+p exec bash ~/.config/scripts/pomodoro.sh $menu
-bindsym $mod+Shift+t exec bash ~/.config/scripts/timer.sh $menu
-
-
+bindsym $mod+Shift+p exec bash ~/.config/polybar/scripts/pomodoro.sh $menu
+bindsym $mod+Shift+t exec bash ~/.config/polybar/scripts/timer.sh $menu
+bindsym $mod+Escape exec bash ~/.config/polybar/scripts/power_menu.sh
 # Screenshoting
-#set $screenshots_dir "/mnt/HDD/Pictures/Screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
-#set $screenshots_dir "/mnt/HDD/Pictures/Screenshots/"
-
-# Full screen to file
 bindsym --release Print exec --no-startup-id bash ~/.config/scripts/multi_press_print.sh
-#bindsym Print exec --no-startup-id flameshot full -c --path $screenshots_dir
-# Area selection (opens GUI)
-#bindsym --release $mod+Print exec --no-startup-id flameshot gui --clipboard
-#bindsym $mod+Print exec flameshot gui 
-#-p $screenshots_dir
-# Active window only
-#bindsym --release $mod+Shift+Print exec --no-startup-id flameshot screen -p $screenshots_dir
-#bindsym $mod+Shift+Print exec --no-startup-id maim -i $(xdotool getactivewindow) "$screenshot_dir/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png" && notify-send "📸 Window screenshot saved"
-# Save screenshot to ~/Pictures with timestamp (no dependencies)
-# bindsym Print exec --no-startup-id scrot '~/Pictures/screenshot_%Y-%m-%d_%H-%M-%S.png'
-
-
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
