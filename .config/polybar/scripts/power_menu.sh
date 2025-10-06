@@ -1,2 +1,34 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+
+res=$(echo \
+"poweroff
+reboot
+lock
+exit
+suspend" \
+| tofi --height 225 --width 225 -c ~/.config/tofi/configA )
+#| rofi -dmenu -p "system")
+
+which systemctl &>/dev/null
+if [ "$?" -eq 0 ]; then
+    login_manager="systemctl"
+else
+    login_manager="loginctl"
+fi
+
+case $res in
+"lock")
+    hyprlock
+    #sleep 0.5; # wait for picom fade --- not sure how to do this via script
+    #~/.scripts/i3lock_launch;;
+"exit")
+    
+    #xdotool search "" windowkill %@  --maxdepth; bspc quit;;
+"poweroff")
+    $login_manager poweroff;;
+"reboot")
+    $login_manager reboot;;
+"suspend")
+    $login_manager suspend;;
+esac !/usr/bin/bash
 
