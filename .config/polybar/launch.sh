@@ -1,6 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+# Kill existing bars
 killall -q polybar
+
+# Wait until processes have been shut down
 while pgrep -x polybar >/dev/null; do sleep 1; done
 
-polybar mybar &
+# Launch Polybar (enable IPC)
+polybar --reload mybar &

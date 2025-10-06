@@ -12,7 +12,7 @@ launcher=$1
 
 case $launcher in
     dmenu)
-        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -i -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
         ;;
     tofi)
 	menu_cmd="tofi -c $HOME/.config/tofi/configA --height 40 --width 330 --require-match=false \"$PROMPT\""

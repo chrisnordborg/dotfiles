@@ -26,8 +26,25 @@ UNMOUNT_ALL_STR="!Unmount All Mounted External Devices"
 MenuList="$DeviceList\n$UNMOUNT_ALL_STR"
 
 # Launch menu
-menu="tofi -c $HOME/.config/tofi/configA --height 300 --width 800 --require-match=false"
-Selection=$(echo -e "$MenuList" | $menu --prompt "Select device or action: " | tr -d '\r\n')
+SB="#a3be8c"
+NF="#d8dee9"
+FN="monospace-16"
+PROMPT="Select device or action:"
+launcher=$1
+
+case $launcher in
+    dmenu)
+        menu_cmd="printf '%s\n' \"$MenuList\" | dmenu -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        ;;
+    tofi)
+	menu_cmd="echo \"$Menulist\" | tofi -c $HOME/.config/tofi/configA --height 300 --width 800 --require-match=false \"$PROMPT\""
+        ;;
+    *)
+        notify-send "You have to choose a launcher!"
+        exit 1
+        ;;
+esac
+Selection=$(eval "$menu_cmd") || exit 0
 
 # Exit if user presses Escape or cancels
 [ -z "$Selection" ] && notify-send "Android Mount" "No selection made" && exit 1

@@ -4,8 +4,26 @@
 DefaultPushTarget="/mnt/HDD/Music"
 DefaultPullSource="/storage/3534-3930"
 DefaultLocalDir="$HOME/Downloads"
+SB="#a3be8c"
+NF="#d8dee9"
+FN="monospace-16"
+PROMPT="Select ADB action:"
+launcher=$1
+# Define options
+OPTIONS="Push file to phone\nPull file from phone\nDelete file/folder on phone\nOpen phone shell"
 
-menu="tofi -c $HOME/.config/tofi/configA --height 300 --width 800 --require-match=false --num-results=15"
+case $launcher in
+    dmenu)
+        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        ;;
+    tofi)
+	menu_cmd="tofi -c $HOME/.config/tofi/configA --height 300 --width 800 --require-match=false --num-results=15 \"$PROMPT\""
+        ;;
+    *)
+        notify-send "You have to choose a launcher!"
+        exit 1
+        ;;
+esac
 
 # Check if device is connected
 if ! adb get-state 1>/dev/null 2>&1; then
@@ -13,11 +31,9 @@ if ! adb get-state 1>/dev/null 2>&1; then
   exit 1
 fi
 
-# Define options
-OPTIONS="Push file to phone\nPull file from phone\nDelete file/folder on phone\nOpen phone shell"
 
 # Show menu
-Choice=$(echo -e "$OPTIONS" | $menu --prompt "Select ADB action:" | tr -d '\r\n')
+Choice=$(eval "$menu_cmd") || exit 0
 [ -z "$Choice" ] && exit 0
 
 case "$Choice" in

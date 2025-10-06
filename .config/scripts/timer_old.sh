@@ -3,8 +3,8 @@
 # ----------------------------
 # CONFIGURATION
 # ----------------------------
-TIMER_FILE="/tmp/status_bar_timer.txt"
-PID_FILE="/tmp/status_bar_timer_pid"
+TIMER_FILE="/tmp/waybar_timer.txt"
+PID_FILE="/tmp/waybar_timer_pid"
 SB="#a3be8c"
 NF="#d8dee9"
 FN="monospace-16"
@@ -55,14 +55,11 @@ start_timer() {
             local text
             text=$(printf "%02d:%02d" "$min" "$sec")
 
-	    if [ "$total_seconds" -lt 60 ]; then
-    	    printf '{"text":"%s", "class":"warning"}\n' "$text" > "$TIMER_FILE"
-	    else
-    	    printf '{"text":"%s", "class":"normal"}\n' "$TIMER_FILE"
-	    fi
-
-	    # New: output for Polybar
-	    echo "$text" > /tmp/status_bar_timer.txt
+            if [ "$total_seconds" -lt 60 ]; then
+                printf '{"text":"%s", "class":"warning"}\n' "$text" > "$TIMER_FILE"
+            else
+                printf '{"text":"%s", "class":"normal"}\n' "$text" > "$TIMER_FILE"
+            fi
 
             sleep 1
             ((total_seconds--))
