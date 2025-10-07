@@ -92,7 +92,7 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+#bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
@@ -193,7 +193,7 @@ bindsym $mod+Shift+d exec bash ~/.config/scripts/mount_devices.sh $menu
 bindsym $mod+Shift+n exec bash ~/.config/scripts/create_note.sh $menu
 bindsym $mod+Shift+p exec bash ~/.config/polybar/scripts/pomodoro.sh $menu
 bindsym $mod+Shift+t exec bash ~/.config/polybar/scripts/timer.sh $menu
-bindsym $mod+Escape exec bash ~/.config/polybar/scripts/power_menu.sh
+bindsym $mod+Escape exec bash ~/.config/polybar/scripts/power_menu.sh $menu
 # Screenshoting
 bindsym --release Print exec --no-startup-id bash ~/.config/scripts/multi_press_print.sh
 

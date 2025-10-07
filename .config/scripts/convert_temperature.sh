@@ -3,9 +3,6 @@
 # Ensure bc is installed
 command -v bc >/dev/null || { notify-send "Error: bc not found"; exit 1; }
 
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 PROMPT="Enter a temperature:"
 launcher=$1
 
@@ -14,7 +11,7 @@ launcher=$1
 # ----------------------------
 case $launcher in
     dmenu)
-        menu_cmd="printf '' | dmenu -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\" <&- || exit 0"
+        menu_cmd="printf '        ' | dmenu -l 0 -p \"$PROMPT\""
         ;;
     tofi)
         menu_cmd="tofi -c \"$HOME/.config/tofi/configA\" --height 40 --width 330 --require-match=false --prompt \"$PROMPT\""
@@ -54,7 +51,7 @@ k_from_f=$(bc <<< "scale=2; (($temp - 32) * 5/9 + 273.15)")
 # ----------------------------
 # DISPLAY RESULTS
 # ----------------------------
-notify-send -t 5000 -h string:bgcolor:#916B4A "$(echo -e \
+notify-send -t 5000 -u critical "$(echo -e \
 "$temp°C ---> $f_from_c°F  or $k_from_c°K\n\n\
 $temp°F ---> $c_from_f°C  or  $k_from_f°K\n\n\
 $temp°K ---> $c_from_k°C  or  $f_from_c°F")"

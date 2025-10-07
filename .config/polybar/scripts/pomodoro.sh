@@ -2,18 +2,11 @@
 
 TIMER_FILE="/tmp/waybar_timer.txt"
 PID_FILE="/tmp/waybar_pomodoro_pid"
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 launcher=$1
 
 # ───────────────────────────────────────────────
 # Launcher command setup
 # ───────────────────────────────────────────────
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
-
 case "$launcher" in
     tofi)
         menu() {
@@ -32,12 +25,11 @@ case "$launcher" in
         menu() {
             local prompt="$1"; local height="$2"; local width="$3"; local items="$4"
             # Use your colors and font here
-            printf '%b' "$items" | dmenu -l "$height" -p "$prompt" \
-                -sb "$SB" -nf "$NF" -fn "$FN"
+            printf '%b' "$items" | dmenu -l "$height" -p "$prompt"
         }
         ;;
     *)
-        notify-send "You must specify launcher: tofi, rofi or dmenu"
+        notify-send -u critical "You must specify launcher: tofi, rofi or dmenu"
         exit 1
         ;;
 esac
@@ -59,11 +51,11 @@ prompt_minutes() {
 
 stop_pomodoro() {
     if [ -f "$PID_FILE" ]; then
-        kill -TERM "$(cat "$PID_FILE")" 2>/dev/null && notify-send "🛑 Pomodoro stopped"
+        kill -TERM "$(cat "$PID_FILE")" 2>/dev/null && notify-send -u critical "🛑 Pomodoro stopped"
         echo "" > "$TIMER_FILE"
         rm -f "$PID_FILE"
     else
-        notify-send "No active Pomodoro"
+        notify-send -u critical "No active Pomodoro"
     fi
 }
 
@@ -103,17 +95,17 @@ start_pomodoro() {
 
     # Validate numeric (integers only)
     if ! [[ "$work_min" =~ ^[0-9]+$ ]]; then
-        notify-send "Invalid work time (enter whole minutes)"
+        notify-send -u critical "Invalid work time (enter whole minutes)"
         return 1
     fi
     if ! [[ "$break_min" =~ ^[0-9]+$ ]]; then
-        notify-send "Invalid break time (enter whole minutes)"
+        notify-send -u critical "Invalid break time (enter whole minutes)"
         return 1
     fi
 
     # Validate > 0
     if [ "$work_min" -le 0 ] || [ "$break_min" -le 0 ]; then
-        notify-send "Time must be greater than 0"
+        notify-send -u critical "Time must be greater than 0"
         return 1
     fi
 
@@ -134,7 +126,7 @@ start_pomodoro() {
           #      --no-wrap --window-icon=info \
           #      --timeout=5 --no-markup &
 
-            notify-send "🍅 Work time: $work_min minutes"
+            notify-send -u critical "🍅 Work time: $work_min minutes"
 
             run_timer "$work_min" "Work" "work"
 
@@ -147,7 +139,7 @@ start_pomodoro() {
             #    --no-wrap --window-icon=info \
             #    --timeout=5 --no-markup &
 
-            notify-send "☕ Break time: $break_min minutes"
+            notify-send -u critical "☕ Break time: $break_min minutes"
 
             run_timer "$break_min" "Break" "break"
         done

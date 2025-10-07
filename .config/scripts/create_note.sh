@@ -8,9 +8,6 @@ newNoteFolder="$mainFolder/_NewNotes"
 terminal="kitty"
 timestamp=$(date +%F_%T | tr ':' '-') # e.g. 2025-06-21_21-24-00
 
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 launcher=$1
 
 # ---------------------------------------
@@ -19,12 +16,12 @@ launcher=$1
 case "$launcher" in
     dmenu)
         menu() {
-            dmenu -i -l 15 -c -fn "$FN" -sb "$SB" -nf "$NF" -p "$1"
+            dmenu -l 15 -p "$1"
         }
         ;;
     rofi)
         menu() {
-            rofi -dmenu -i -p "$1"
+            rofi -dmenu -p "$1"
         }
         ;;
     tofi)

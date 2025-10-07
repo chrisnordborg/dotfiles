@@ -1,13 +1,10 @@
 #!/bin/bash
 
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 launcher=$1
 
 currencies=(SEK USD EUR GBP NOK)
 currency_list_pipe=$(IFS="|"; echo "${currencies[*]}")
-PROMPT="Enter amount with currency (e.g. 100 ${currency_list_pipe}):"
+PROMPT="Enter [amount] (e.g. 100 ${currencies[0]}):"
 
 format_number() {
   local number="$1"
@@ -21,7 +18,7 @@ done
 
 case $launcher in
     dmenu)
-        menu_cmd="echo '             ' | dmenu -l 1 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        menu_cmd="printf '               ' | dmenu -l 0 -p \"$PROMPT\""
         ;;
     tofi)
         menu_cmd="tofi -c $HOME/.config/tofi/configA --height 40 --width 800 --require-match=false --prompt \"$PROMPT\""
@@ -78,5 +75,5 @@ for target in "${currencies[@]}"; do
   output+="  $converted $target \t(rate: $rounded_rate)\n"
 done
 
-notify-send -t 10000 -h string:bgcolor:#586e75 "$(echo -e "$output")"
+notify-send -t 10000 -u critical "$(echo -e "$output")"
 

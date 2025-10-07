@@ -1,8 +1,5 @@
 #!/bin/bash
 
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 PROMPT="Enter a concentration:"
 launcher=$1
 # Conversion functions
@@ -20,7 +17,7 @@ command -v bc >/dev/null || { notify-send "Error: bc not found"; exit 1; }
 # Get user input
 case $launcher in
     dmenu)
-        menu_cmd="printf '' | dmenu -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\" <&- || exit 0"
+        menu_cmd="printf '        ' | dmenu -l 0 -p \"$PROMPT\""
         ;;
     tofi)
 	menu_cmd="tofi -c $HOME/.config/tofi/configA --height 40 --width 350 --require-match=false --prompt \"$PROMPT\”"
@@ -60,4 +57,4 @@ for substance in "${!molar_masses[@]}"; do
 done
 
 # Display result
-notify-send -t 6000 -h string:bgcolor:#916B4A "$(echo -e "$output")"
+notify-send -t 6000 -u critical "$(echo -e "$output")"

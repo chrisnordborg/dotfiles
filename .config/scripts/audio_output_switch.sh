@@ -13,42 +13,48 @@ restartbt="[Restart Bluetooth]"
 # Enable case-insensitive matching
 shopt -s nocasematch
 
+
+# Detect mute state using amixer
+if amixer get Master | grep -q '\[off\]'; then
+    mute_option="Unmute"
+else
+    mute_option="Mute"
+fi
+
+
 # Prompt user
 launcher=$1
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 case $launcher in 
 	dmenu)
-		selection=$(echo -e "$options\n$scanbt\n$restartbt" | dmenu -l 8 -c -fn $FN -sb $SB -nf $NF -p "Set audio output:") || exit 0
+		selection=$(echo -e "$mute_option\n$options\n$scanbt\n$restartbt\n" | dmenu -p "Set audio output:") || exit 0
 		;;
 	tofi)
-		selection=$(echo -e "$options\n$scanbt\n$restartbt" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
+		selection=$(echo -e "$mute_option\n$options\n$scanbt\n$restartbt" | tofi -c ~/.config/tofi/configA --prompt "Set audio output: ")
 		;;
 	*)
-		notify-send "You have to select a launcher!"
+		notify-send -u critical "You have to select a launcher!"
 		exit
 		;;
 esac
 
-
-
 clean_selection=$(printf "%s" "$selection" | tr -d '\n\r')
-
-# Handle Bluetooth restart
-if [ "$clean_selection" = "$restartbt" ]; then
-    notify-send "Bluetooth" "Restarting service..."
-    sudo systemctl restart bluetooth
-    sleep 2
-    exit
-fi
-
-# Handle Bluetooth headset scan/connect
-if [ "$clean_selection" = "$scanbt" ]; then
-    output=$(bash "$toggle_bt" | grep -E '^Connected:|^Disconnected:')
-    #[ -n "$output" ] && notify-send "Audio: $output"
-    exit
-fi
+case $clean_selection in
+	"Mute"|"Unmute")
+		amixer set Master toggle
+		exit 1
+		;;
+	$restartbt)
+		notify-send -u critical "Bluetooth" "Restarting service..."
+    		sudo systemctl restart bluetooth
+    		sleep 2
+    		exit
+		;;
+	$scanbt)
+    		output=$(bash "$toggle_bt" | grep -E '^Connected:|^Disconnected:')
+    		#[ -n "$output" ] && notify-send -u critical "Audio: $output"
+		exit 1
+		;;
+esac
 
 # Set default audio sink
 sink_name=$(pactl -f json list sinks | jq -r --arg desc "$clean_selection" '.[] | select(.description == $desc) | .name')
@@ -62,8 +68,8 @@ if [ -n "$sink_name" ]; then
         pactl move-sink-input "$input_id" "$sink_name"
     done
 
-    notify-send "Audio switched to: $clean_selection"
+    notify-send -u critical "Audio switched to: $clean_selection"
 else
-    notify-send "Audio switch failed"
+    notify-send -u critical "Audio switch failed"
 fi
 

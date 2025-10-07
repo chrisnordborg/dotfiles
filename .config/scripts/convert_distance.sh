@@ -4,15 +4,12 @@
 command -v bc >/dev/null || { notify-send "Error: bc not found"; exit 1; }
 
 # Get user input
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 PROMPT="Enter a distance:"
 launcher=$1
 
 case $launcher in
     dmenu)
-        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -i -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        menu_cmd="printf '            ' | dmenu  -l 0 -p \"$PROMPT\""
         ;;
     tofi)
 	menu_cmd="tofi -c $HOME/.config/tofi/configA --height 40 --width 330 --require-match=false \"$PROMPT\""
@@ -34,4 +31,4 @@ miles_to_km="$(echo "scale=2; ($dist * 1.609344 + 0.005)/1" | bc)"
 message="$dist km ---> $km_to_miles miles
 $dist miles ---> $miles_to_km km"
 
-notify-send -t 4000 -h string:bgcolor:#916B4A "$message"
+notify-send -t 4000 -u critical "$message"

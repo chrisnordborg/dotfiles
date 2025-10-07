@@ -7,9 +7,6 @@ temp="1. Temperature (Celsius Fahrenheit Kelvin)"
 conc="2. Concentration (mmol mg/dL)"
 currency="3. Currency (SEK USD EUR GBP NOK)"
 distance="4. Distance (miles km)"
-SB="#a3be8c"
-NF="#d8dee9"
-FN="monospace-16"
 PROMPT="Choose converter:"
 scriptFolder="$HOME/.config/scripts"
 launcher=$1
@@ -27,7 +24,7 @@ $distance"
 # ----------------------------
 case $launcher in
     dmenu)
-        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -l 10 -c -fn \"$FN\" -sb \"$SB\" -nf \"$NF\" -p \"$PROMPT\""
+        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -p \"$PROMPT\""
         ;;
     tofi)
         menu_cmd="printf '%s\n' \"$menu_items\" | tofi -c \"$HOME/.config/tofi/configA\" --require-match=false --width 701 --prompt \"$PROMPT\""
