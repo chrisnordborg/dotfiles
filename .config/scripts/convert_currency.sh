@@ -3,7 +3,7 @@
 launcher=$1
 
 currencies=(SEK USD EUR GBP NOK)
-currency_list_pipe=$(IFS="|"; echo "${currencies[*]}")
+#currency_list_pipe=$(IFS="|"; echo "${currencies[*]}")
 PROMPT="Enter [amount] (e.g. 100 ${currencies[0]}):"
 
 format_number() {

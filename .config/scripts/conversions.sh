@@ -7,6 +7,7 @@ temp="1. Temperature (Celsius Fahrenheit Kelvin)"
 conc="2. Concentration (mmol mg/dL)"
 currency="3. Currency (SEK USD EUR GBP NOK)"
 distance="4. Distance (miles km)"
+velocity="5. Velocity (km/h mph knots)"
 PROMPT="Choose converter:"
 scriptFolder="$HOME/.config/scripts"
 launcher=$1
@@ -17,7 +18,8 @@ launcher=$1
 menu_items="$temp
 $conc
 $currency
-$distance"
+$distance
+$velocity"
 
 # ----------------------------
 # LAUNCHER SELECTION PHASE
@@ -55,6 +57,9 @@ case "$choice" in
         ;;
     "$distance")
         bash "$scriptFolder/convert_distance.sh" "$launcher"
+        ;;
+    "$velocity")
+        bash "$scriptFolder/convert_velocity.sh" "$launcher"
         ;;
     *)
         exit 0

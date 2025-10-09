@@ -57,4 +57,4 @@ for substance in "${!molar_masses[@]}"; do
 done
 
 # Display result
-notify-send -t 6000 -u critical "$(echo -e "$output")"
+notify-send -t 8000 -u critical "$(echo -e "$output")"

@@ -68,7 +68,8 @@ fi
 
 case "$option" in
     "lock")
-        hyprctl dispatch dpms off  # Or your lock command
+	    # This didn't work
+	    #hyprctl dispatch dpms off  # Or your lock command
         ;;
     "exit")
         bspc quit || i3-msg exit
