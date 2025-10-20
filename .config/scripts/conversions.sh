@@ -8,6 +8,8 @@ conc="2. Concentration (mmol mg/dL)"
 currency="3. Currency (SEK USD EUR GBP NOK)"
 distance="4. Distance (miles km)"
 velocity="5. Velocity (km/h mph knots)"
+language="6. Language"
+
 PROMPT="Choose converter:"
 scriptFolder="$HOME/.config/scripts"
 launcher=$1
@@ -19,14 +21,15 @@ menu_items="$temp
 $conc
 $currency
 $distance
-$velocity"
+$velocity
+$language"
 
 # ----------------------------
 # LAUNCHER SELECTION PHASE
 # ----------------------------
 case $launcher in
     dmenu)
-        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -p \"$PROMPT\""
+        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -l 6 -p \"$PROMPT\""
         ;;
     tofi)
         menu_cmd="printf '%s\n' \"$menu_items\" | tofi -c \"$HOME/.config/tofi/configA\" --require-match=false --width 701 --prompt \"$PROMPT\""
@@ -61,6 +64,9 @@ case "$choice" in
     "$velocity")
         bash "$scriptFolder/convert_velocity.sh" "$launcher"
         ;;
+    "$language")
+	bash "$scriptFolder/translate.sh" "$launcher"
+	;;
     *)
         exit 0
         ;;

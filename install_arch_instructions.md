@@ -119,7 +119,7 @@ cp config ~/.config/onedrive/config
 
 onedrive --monitor
 
-# bluetooth dongle
+# bluetooth dongle (may not be needed, 251009)
 sudo pacman -S linux-headers
 #cp -r ~/dotfiles/2020... ~/Downloads/
 cd 2020../2020../usb/bluetooth_usb_driver
