@@ -3,36 +3,42 @@
 # ----------------------------
 # CONFIGURATION PHASE
 # ----------------------------
-temp="1. Temperature (Celsius Fahrenheit Kelvin)"
-conc="2. Concentration (mmol mg/dL)"
-currency="3. Currency (SEK USD EUR GBP NOK)"
-distance="4. Distance (miles km)"
-velocity="5. Velocity (km/h mph knots)"
-language="6. Language"
-
 PROMPT="Choose converter:"
 scriptFolder="$HOME/.config/scripts"
 launcher=$1
 
 # ----------------------------
-# PREPARE MENU OPTIONS
+# MENU ITEMS AS ARRAY
 # ----------------------------
-menu_items="$temp
-$conc
-$currency
-$distance
-$velocity
-$language"
+menu_items=(
+    "1. Temperature (Celsius Fahrenheit Kelvin)"
+    "2. Concentration (mmol mg/dL)"
+    "3. Currency (SEK USD EUR GBP NOK)"
+    "4. Distance (miles km)"
+    "5. Velocity (km/h mph knots)"
+)
+
+# Map menu item to script name automatically
+declare -A script_map=(
+    ["${menu_items[0]}"]="convert_temperature.sh"
+    ["${menu_items[1]}"]="convert_concentration.sh"
+    ["${menu_items[2]}"]="convert_currency.sh"
+    ["${menu_items[3]}"]="convert_distance.sh"
+    ["${menu_items[4]}"]="convert_velocity.sh"
+)
+
+# Number of menu items
+menu_length=${#menu_items[@]}
 
 # ----------------------------
 # LAUNCHER SELECTION PHASE
 # ----------------------------
 case $launcher in
     dmenu)
-        menu_cmd="printf '%s\n' \"$menu_items\" | dmenu -l 6 -p \"$PROMPT\""
+        choice=$(printf '%s\n' "${menu_items[@]}" | dmenu -l "$menu_length" -p "$PROMPT") || exit 0
         ;;
     tofi)
-        menu_cmd="printf '%s\n' \"$menu_items\" | tofi -c \"$HOME/.config/tofi/configA\" --require-match=false --width 701 --prompt \"$PROMPT\""
+        choice=$(printf '%s\n' "${menu_items[@]}" | tofi -c "$HOME/.config/tofi/configA" --require-match=false --width 701 --prompt "$PROMPT") || exit 0
         ;;
     *)
         notify-send "You have to choose a launcher!"
@@ -41,33 +47,11 @@ case $launcher in
 esac
 
 # ----------------------------
-# EXECUTION PHASE
+# RESULT HANDLING (automatic)
 # ----------------------------
-choice=$(eval "$menu_cmd") || exit 0
-
-# ----------------------------
-# RESULT HANDLING
-# ----------------------------
-case "$choice" in
-    "$temp")
-        bash "$scriptFolder/convert_temperature.sh" "$launcher"
-        ;;
-    "$conc")
-        bash "$scriptFolder/convert_concentration.sh" "$launcher"
-        ;;
-    "$currency")
-        bash "$scriptFolder/convert_currency.sh" "$launcher"
-        ;;
-    "$distance")
-        bash "$scriptFolder/convert_distance.sh" "$launcher"
-        ;;
-    "$velocity")
-        bash "$scriptFolder/convert_velocity.sh" "$launcher"
-        ;;
-    "$language")
-	bash "$scriptFolder/translate.sh" "$launcher"
-	;;
-    *)
-        exit 0
-        ;;
-esac
+# Launch script if it exists
+if [[ -f "$scriptFolder/${script_map[$choice]}" ]]; then
+    bash "$scriptFolder/${script_map[$choice]}" "$launcher"
+else
+    notify-send "Script not found: $script_name"
+fi

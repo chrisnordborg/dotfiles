@@ -1,99 +1,98 @@
 #!/usr/bin/env bash
-# Translate a word or phrase using LibreTranslate
-# Usage: ./translate.sh <launcher>
+# Translate a word or phrase using LibreTranslate (API key needed and costs money, therefore I don't use this script.)
 
-API="https://libretranslate.com"
 launcher="$1"
-PROMPT="Enter a word or sentence to translate:"
+PROMPT="Enter a word or phrase to translate:"
 
 # ----------------------------
-# GET INPUT THROUGH LAUNCHER
+# Choose launcher for input
 # ----------------------------
-case "$launcher" in
-    dmenu)
-        menu_cmd="printf ' ' | dmenu -p \"$PROMPT\""
-        ;;
-    tofi)
-        menu_cmd="tofi -c \"$HOME/.config/tofi/configA\" \
-          --height 40 --width 350 \
-          --require-match=false \
-          --prompt \"$PROMPT\""
-        ;;
-    *)
-        notify-send "You have to choose a launcher!"
-        exit 1
-        ;;
+case $launcher in
+  dmenu)
+    text=$(printf '' | dmenu -p "$PROMPT") ;;
+  tofi)
+    text=$(tofi -c "$HOME/.config/tofi/configA" \
+                --require-match=false \
+                --width 400 \
+                --prompt "$PROMPT") ;;
+  *)
+    notify-send "You have to choose a launcher!"
+    exit 1 ;;
 esac
 
-text=$(eval "$menu_cmd") || exit 0
 [ -z "$text" ] && exit 0
 
 # ----------------------------
-# DETECT SOURCE LANGUAGE
+# Pick working LibreTranslate API (check /languages instead of HEAD)
 # ----------------------------
-detected_lang=$(curl -s -X POST "$API/detect" \
+API_LIST=(
+  "https://translate.argosopentech.com"
+  "https://translate.astian.org"
+  "https://translate.stibarc.com"
+  "https://libretranslate.de"
+)
+
+for candidate in "${API_LIST[@]}"; do
+  if curl -s --max-time 3 "$candidate/languages" | grep -q '\[.*\]'; then
+    API="$candidate"
+    break
+  fi
+done
+
+[ -z "$API" ] && {
+  notify-send "No LibreTranslate servers available"
+  exit 1
+}
+
+# ----------------------------
+# Detect language (handle both array and object responses)
+# ----------------------------
+response=$(curl -s -X POST "$API/detect" \
   -H "Content-Type: application/json" \
-  -d "$(jq -nc --arg q "$text" '{q: $q}')" \
-  | jq -r '.[0].language')
+  -d "$(jq -nc --arg q "$text" '{q: $q}')")
 
-# Fallback: assume English if detection fails or null
-if [ -z "$detected_lang" ] || [ "$detected_lang" = "null" ]; then
-  detected_lang="en"
-  notify-send "Language detection uncertain" "Assuming English (fallback)"
-fi
+# Some servers return an array, others a single object — normalize both
+detected_lang=$(echo "$response" | jq -r '
+  if type=="array" then .[0].language
+  elif type=="object" then .language
+  else "en" end
+')
+
+[ -z "$detected_lang" ] && detected_lang="en"
 
 # ----------------------------
-# TRANSLATE INTO MULTIPLE LANGUAGES
+# Translate into targets
 # ----------------------------
-targets=("en" "sv" "de" "es" "fr" "it")
-output="Detected language: $detected_lang\n\nTranslations:\n--------------\n"
-english_translation=""
+targets=(en sv de es fr it)
+output="Detected: $detected_lang\n\n"
+english_copy=""
 
 for lang in "${targets[@]}"; do
-  # Skip translating into the same language
-  if [ "$lang" = "$detected_lang" ]; then
-    continue
-  fi
+  [ "$lang" = "$detected_lang" ] && continue
 
-  translation=$(curl -s -X POST "$API/translate" \
+  resp=$(curl -s -X POST "$API/translate" \
     -H "Content-Type: application/json" \
     -d "$(jq -nc --arg q "$text" --arg src "$detected_lang" --arg tgt "$lang" \
-      '{q: $q, source: $src, target: $tgt}')" \
-    | jq -r '.translatedText')
+      '{q: $q, source: $src, target: $tgt, format: "text"}')")
 
-  [ "$lang" = "en" ] && english_translation="$translation"
-  output+=$(printf "%-3s: %s\n" "$lang" "$translation")
+  translation=$(echo "$resp" | jq -r '.translatedText // "[no result]"')
+  output+="$lang : $translation\n"
+
+  # Store English translation to copy later
+  if [ "$lang" = "en" ]; then
+    english_copy="$translation"
+  fi
 done
 
 # ----------------------------
-# COPY ENGLISH TRANSLATION TO CLIPBOARD
+# Copy English translation to clipboard
 # ----------------------------
-if command -v wl-copy &>/dev/null; then
-  echo -n "$english_translation" | wl-copy
-elif command -v xclip &>/dev/null; then
-  echo -n "$english_translation" | xclip -selection clipboard
-else
-  notify-send "Clipboard tool not found (install wl-clipboard or xclip)."
+if [ -n "$english_copy" ]; then
+  echo -n "$english_copy" | wl-copy 2>/dev/null || echo -n "$english_copy" | xclip -selection clipboard
 fi
 
 # ----------------------------
-# DISPLAY RESULT
+# Show result
 # ----------------------------
-case "$launcher" in
-    dmenu)
-        echo -e "$output" | dmenu -l 10 -p "Results:"
-        ;;
-    tofi)
-        echo -e "$output" | tofi -c "$HOME/.config/tofi/configA" \
-          --width 500 --height 300 \
-          --prompt "Translations:"
-        ;;
-    *)
-        echo -e "$output"
-        ;;
-esac
-
-# ----------------------------
-# NOTIFY COPY SUCCESS
-# ----------------------------
-[ -n "$english_translation" ] && notify-send "Copied English translation" "$english_translation"
+notify-send -t 10000 "Translations" "$(echo -e "$output")"
+echo -e "$output"
