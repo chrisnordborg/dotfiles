@@ -42,9 +42,16 @@ esac
 # CREATE A NEW NOTE
 # ---------------------------------------
 newnote() {
-    name=$(printf '\n' | menu "New note:")
+    name="$1"
     [ -z "$name" ] && name="$timestamp"
-    filepath="$newNoteFolder/$name.md"
+
+    # Always ensure .md extension
+    case "$name" in
+        *.md) ;;                          # already ends with .md
+        *) name="${name}.md" ;;           # add .md if missing
+    esac
+
+    filepath="$newNoteFolder/$name"
     mkdir -p "$newNoteFolder"
     "$terminal" nvim "$filepath" >/dev/null 2>&1
 }
@@ -69,7 +76,7 @@ selected() {
 
     case "$choice" in
         "[New Note]")
-            newnote
+            newnote ""
             ;;
         *.md)
             for path in "${all_files[@]}"; do
@@ -80,6 +87,8 @@ selected() {
             done
             ;;
         *)
+            # If the user typed something custom that doesn't match an existing file
+            newnote "$choice"
             ;;
     esac
 }
