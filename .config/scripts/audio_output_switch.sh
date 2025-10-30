@@ -77,7 +77,7 @@ case "$clean_selection" in
         ;;
     "$scanbt")
         output=$(bash "$toggle_bt" | grep -E '^Connected:|^Disconnected:')
-        notify-send -u normal "Bluetooth headset" "$output"
+        #notify-send -u normal "Bluetooth headset" "$output"
         exit 0
         ;;
 esac
