@@ -11,6 +11,8 @@ export EDITOR="nvim"
 #export BROWSER2="librewolf"
 # export DISPLAY=:0 # useful for some scripts
 
+export XKB_DEFAULT_LAYOUT=se
+
 # follow XDG base dir specification
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"

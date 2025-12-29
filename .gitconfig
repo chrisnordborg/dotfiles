@@ -1,3 +1,5 @@
 [user]
 	email = nordborgchristian@gmail.com
 	name = Christian Nordborg
+[init]
+	defaultBranch = main
