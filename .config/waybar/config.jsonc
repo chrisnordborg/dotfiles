@@ -1,16 +1,140 @@
 {
   "modules-left": [
     "ext/workspaces",
-    "dwl/window"
+	//"dwl/tags",
+    "custom/sep",
+	"dwl/window",
+    "custom/sep",
+    "dwl/window#layout",
+    "custom/sep",
+    "dwl/window#title"
   ],
+
+  "modules-center":[
+    "custom/timer"
+  ],
+
+  "modules-right": [
+    "battery",                      "custom/sep",
+    "custom/backlight",             "custom/sep",
+    "custom/pulseaudio",            "custom/sep",
+    "custom/pulseaudiomicrophone",  "custom/sep",
+    "network",                      "custom/sep",
+    "cpu",                          "custom/sep",
+    "memory",                       "custom/sep",
+    "disk",                         "custom/sep",
+    "clock",                        "custom/sep",
+    "tray"
+  ],
+
+    "custom/timer": {
+        "exec": "cat /tmp/waybar_timer.txt",
+        "interval": 1,
+        "format": "⏱ {text} ",
+        "return-type": "json",  // <-- This line is now required again!
+        "on-click": "~/.config/scripts/timer.sh"
+    },
+
+  "clock": {
+        // English/American format (20:05:00 AM).
+	      //"format": "{:%A    %B-%d-%Y    %I:%M:%S %p}",
+    "format-alt": "{:%A |   %Y-%m-%d |   %H:%M:%S}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "on-scroll": 1,
+            "on-click-right": "mode",
+            "format": {
+                "months": "<span color='#a6adc8'><b>{}</b></span>",
+                "weekdays": "<span color='#a6adc8'><b>{}</b></span>",
+                "today": "<span color='#a6adc8'><b>{}</b></span>",
+                "days": "<span color='#555869'><b>{}</b></span>"
+            }
+        }
+
+  },
+  "cpu": {
+    "interval": 10,
+    "format": "CPU: {usage}%",
+    "format-alt": "{icon0}{icon1}{icon2}{icon3}",
+    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    "tooltip": false
+  },
+  "memory": {
+    "format": "Mem: {used}GB"
+  },
+  "disk": {
+    "interval": 60,
+    "path": "/",
+    "format": "Disk: {free}"
+  },
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "Bat: {capacity}% {icon} {time}",
+    "format-plugged": "{capacity}% ",
+    "format-alt": "Bat {capacity}%",
+    "format-time": "{HH}:{MM}",
+    "format-icons": ["󰂃", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+  },
+
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "tooltip": false,
+        "format-muted": "  Muted",
+        "on-click": "pamixer -t",
+        "on-scroll-up": "pamixer -i 1",
+        "on-scroll-down": "pamixer -d 1",
+        "scroll-step": 5,
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["","", "", ""]
+        }
+    },
+
+    "pulseaudio#microphone": {
+        "format": "{format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": "  Muted",
+        "on-click": "pamixer --default-source -t",
+        "on-scroll-up": "pamixer --default-source -i 5",
+        "on-scroll-down": "pamixer --default-source -d 5",
+        "scroll-step": 5
+    },
+
+  "network": {
+    "format": "Online",
+    "format-disconnected": "Disconnected ⚠"
+  },
   "ext/workspaces": {
     "format": "{icon}",
-    "ignore-hidden": true,
+    "ignore-hidden": false,
     "on-click": "activate",
-    "on-click-right": "deactivate",
     "sort-by-id": true
   },
-  "dwl/window": {
-    "format": "[{layout}] {title}"
+  "dwl/tags": {
+    "num-tags": 10
+  },
+  "dwl/window#layout": {
+    "format": "[{layout}]"
+  },
+  "dwl/window#title": {
+    "format": "{title}"
+  },
+  "dwl/window":{
+	"format": "[{layout}]{title}"
+  },
+  "custom/sep": {
+    "format": "|",
+    "interval": 0
   }
 }
