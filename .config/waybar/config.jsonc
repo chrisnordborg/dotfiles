@@ -3,11 +3,7 @@
     "ext/workspaces",
 	//"dwl/tags",
     "custom/sep",
-	"dwl/window",
-    "custom/sep",
-    "dwl/window#layout",
-    "custom/sep",
-    "dwl/window#title"
+	"dwl/window"
   ],
 
   "modules-center":[
