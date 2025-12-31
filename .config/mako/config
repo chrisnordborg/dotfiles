@@ -1,0 +1,100 @@
+##################################
+# General appearance
+##################################
+
+font=JetBrainsMono Nerd Font 10
+format=<b>%s</b>\n%b
+
+# Window geometry
+width=250
+height=200
+margin=10
+padding=12
+border-size=2
+border-radius=6
+
+# Screen position
+# top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
+anchor=top-right
+
+##################################
+# Timing
+##################################
+
+# Time in milliseconds (0 = persist until dismissed)
+default-timeout=5000
+
+ignore-timeout=false
+
+##################################
+# Colors (default / low urgency)
+##################################
+
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#89b4fa
+progress-color=over #89b4fa
+
+##################################
+# Urgency overrides
+##################################
+
+[urgency=low]
+default-timeout=3000
+background-color=#1e1e2e
+border-color=#6c7086
+
+[urgency=normal]
+default-timeout=5000
+background-color=#1e1e2e
+border-color=#89b4fa
+
+[urgency=critical]
+default-timeout=0
+background-color=#311313
+text-color=#f38ba8
+border-color=#f38ba8
+
+##################################
+# Grouping & behavior
+##################################
+
+# Combine notifications from same app
+group-by=app-name
+
+# Maximum visible notifications
+#max-visible=5
+
+# Show indicators
+icons=1
+icon-location=left
+#icon-size=48
+
+##################################
+# Interaction
+##################################
+
+# Mouse bindings
+on-button-left=dismiss
+on-button-right=dismiss-all
+on-button-middle=none
+
+##################################
+# Progress bar
+##################################
+
+#progress-bar-height=6
+
+##################################
+# Advanced / Quality of life
+##################################
+
+# Sort newest on top
+#sort=-time
+
+# Don’t show duplicate notifications
+# history=1
+
+# Prevent notifications from stealing focus
+#focus=none
+
