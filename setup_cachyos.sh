@@ -26,7 +26,7 @@ stow .
 
 
 #Terminal, scripts and additionals
-sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim ntfs-3g android-file-transfer notify-send pipewire-pulse dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser
+sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim ntfs-3g android-file-transfer notify-send pipewire-pulse dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser grimblast
 
 dpkg -s spotify &> /dev/null && echo "Spotify is already installed" || sudo XTRA spotify
 

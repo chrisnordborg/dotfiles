@@ -46,7 +46,7 @@ prompt_minutes() {
         rofi) height=20; width=300 ;;
         dmenu) height=10; width=400 ;;
     esac
-    echo "$default" | menu "$label (minutes):" "$height" "$width" ""
+    echo "$default" | menu "$label (minutes):   " "$height" "$width" ""
 }
 
 stop_pomodoro() {

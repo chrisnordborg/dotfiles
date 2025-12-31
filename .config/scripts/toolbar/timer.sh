@@ -62,7 +62,7 @@ start_timer() {
 	    fi
 
 	    # New: output for Polybar
-	    echo "|| $text ||" > /tmp/status_bar_timer.txt
+	    echo "$text" > /tmp/status_bar_timer.txt
 
             sleep 1
             ((total_seconds--))
@@ -89,7 +89,7 @@ stop_timer() {
 main() {
     local choice
 
-    choice=$(printf "Stop Timer\n" | menu_prompt "Timer (minutes): " 100 350)
+    choice=$(printf "Stop Timer\n" | menu_prompt "Timer (minutes):   " 100 350)
 
     # Cancel if empty
     [ -z "$choice" ] && exit

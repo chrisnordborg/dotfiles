@@ -7,7 +7,8 @@
   ],
 
   "modules-center":[
-    "custom/timer"
+    "custom/timer",
+    "custom/pomodoro"
   ],
 
   "modules-right": [
@@ -24,12 +25,20 @@
   ],
 
     "custom/timer": {
-        "exec": "cat /tmp/waybar_timer.txt",
+        "exec": "cat /tmp/status_bar_timer.txt",
         "interval": 1,
-        "format": "⏱ {text} ",
-        "return-type": "json",  // <-- This line is now required again!
+        "format": " ⏱ {text} ",
         "on-click": "~/.config/scripts/toolbar/timer.sh"
     },
+
+    "custom/pomodoro": {
+        "exec": "cat /tmp/waybar_timer.txt",
+        "interval": 1,
+        "format": " ⏱ {text} ",
+        "return-type": "json",
+        "on-click": "~/.config/scripts/toolbar/pomodoro.sh"
+    },
+
 
   "clock": {
         // English/American format (20:05:00 AM).

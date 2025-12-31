@@ -70,7 +70,7 @@ selected() {
     filenames=$(printf "%s\n" "${all_files[@]##*/}")
 
     # Show the menu
-    choice=$(printf "[New Note]\n%s\n" "$filenames" | menu "Choose note:")
+    choice=$(printf "[New Note]\n%s\n" "$filenames" | menu "Choose note: ")
 
     [ -z "$choice" ] && exit 0
 
