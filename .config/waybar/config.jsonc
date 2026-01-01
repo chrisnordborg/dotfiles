@@ -3,7 +3,7 @@
     "ext/workspaces",
 	//"dwl/tags",
     "custom/sep",
-	"dwl/window"
+    "dwl/window"
   ],
 
   "modules-center":[
@@ -12,10 +12,10 @@
   ],
 
   "modules-right": [
-    "battery",                      "custom/sep",
-    "custom/backlight",             "custom/sep",
-    "custom/pulseaudio",            "custom/sep",
-    "custom/pulseaudiomicrophone",  "custom/sep",
+   // "battery",                      "custom/sep",
+   // "custom/backlight",             "custom/sep",
+    "pulseaudio",            	    "custom/sep",
+    "pulseaudio#microphone", 	    "custom/sep",
     "network",                      "custom/sep",
     "cpu",                          "custom/sep",
     "memory",                       "custom/sep",
@@ -67,11 +67,12 @@
     "tooltip": false
   },
   "memory": {
-    "format": "Mem: {used}GB"
+    "format": "RAM: {used}GB",
+    "tooltip": false
   },
   "disk": {
     "interval": 60,
-    "path": "/",
+    "path": "/home/",
     "format": "Disk: {free}"
   },
   "battery": {
@@ -89,7 +90,7 @@
 
     "pulseaudio": {
         "format": "{icon}  {volume}%",
-        "tooltip": false,
+        "tooltip": true,
         "format-muted": "  Muted",
         "on-click": "pamixer -t",
         "on-scroll-up": "pamixer -i 1",
@@ -111,8 +112,8 @@
         "format-source": " {volume}%",
         "format-source-muted": "  Muted",
         "on-click": "pamixer --default-source -t",
-        "on-scroll-up": "pamixer --default-source -i 5",
-        "on-scroll-down": "pamixer --default-source -d 5",
+        "on-scroll-up": "pamixer --default-source -i 1",
+        "on-scroll-down": "pamixer --default-source -d 1",
         "scroll-step": 5
     },
 
@@ -136,7 +137,8 @@
     "format": "{title}"
   },
   "dwl/window":{
-	"format": "[{layout}]{title}"
+	"format": "[{layout}]{title}",
+	"tooltip": true
   },
   "custom/sep": {
     "format": "|",
