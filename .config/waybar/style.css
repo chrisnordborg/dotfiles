@@ -31,9 +31,9 @@ window#waybar {
     color: @cyn;
     border-bottom: 3px solid @mag;
 }
-#workspaces button.inactive {
+#workspaces button.empty{
     color: @white;
-    border-bottom: 3px solid @mag;
+    opacity: 0.5;
 }
 #workspaces button.hidden {
     color: @white;
