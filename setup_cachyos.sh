@@ -22,6 +22,9 @@ yay -S mangowc-git
 cd ~/dotfiles/
 stow .
 
+# Hyprland dual installation
+# Maybe change out the specifiec wlroots0.18 at some time (this was chosen to be compatible with MangoWC).
+sudo $PM wlroots0.18 libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-desktop-portal hyprland wl-clipboard
 
 
 
