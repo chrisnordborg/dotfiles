@@ -69,5 +69,6 @@ export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 
 # Autostart mangowc on tty1
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
-    exec mango
+    #exec mango
+    exec start-hyprland
 fi

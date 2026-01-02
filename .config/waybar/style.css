@@ -31,6 +31,10 @@ window#waybar {
     color: @cyn;
     border-bottom: 3px solid @mag;
 }
+#workspaces button.inactive {
+    color: @white;
+    border-bottom: 3px solid @mag;
+}
 #workspaces button.hidden {
     color: @white;
 }
@@ -47,6 +51,7 @@ button:hover {
     background: inherit;
     box-shadow: inset 0 -3px #ffffff;
 }
+
 
 #clock,
 #custom-sep,
@@ -67,6 +72,20 @@ button:hover {
 #clock {
     color: @cyn;
     border-bottom: 4px solid @cyn;
+}
+
+#custom-timer.work {
+  background: #1e1e2e;
+}
+
+#custom-timer.break {
+  background: #204020;
+}
+
+#custom-timer.warning {
+  background: #b52020;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 #battery {

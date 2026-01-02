@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-TIMER_FILE="/tmp/waybar_timer.txt"
-PID_FILE="/tmp/waybar_pomodoro_pid"
+TIMER_FILE="/tmp/pomodoro_timer.txt"
+PID_FILE="/tmp/pomodoro_pid"
 launcher=$1
 
 # ───────────────────────────────────────────────

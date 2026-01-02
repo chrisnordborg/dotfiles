@@ -26,7 +26,41 @@ stow .
 
 
 #Terminal, scripts and additionals
-sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim ntfs-3g android-file-transfer notify-send pipewire pipewire-pulse wireplumber dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser grimblast pamixer
+sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim ntfs-3g android-file-transfer notify-send pipewire pipewire-pulse wireplumber dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser grimblast pamixer wlogout
+
+sudo pacman -S \
+  vulkan-icd-loader \
+  lib32-vulkan-icd-loader \
+  mesa \
+  lib32-mesa
+
+sudo pacman -S \
+  vulkan-icd-loader \
+  lib32-vulkan-icd-loader
+
+sudo pacman -S \
+  vulkan-intel \
+  lib32-vulkan-intel
+
+
+sudo pacman -S \
+  vulkan-tools \
+  mesa-utils \
+  lib32-mesa-utils
+
+
+sudo pacman -S \
+  nvidia-580xx-dkms \
+  nvidia-580xx-utils \
+  lib32-nvidia-580xx-utils
+
+
+
+
+
+
+
+
 
 dpkg -s spotify &> /dev/null && echo "Spotify is already installed" || sudo XTRA spotify
 

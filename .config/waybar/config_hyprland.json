@@ -7,52 +7,74 @@
     "gtk-layer-shell": true,
     "height": 0,
     "modules-left": [
-        "clock",
-        "hyprland/workspaces"
+        "hyprland/workspaces",
+	"hyprland/window"
     ],
     "modules-center": [
-	/* "hyprland/window"], */
-	"custom/timer"
+	"custom/timer",
+	"clock",
+	"custom/pomodoro"
     ],
     "modules-right": [
-	"tray",
-        "memory",
         "cpu",
-        "network",
+	"memory",
+        "disk",
+	"network",
         "battery",
         "backlight",
         "pulseaudio",
-        "pulseaudio#microphone"
+        "pulseaudio#microphone",
+	"systemprompt",
+	"tray"
     ],
 
     "hyprland/window": {
-        "format": "󰣇 {}"
+        "format": " 󰣇 {}"
     },
     
     "hyprland/workspaces": {
+	//    "format-icons": {
+	//	"1": "I",	
+	//	"2": "II",	
+	//	"3": "III",	
+	//	"4": "IV",	
+	//	"5": "V",	
+	//	"6": "VI",	
+	//	"7": "VII",	
+	//	"8": "VIII",	
+	//	"9": "IX",	
+	//	"10": "X"	
+	//},
+	
         "disable-scroll": true,
         "all-outputs": true,
         "on-click": "activate",
-        "format": "{icon}"
+        "format": "{icon}",
+	"format-window-separator": " | ",
+	"persistent-workspaces": {"*": 10 }
     },
 
     "custom/timer": {
-        "exec": "cat /tmp/waybar_timer.txt",
+        "exec": "cat /tmp/status_bar_timer.txt",
         "interval": 1,
         "format": "⏱ {text} ",
-        "return-type": "json",  // <-- This line is now required again!
-        "on-click": "~/.config/scripts/timer.sh"
+        "on-click": "~/.config/scripts/toolbar/timer.sh"
     },
 
-    "tray": {
-        "icon-size": 13,
-        "spacing": 10
+    "custom/pomodoro": {
+        "exec": "cat /tmp/pomodoro_timer.txt",
+        "interval": 1,
+        "format": " ⏱ {text} ",
+        "return-type": "json",
+        "on-click": "~/.config/scripts/toolbar/pomodoro.sh"
     },
+    
 
     "clock": {
         // English/American format (20:05:00 AM).
 	//"format": "{:%A    %B-%d-%Y    %I:%M:%S %p}",
-        "format": "{:%A |   %Y-%m-%d |   %H:%M:%S}",
+        // Swedish format
+	"format-alt": "{:%A |   %Y-%m-%d |   %H:%M:%S}",
 	"interval": 1,
         "rotate": 0,
         "tooltip-format": "<tt>{calendar}</tt>",
@@ -93,7 +115,7 @@
     },
 
     "pulseaudio": {
-        "format": "{icon}  {volume}%",
+        "format": "{icon} {volume}%  ",
         "tooltip": false,
         "format-muted": "  Muted",
         "on-click": "pamixer -t",
@@ -155,5 +177,14 @@
         "tooltip-format-disconnected": "Disconnected",
 	"format-alt": "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>",
        "interval": 2
+    },
+    "systemprompt": {
+        "format": "System",
+        "on-click": "wlogout"
+    },
+
+    "tray": {
+        "icon-size": 13,
+        "spacing": 10
     }
 }

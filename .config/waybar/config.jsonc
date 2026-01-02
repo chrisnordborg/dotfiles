@@ -8,19 +8,20 @@
 
   "modules-center":[
     "custom/timer",
+    "clock",
     "custom/pomodoro"
   ],
 
   "modules-right": [
    // "battery",                      "custom/sep",
    // "custom/backlight",             "custom/sep",
-    "pulseaudio",            	    "custom/sep",
-    "pulseaudio#microphone", 	    "custom/sep",
     "network",                      "custom/sep",
     "cpu",                          "custom/sep",
     "memory",                       "custom/sep",
     "disk",                         "custom/sep",
-    "clock",                        "custom/sep",
+    "pulseaudio",            	    "custom/sep",
+    "pulseaudio#microphone", 	    "custom/sep",
+    "systemprompt",                 "custom/sep",
     "tray"
   ],
 
@@ -32,7 +33,7 @@
     },
 
     "custom/pomodoro": {
-        "exec": "cat /tmp/waybar_timer.txt",
+        "exec": "cat /tmp/pomodoro_timer.txt",
         "interval": 1,
         "format": " ⏱ {text} ",
         "return-type": "json",
@@ -139,6 +140,10 @@
   "dwl/window":{
 	"format": "[{layout}]{title}",
 	"tooltip": true
+  },
+  "systemprompt": {
+        "format": "System",
+        "on-click": "wlogout"
   },
   "custom/sep": {
     "format": "|",
