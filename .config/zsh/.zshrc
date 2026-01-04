@@ -64,6 +64,8 @@ bindkey -e
 # bind DEL button to delete-char instead of ~
 bindkey '\e[3~' delete-char
 
+## Run fastfetch as welcome message
+fastfetch
 
 # Set up prompt
 # fallback prompt is 'hostname%' in case of something wrong with the statement below.
