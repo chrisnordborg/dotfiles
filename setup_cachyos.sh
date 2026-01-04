@@ -32,7 +32,7 @@ stow .
 
 
 #Terminal, scripts and additionals
-sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget pandoc tree-sitter marksman util-linux neovim ntfs-3g android-file-transfer libnotify pipewire pipewire-pulse wireplumber dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser grimblast pamixer wlogout waybar tree
+sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget pandoc tree-sitter marksman util-linux neovim ntfs-3g android-file-transfer libnotify pipewire pipewire-pulse wireplumber dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser grimblast pamixer wlogout waybar tree hyprpicker dunst
 # if dmesg fails, run "sudo dmesg"
 $YAY tofi
 
