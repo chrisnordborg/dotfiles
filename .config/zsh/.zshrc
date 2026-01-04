@@ -66,6 +66,7 @@ bindkey '\e[3~' delete-char
 
 
 # Set up prompt
+# fallback prompt is 'hostname%' in case of something wrong with the statement below.
 NEWLINE=$'\n'
 PROMPT="${NEWLINE}%K{#2E3440}%F{#E5E9F0}$(date +%_I:%M%P) %K{#3b4252}%F{#ECEFF4} %n %K{#4c566a} %~ %f%k ❯ "
 # PROMPT="${NEWLINE}%K{$COL0}%F{$COL1}$(date +%_I:%M%P) %K{$COL0}%F{$COL2} %n %K{$COL3} %~ %f%k ❯ " # pywal colors, from postrun script
@@ -137,6 +138,7 @@ alias launchpoly="~/.config/polybar/launch.sh"
 alias hyprconf="nvim ~/.config/hypr/hyprland.conf"
 alias mangoconf="nvim ~/.config/mango/config.conf"
 alias waybarconf="nvim ~/.config/waybar/config.jsonc"
+alias waybarhyprconf="nvim ~/.config/waybar/config_hyprland.jsonc"
 alias waybarstyle="nvim ~/.config/waybar/style.css"
 alias tbh="bash ~/dotfiles/.config/scripts/toggle_bluetooth_headsets_OnOff.sh"
 alias backupdot="bash ~/dotfiles/.config/scripts/backupdotfiles.sh"

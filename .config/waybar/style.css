@@ -1,6 +1,8 @@
 @define-color bg    #1a1b26; 
+/* @fg format text color of all who doesn't have a custom color */
 @define-color fg    #a9b1d6; 
 @define-color blk   #32344a; 
+@define-color gold  #EFBF04;
 @define-color red   #f7768e; 
 @define-color grn   #9ece6a; 
 @define-color ylw   #e0af68; 
@@ -10,113 +12,107 @@
 @define-color brblk #444b6a; 
 @define-color white #ffffff; 
 
-* {
+window#waybar {
     font-family: "JetBrainsMono Nerd Font", monospace;
     font-size: 16px;
     font-weight: bold;
-}
-
-window#waybar {
-    background-color: @bg;
+    border: none;
+    background: transparent;
     color: @fg;
 }
+/*
+.modules-left,
+.modules-center,
+.modules-right {
+    margin: 0px 0px -5px;
+}
+*/
+
+#workspaces,
+#window,
+window#waybar.top label.module {
+    background-color: @bg;
+    margin: 0px 1px;
+    padding: 0px 6px;
+    border-radius: 12px;
+}
+
 
 #workspaces button {
-    padding: 0 6px;
-    color: @cyn;
-    background: transparent;
-    border-bottom: 3px solid @bg;
+    border-bottom: 4px solid @bg;
 }
-#workspaces button.active {
-    color: @cyn;
-    border-bottom: 3px solid @mag;
+#workspaces button:not(.empty) {
+   color: @cyn;
 }
 #workspaces button.empty{
-    color: @white;
-    opacity: 0.5;
+    color: @brblk;
 }
-#workspaces button.hidden {
-    color: @white;
+#workspaces button.active {
+    border-bottom: 4px solid @mag;
 }
-#workspaces button.hidden.active {
-    color: @cyn;
-    border-bottom: 3px solid @mag;
-}
-
 #workspaces button.urgent {
     background-color: @red;
 }
-
-button:hover {
+#workspaces button:hover {
     background: inherit;
     box-shadow: inset 0 -3px #ffffff;
 }
 
-
-#clock,
-#custom-sep,
-#battery,
-#cpu,
-#memory,
-#disk,
-#network,
-#tray {
-    padding: 0 8px;
-    color: @white;
-}
-
-#custom-sep {
-    color: @brblk;
-}
-
 #clock {
-    color: @cyn;
-    border-bottom: 4px solid @cyn;
+   /* Size for the format-alt text is set in the .jsonc file */
+   font-size: 24px; 
+   color: @cyn;
 }
+
 
 #custom-timer.work {
   background: #1e1e2e;
 }
-
 #custom-timer.break {
   background: #204020;
 }
-
 #custom-timer.warning {
   background: #b52020;
   color: #ffffff;
   font-weight: bold;
 }
 
-#battery {
-    color: @blu;
-    border-bottom: 4px solid @blu;
-}
 
 #disk {
     color: @ylw;
-    border-bottom: 4px solid @ylw;
 }
 
 #memory {
     color: @mag;
-    border-bottom: 4px solid @mag;
 }
 
 #cpu {
     color: @grn;
-    border-bottom: 4px solid @grn;
 }
 
-#network {
+#network,
+#pulseaudio,
+#pulseaudio#microphone {
     color: @red;
-    border-bottom: 4px solid @red;
 }
-
 #network.disconnected {
     background-color: @red;
 }
 
+#battery {
+    color: @blu;
+}
+
+#backlight {
+    color: @gold;
+}
+
+#custom-systemprompt {
+    font-size: 28px;
+    color: @cyn;
+}
+
+
 #tray {
-    background-color: #2980b9;
+    background-color: #2981b9;
 }

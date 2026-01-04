@@ -1,6 +1,11 @@
 #!/bin/sh
-# env vars to set on login, zsh settings in ~/config/zsh/.zshrc
-# read first
+# ZSH loads files in the following order (environment variables, profile and then zshrc):
+# 1. /etc/zsh/zshenv
+# 2. ~/.zshenv
+# 3. /etc/zsh/zprofile
+# 4. ~/.zprofile
+# 5. /etc/zsh/zshrc
+# 6. ~/.zshrc
 
 # default programs
 export EDITOR="nvim"

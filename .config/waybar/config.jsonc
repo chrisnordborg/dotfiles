@@ -25,6 +25,13 @@
     "tray"
   ],
 
+  "ext/workspaces": {
+    "format": "{icon}",
+    "ignore-hidden": false,
+    "on-click": "activate",
+    "sort-by-id": true
+  },
+
     "custom/timer": {
         "exec": "cat /tmp/status_bar_timer.txt",
         "interval": 1,
@@ -121,12 +128,6 @@
   "network": {
     "format": "Online",
     "format-disconnected": "Disconnected ⚠"
-  },
-  "ext/workspaces": {
-    "format": "{icon}",
-    "ignore-hidden": false,
-    "on-click": "activate",
-    "sort-by-id": true
   },
   "dwl/tags": {
     "num-tags": 10

@@ -18,7 +18,7 @@ sudo $PM git stow yay
 git clone git@github.com:chrisnordborg/dotfiles.git ~/
 git clone git@github.com:chrisnordborg/wallpapers.git ~/
 cd ~
-yay -S mangowc-git
+yay -S mangowc-git zen-browser
 cd ~/dotfiles/
 stow .
 
@@ -29,7 +29,10 @@ sudo $PM wlroots0.18 libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-d
 
 
 #Terminal, scripts and additionals
-sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim ntfs-3g android-file-transfer notify-send pipewire pipewire-pulse wireplumber dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser grimblast pamixer wlogout
+sudo $PM kitty bc jq neovim ripgrep unzip xclip tree bat feh rhythmbox bc zsh fzf obsidian make wget markdown neovim ntfs-3g android-file-transfer notify-send pipewire pipewire-pulse wireplumber dmesg dmd gdc libreoffice timeshift gimp qbittorrent swww dunst hyprpicker libnotify mako vlc zen-browser grimblast pamixer wlogout waybar tree
+
+# Install the nightly build of neovim (maybe remove this down the line. 260104)
+yay -S neovim-nightly-bin
 
 sudo pacman -S \
   vulkan-icd-loader \
@@ -72,6 +75,7 @@ dpkg -s spotify &> /dev/null && echo "Spotify is already installed" || sudo XTRA
 
 echo "Setting ZSH as default shell"
 chsh -s /bin/zsh
+source ~/dotfiles/.config/zsh/.zshrc
 
 echo "Setting up Git variables"
 git config --global user.name "Christian Nordborg"
