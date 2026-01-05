@@ -8,6 +8,10 @@
       "rev": "cb938c25edaac38d362555f19244a9cb85d561e8",
       "src": "https://github.com/aznhe21/actions-preview.nvim"
     },
+    "glow.nvim": {
+      "rev": "5d5954b2f22e109d4a6eba8b2618c5b96e4ee7a2",
+      "src": "https://github.com/ellisonleao/glow.nvim"
+    },
     "marks.nvim": {
       "rev": "f353e8c08c50f39e99a9ed474172df7eddd89b72",
       "src": "https://github.com/chentoast/marks.nvim"
@@ -77,6 +81,10 @@
     "vague.nvim": {
       "rev": "fcc283576764474ccfbbcca240797d5d7f4d8a78",
       "src": "https://github.com/vague2k/vague.nvim"
+    },
+    "vim-markdown": {
+      "rev": "1bc9d0cd8e1cc3e901b0a49c2b50a843f1c89397",
+      "src": "https://github.com/plasticboy/vim-markdown"
     }
   }
 }

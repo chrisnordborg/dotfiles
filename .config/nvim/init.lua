@@ -5,7 +5,7 @@ vim.opt.shiftwidth = 2
 vim.opt.showtabline = 2
 vim.opt.scrolloff = 14
 vim.opt.signcolumn = "yes"
-vim.opt.wrap = false
+vim.opt.wrap = true 
 vim.opt.cursorcolumn = false
 vim.opt.ignorecase = true
 vim.opt.smartindent = true
@@ -16,6 +16,11 @@ vim.opt.relativenumber = true
 vim.o.cursorline = true
 vim.g.mapleader = " "
 vim.g.have_nerd_font = true
+-- Markdown
+vim.opt.conceallevel = 2
+vim.opt.concealcursor = "nc"
+vim.g.vim_markdown_conceal = 2
+vim.g.vim_markdown_conceal_code_blocks = 0
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
@@ -41,29 +46,53 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 vim.pack.add({
-	{ src = "https://github.com/vague2k/vague.nvim" },
-	{ src = "https://github.com/stevearc/oil.nvim" },
---	{ src = "https://github.com/nvim-treesitter/nvim-treesitter",        version = "main" },
-	{ src = "https://github.com/echasnovski/mini.pick" },
-	{ src = "https://github.com/chomosuke/typst-preview.nvim" },
-	{ src = "https://github.com/neovim/nvim-lspconfig" },
+  { src = "https://github.com/vague2k/vague.nvim" },
+  { src = "https://github.com/stevearc/oil.nvim" },
+
+  -- Markdown
+  { src = "https://github.com/plasticboy/vim-markdown" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+	{ src = "https://github.com/ellisonleao/glow.nvim" },
+
+  { src = "https://github.com/echasnovski/mini.pick" },
+  { src = "https://github.com/chomosuke/typst-preview.nvim" },
+  { src = "https://github.com/neovim/nvim-lspconfig" },
 --	{ src = "https://github.com/mason-org/mason.nvim" },
 --	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 })
+vim.cmd("packadd nvim-treesitter")
 
 
 vim.api.nvim_create_autocmd('LspAttach', {
 		callback = function(ev)
 			local client = vim.lsp.get_client_by_id(ev.data.client_id)
 			if client:supports_method('textDocument/completion') then
-					vim.lsp.competion.enable(true, client.id, ev.buf, { autotrigger = true })
+					vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
 			end
 	end,
 })
+
 require "mini.pick".setup()
 require "oil".setup()
 --require "mason".setup()
 --require "vague".setup({ transparent = true })
+require("glow").setup({
+  style = "dark",
+  width = 120,
+})
+
+
+pcall(vim.cmd, "packadd nvim-treesitter")
+
+local ok, ts = pcall(require, "nvim-treesitter.configs")
+if ok then
+  ts.setup({
+    ensure_installed = { "markdown", "markdown_inline" },
+    highlight = { enable = true },
+  })
+end
+
+vim.keymap.set("n", "<leader>mg", "<Cmd>Glow<CR>", { desc = "Glow markdown preview" })
 
 
 vim.cmd("set completeopt+=noselect")
@@ -129,8 +158,6 @@ end
 -- NOTE (sylvan)
 -- TODO (sylvan)
 --
-map({ "n", "v", "x" }, ";", ":", { desc = "Self explanatory" })
-map({ "n", "v", "x" }, ":", ";", { desc = "Self explanatory" })
 map({ "n", "v", "x" }, "<leader>v", "<Cmd>edit $MYVIMRC<CR>", { desc = "Edit " .. vim.fn.expand("$MYVIMRC") })
 map({ "n", "v", "x" }, "<leader>z", "<Cmd>e ~/.config/zsh/.zshrc<CR>", { desc = "Edit .zshrc" })
 map({ "n", "v", "x" }, "<leader>n", ":norm ", { desc = "ENTER NORM COMMAND." })
