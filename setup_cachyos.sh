@@ -26,9 +26,11 @@ cd ~/dotfiles/
 # Hyprland dual installation
 # Maybe change out the specifiec wlroots0.18 at some time (this was chosen to be compatible with MangoWC).
 sudo $PM wlroots0.18 libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-desktop-portal hyprland wl-clipboard
-
-
 stow .
+
+# Manually backing up fstab and inserting my own fstab
+sudo mv /etc/fstab /etc/fstab.bak
+sudo cp ~/dotfiles/etc/fstab /etc/fstab
 
 
 #Terminal, scripts and additionals
