@@ -131,6 +131,7 @@ local current = 1
 local map = vim.keymap.set
 map({ "n", "x" }, "<leader>o", ':update<CR> :source<CR>')
 map({ "n", "x" }, "<leader>w", ':write<CR>')
+map({ "n", "x" }, "<leader>r", ':%s/')
 map({ "n", "x" }, "<leader>q", ':quit<CR>')
 map({ "n", "x" }, "<leader>y", '"+y')
 map({ "n", "x" }, "<leader>d", '"+d')

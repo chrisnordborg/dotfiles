@@ -159,3 +159,9 @@ echo "Installing programming relatable applications"
 $YAY android-studio
 
 
+
+echo "Installing KVM/QEMU + Virt-manager for running virtual machines" 
+
+$PM qemu-desktop virt-manager libvirt edk2-ovmf swtpm dnsmasq
+
+

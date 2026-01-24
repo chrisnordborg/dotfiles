@@ -1,0 +1,15 @@
+# All Steam games
+windowrule {
+    match = class:^(steam_app_.*)$
+    float = true
+    noanim = true
+    noinitialfocus = true
+    noborder = true
+}
+
+# Steam client itself (optional)
+windowrule {
+    match = class:^(steam)$
+    opacity = 0.90 0.90
+}
+
