@@ -1,12 +1,28 @@
 #!/bin/bash
 set -e
 
+trap 'echo "ERROR: Script failed at line $LINENO"; exit 1' ERR
+
+
 PM="pacman --noconfirm --needed -Syu"
 YAY="yay --needed -S"
 
 PROFILE=""
 NON_INTERACTIVE=false
 DRY_RUN=false
+
+
+# ================================
+# Argument help 
+# ================================
+print_help() {
+    cat <<EOF
+Usage:
+  --profile [desktop|laptop]   to use predefined defaults.
+  --non-interactive            to install without asking for input.
+  --dry-run                    run without executing commands.
+EOF
+}
 
 # ================================
 # Argument parsing
@@ -26,6 +42,10 @@ for arg in "$@"; do
         --dry-run)
             DRY_RUN=true
             ;;
+				--help|-h)
+						print_help
+						exit 0
+						;;         
     esac
 done
 
@@ -43,12 +63,12 @@ run() {
 # ================================
 # Defaults (manual mode)
 # ================================
-INSTALL_NVIDIA_DESKTOP=
-INSTALL_NVIDIA_LAPTOP=
-INSTALL_GAMING=
-INSTALL_BLUETOOTH=
-INSTALL_ANDROID=
-INSTALL_KVM=
+INSTALL_NVIDIA_DESKTOP=-1
+INSTALL_NVIDIA_LAPTOP=-1
+INSTALL_GAMING=-1
+INSTALL_BLUETOOTH=-1
+INSTALL_ANDROID=-1
+INSTALL_KVM=-1
 
 # ================================
 # Apply profile defaults
@@ -78,6 +98,19 @@ case "$PROFILE" in
         ;;
 esac
 
+
+# ================================
+# Helper
+# ================================
+yn() {
+    case "$1" in
+        0) echo YES ;;
+        1) echo NO ;;
+        *) echo UNSET ;;
+    esac
+}
+
+
 # ================================
 # Prompt helper
 # ================================
@@ -85,29 +118,38 @@ ask_install() {
     local title="$1"
     local description="$2"
     local current="$3"
-
-    echo
-    echo "================================================="
-    echo "$title"
-    echo "-------------------------------------------------"
-    echo "$description"
-    echo
-    echo "1) Yes"
-    echo "2) No"
-    [ -n "$current" ] && echo "(Default: $([ "$current" -eq 0 ] && echo Yes || echo No))"
-    echo "================================================="
+    local choice
+    local default
+    {
+        echo
+        echo "================================================="
+        echo "       $title"
+        echo "-------------------------------------------------"
+        echo "$description"
+        echo
+        if [ "$current" -ne -1 ]; then
+            #echo "(Default: $([ "$current" -eq 0 ] && echo Yes || echo No))"
+            default="(Default: $([ "$current" -eq 0 ] && echo Yes || echo No))"
+        fi
+				echo "1) Yes    2) No        $default"
+        echo "-------------------------------------------------"
+    } >&2
 
     while true; do
         read -rp "Choose (1 or 2, Enter = default): " choice
-        if [ -z "$choice" ] && [ -n "$current" ]; then
-            return "$current"
+        if [ -z "$choice" ] && [ "$current" -ne -1 ]; then
+            echo "$current"
+						echo >&2    #extra spacing
+						echo >&2    #extra spacing
+            return
         fi
         case "$choice" in
-            1) return 0 ;;
-            2) return 1 ;;
-            *) echo "Invalid input. Please enter 1 or 2." ;;
+            1) echo 0; return ;;
+            2) echo 1; return ;;
+            *) echo "Invalid input. Please enter 1 or 2." >&2 ;;
         esac
     done
+    echo "================================================="
 }
 
 # ================================
@@ -209,7 +251,6 @@ install_nvidia_laptop() {
 }
 
 
-
 install_android() {
     run $YAY android-studio
 }
@@ -222,23 +263,35 @@ install_kvm() {
 # INTERACTIVE QUESTIONS
 # ================================
 if ! $NON_INTERACTIVE; then
-    ask_install "Nvidia Drivers for desktop" "Proprietary Nvidia drivers" "$INSTALL_NVIDIA_DESKTOP"
-    INSTALL_NVIDIA_DESKTOP=$?
-    
-    ask_install "Nvidia Drivers for laptop" "Proprietary Nvidia drivers" "$INSTALL_NVIDIA_LAPTOP"
-    INSTALL_NVIDIA_LAPTOP=$?
+    INSTALL_NVIDIA_DESKTOP="$(ask_install \
+        "Nvidia Drivers for desktop" \
+        "Proprietary Nvidia drivers" \
+        "$INSTALL_NVIDIA_DESKTOP")"
 
-    ask_install "Gaming / Steam" "Steam, Wine, Proton, Lutris" "$INSTALL_GAMING"
-    INSTALL_GAMING=$?
+#    INSTALL_NVIDIA_LAPTOP="$(ask_install \
+#        "Nvidia Drivers for laptop" \
+#        "Proprietary Nvidia drivers" \
+#        "$INSTALL_NVIDIA_LAPTOP")"
 
-    ask_install "Bluetooth" "BlueZ + firmware" "$INSTALL_BLUETOOTH"
-    INSTALL_BLUETOOTH=$?
+    INSTALL_GAMING="$(ask_install \
+        "Gaming / Steam" \
+        "Steam, Wine, Proton, Lutris" \
+        "$INSTALL_GAMING")"
 
-    ask_install "Android Studio" "Android IDE" "$INSTALL_ANDROID"
-    INSTALL_ANDROID=$?
+    INSTALL_BLUETOOTH="$(ask_install \
+        "Bluetooth" \
+        "BlueZ + firmware" \
+        "$INSTALL_BLUETOOTH")"
 
-    ask_install "KVM / QEMU" "Virtual machines" "$INSTALL_KVM"
-    INSTALL_KVM=$?
+    INSTALL_ANDROID="$(ask_install \
+        "Android Studio" \
+        "Android IDE" \
+        "$INSTALL_ANDROID")"
+
+    INSTALL_KVM="$(ask_install \
+        "KVM / QEMU" \
+        "Virtual machines" \
+        "$INSTALL_KVM")"
 fi
 
 # ================================
@@ -246,15 +299,14 @@ fi
 # ================================
 echo
 echo "================ INSTALL SUMMARY ================"
-echo "Profile:            ${PROFILE:-manual}"
-echo "Nvidia drivers, desktop:     $([ $INSTALL_NVIDIA_DESKTOP -eq 0 ] && echo YES || echo NO)"
-echo "Nvidia drivers, laptop:     $([ $INSTALL_NVIDIA_LAPTOP -eq 0 ] && echo YES || echo NO)"
-echo "Gaming / Steam:     $([ $INSTALL_GAMING -eq 0 ] && echo YES || echo NO)"
-echo "Bluetooth:          $([ $INSTALL_BLUETOOTH -eq 0 ] && echo YES || echo NO)"
-echo "Android Studio:     $([ $INSTALL_ANDROID -eq 0 ] && echo YES || echo NO)"
-echo "KVM / QEMU:         $([ $INSTALL_KVM -eq 0 ] && echo YES || echo NO)"
-echo "Non-interactive:    $NON_INTERACTIVE"
-echo "Dry-run:            $DRY_RUN"
+echo "Profile:                  ${PROFILE:-manual}"
+echo "Nvidia drivers, desktop:  $(yn "$INSTALL_NVIDIA_DESKTOP")"
+#echo "Nvidia drivers, laptop:     $([ $INSTALL_NVIDIA_LAPTOP -eq 0 ] && echo YES || echo NO)"
+echo "Gaming / Steam:           $(yn "$INSTALL_GAMING")"
+echo "Bluetooth:                $(yn "$INSTALL_BLUETOOTH")"
+echo "Android Studio:           $(yn "$INSTALL_ANDROID")"
+echo "KVM / QEMU:               $(yn "$INSTALL_KVM")"
+echo "Dry-run:                  $DRY_RUN"
 echo "================================================="
 echo
 
@@ -277,7 +329,7 @@ install_onedrive
 install_vulkan
 
 [ $INSTALL_NVIDIA_DESKTOP -eq 0 ] && install_nvidia_desktop
-[ $INSTALL_NVIDIA_LAPTOP -eq 0 ] && install_nvidia_laptop
+#[ $INSTALL_NVIDIA_LAPTOP -eq 0 ] && install_nvidia_laptop
 [ $INSTALL_GAMING -eq 0 ] && install_gaming
 [ $INSTALL_BLUETOOTH -eq 0 ] && install_bluetooth
 [ $INSTALL_ANDROID -eq 0 ] && install_android

@@ -149,5 +149,5 @@ alias backupdot="bash ~/dotfiles/.config/scripts/backupdotfiles.sh"
 alias backupmusic="bash ~/dotfiles/.config/scripts/backupmusic.sh"
 alias backupall="bash ~/dotfiles/.config/scripts/backup.sh" 
 alias cppoefilter="cp ~/Downloads/*.filter ~/.local/share/Steam/steamapps/compatdata/238960/pfx/drive_c/users/steamuser/My\ Documents/My\ Games/Path\ of\ Exile/"
-
+alias gitoverwritelocal='git stash push -u -m "backup before hard reset" && git fetch origin && git reset --hard origin'
 export QT_QPA_PLATFORM=xcb
