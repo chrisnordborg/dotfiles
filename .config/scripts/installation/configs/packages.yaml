@@ -1,0 +1,55 @@
+always:
+  - git
+  - stow
+  - yay
+  - unzip
+  - zen-browser
+  - bc
+  - jq
+  - ripgrep
+  - xclip
+  - tree
+  - bat
+  - feh
+  - rhythmbox
+  - fzf
+  - obsidian
+  - make
+  - wget
+  - pandoc
+  - tree-sitter
+  - marksman
+  - util-linux
+  - ntfs-3g
+  - android-file-transfer
+  - libnotify
+  - pipewire
+  - pipewire-pulse
+  - wireplumber
+  - gimp
+  - qbittorrent
+  - swww
+  - dunst
+  - hyprpicker
+  - mako
+  - vlc
+  - grimblast
+  - pamixer
+  - wlogout
+  - waybar
+  - brightnessctl
+  - yq
+
+aur:
+  - tofi
+  - neovim-nightly-bin
+  - onedrive-abraunegg-git
+
+fonts:
+  - ~/dotfiles/Other/DejaVuSansMono.zip
+
+dotfiles:
+  - repo: git@github.com:chrisnordborg/dotfiles.git
+    dest: ~/
+  - repo: git@github.com:chrisnordborg/wallpapers.git
+    dest: ~/

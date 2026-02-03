@@ -1,0 +1,3 @@
+features:
+  window_manager:
+    enabled: false
