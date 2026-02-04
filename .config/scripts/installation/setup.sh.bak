@@ -2,8 +2,6 @@
 #set -e
 set -o errexit 
 
-PACMAN_QUEUE=()
-AUR_QUEUE=()
 FAILED_PACKAGES=()
 # ================================
 # CONFIG
@@ -12,7 +10,8 @@ PROFILES_FILE="config/profiles.yaml"
 PACKAGES_FILE="config/packages.yaml"
 SOURCES_FILE="config/sources.yaml"
 
-PM="sudo pacman --noconfirm --needed"
+PMpreSetup="sudo pacman --noconfirm --needed -Syu"
+PM="sudo pacman --noconfirm --needed -S"
 YAY="yay --needed -S"
 
 PROFILE=""
@@ -104,7 +103,7 @@ done
 # ================================
 # CHECK DEPENDENCIES
 # ================================
-command -v yq >/dev/null 2>&1 || { echo "yq required!"; $PM -Syu go-yq exit 1; }
+command -v yq >/dev/null 2>&1 || { echo "yq required!"; exit 1; }
 
 # ================================
 # LOAD YAML
@@ -134,7 +133,6 @@ done
 DOTFILES=($(yq e '.dotfiles[].repo' "$SOURCES_FILE"))
 DOTFILES_DEST=($(yq e '.dotfiles[].dest' "$SOURCES_FILE"))
 FONTS=($(yq e '.fonts[]' "$SOURCES_FILE"))
-DOTFILES_DEST=($(yq e '.fonts[].dest' "$SOURCES_FILE"))
 
 if $LIST_OPTIONS; then
     echo "Profiles: ${PROFILES[*]}"
@@ -208,15 +206,13 @@ for cat in "${PK_CATEGORIES[@]}"; do
         				install_flag=1
         				# Loop over each WM in the array
         				for wm in "${WM[@]}"; do
-            			#echo "Installing WM: $wm"
-            			echo "Queuing WM packages for: $wm"
+            			echo "Installing WM: $wm"
             			case "$wm" in
                 			Hyprland)
-                    			#safe_run $PM -S libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-desktop-portal hyprland wl-clipboard
-													PACMAN_QUEUE+=(libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-desktop-portal hyprland wl-clipboard)
+                    			safe_run $PM libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-desktop-portal hyprland wl-clipboard
                     			;;
                 			MangoWc)
-												AUR_QUEUE+=( mangowc-git wlroots0.18 wl-clipboard )
+                    			safe_run $YAY mangowc-git wlroots0.18 wl-clipboard
                     			;;
                 			*)
                     		echo "Unknown WM: $wm"
@@ -224,7 +220,7 @@ for cat in "${PK_CATEGORIES[@]}"; do
             			esac
         				done
     					fi
-    					# Skip the default $PM -S $pkgs call for WM
+    					# Skip the default $PM $pkgs call for WM
     					install_flag=0
     					;;
            # WM) [[ -n "$WM" ]] && pkgs="$WM" && install_flag=1 ;;
@@ -237,19 +233,18 @@ for cat in "${PK_CATEGORIES[@]}"; do
         				# Install pacman packages
         				if [[ -n "$pkgs_pacman" ]]; then
             			echo "Installing NVIDIA ($NVIDIA) via pacman: $pkgs_pacman"
-									PACMAN_QUEUE+=($pkgs_pacman)
-									#safe_run $PM -S $pkgs_pacman
+            			safe_run $PM $pkgs_pacman
         				fi
 
         				# Install AUR packages
         				if [[ -n "$pkgs_aur" ]]; then
             			echo "Installing NVIDIA ($NVIDIA) via AUR: $pkgs_aur"
             			for p in $pkgs_aur; do
-										AUR_QUEUE+=( $p )
+                		safe_run $YAY $p
             			done
         				fi
 
-        				# Skip default $PM -S $pkgs call
+        				# Skip default $PM $pkgs call
         				install_flag=0
     					fi
     				;;
@@ -263,8 +258,8 @@ for cat in "${PK_CATEGORIES[@]}"; do
         if [[ $install_flag -eq 1 ]]; then
             echo "Installing $cat via $mgr: $pkgs"
             case "$mgr" in
-                pacman) PACMAN_QUEUE+=($pkgs) ;;
-								aur) for p in $pkgs; do AUR_QUEUE+=( $p ); done ;;
+                pacman) safe_run $PM $pkgs ;;
+                aur) for p in $pkgs; do safe_run $YAY $p; done ;;
             esac
         fi
     done
@@ -274,29 +269,6 @@ echo ""
 read -rp "Proceed? (y/N): " confirm
 [[ "$confirm" =~ ^[Yy]$ ]] || exit 0
 
-# Remove duplicates
-PACMAN_QUEUE=($(printf "%s\n" "${PACMAN_QUEUE[@]}" | sort -u))
-AUR_QUEUE=($(printf "%s\n" "${AUR_QUEUE[@]}" | sort -u))
-
-# Filter PACMAN_QUEUE to include only packages not currently installed
-#PACMAN_QUEUE=($(pacman -Qq "${PACMAN_QUEUE[@]}" 2>/dev/null | grep -Fxv -f - <(printf "%s\n" "${PACMAN_QUEUE[@]}")))
-
-# Install everything in one pacman transaction
-if [ ${#PACMAN_QUEUE[@]} -gt 0 ]; then
-    echo "Installing all pacman packages in one transaction: ${PACMAN_QUEUE[*]}"
-		# Update system first
-		safe_run $PM -Syu
-    safe_run $PM -S "${PACMAN_QUEUE[@]}"
-fi
-
-# Install AUR packages individually
-for p in "${AUR_QUEUE[@]}"; do
-    if ! run $YAY "$p"; then
-        FAILED_PACKAGES+=("$p")
-    fi
-done
-
-
 # Dotfiles
 for i in "${!DOTFILES[@]}"; do
     [[ -d "${DOTFILES_DEST[$i]}" ]] || run git clone "${DOTFILES[$i]}" "${DOTFILES_DEST[$i]}"
@@ -304,8 +276,7 @@ done
 
 # Fonts
 for f in "${FONTS[@]}"; do
-    #run sudo unzip "$f" -d /usr/share/fonts/
-    run sudo unzip "$f" -d "$FONTS_DEST" 
+    run sudo unzip "$f" -d /usr/share/fonts/
 done
 
 echo "Installation complete!"

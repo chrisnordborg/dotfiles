@@ -1,0 +1,88 @@
+# always installs with every installation.
+always:
+  pacman:
+    - git
+    - stow
+    - unzip
+    - zen-browser
+    - go-yq
+  aur: []
+
+fonts:
+  pacman: []
+  filesystem:
+    - ~/dotfiles/Other/DejaVuSansMono.zip
+
+dotfiles:
+  pacman: []
+  git:
+    - repo: git@github.com:chrisnordborg/dotfiles.git
+      dest: ~/
+    - repo: git@github.com:chrisnordborg/wallpapers.git
+      dest: ~/
+
+WM:
+  pacman:
+    Hyprland:
+      - libx11
+      - libxcb
+      - libxrandr
+      - libxinerama
+      - libxkbcommon
+      - mesa
+      - xdg-desktop-portal
+      - hyprland
+      - wl-clipboard
+  aur:
+    MangoWc:
+      - mangowc-git
+      - wlroots0.18
+      - wl-clipboard
+
+NVIDIA:
+  580xx:
+    pacman:
+      - nvidia-580xx-dkms
+      - nvidia-580xx-utils
+      - lib32-nvidia-580xx-utils
+    aur:
+  LatestRelease":
+    pacman:
+      - nvidia
+      - nvidia-utils
+      - nvidia-settings
+      - egl-gbm
+    aur:
+
+GAMING:
+  pacman:
+    - steam
+    - wine
+    - proton
+    - lutris
+    - pipewire
+    - pipewire-pulse
+  aur: []
+
+BLUETOOTH:
+  pacman:
+    - linux-headers
+    - linux-firmware
+    - bluez
+    - bluez-utils
+  aur: []
+
+ANDROID:
+  pacman: []
+  aur:
+    - android-studio
+
+KVM:
+  pacman:
+    - qemu-desktop
+    - virt-manager
+    - libvirt
+    - edk2-ovmf
+    - swtpm
+    - dnsmasq
+  aur: []

@@ -1,0 +1,14 @@
+# Optional: external references for dotfiles or font zips
+dotfiles:
+  - name: dotfiles
+    repo: git@github.com:chrisnordborg/dotfiles.git
+    dest: ~/
+  - name: wallpapers
+    repo: git@github.com:chrisnordborg/wallpapers.git
+    dest: ~/
+
+fonts:
+  - name: DejaVuSansMono
+    path: ~/dotfiles/Other/DejaVuSansMono.zip
+    # The following was added by me, may have to be coded in the script. 
+    dest: /usr/share/fonts

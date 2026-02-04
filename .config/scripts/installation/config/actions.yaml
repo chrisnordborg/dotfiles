@@ -1,0 +1,10 @@
+always:
+  - ensure_aur_helper
+  - setup_git
+  - setup_ssh
+  - install_fonts
+  - install_dotfiles
+  - start_notification_daemon
+
+desktop:
+  - enable_pipewire
