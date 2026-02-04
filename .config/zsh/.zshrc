@@ -102,7 +102,7 @@ bindkey "^K" history-search-backward
 #####  ALIASES  #####
 #####################
 
-
+alias po="poweroff"
 alias c="clear"
 alias v="nvim"
 alias f="fff"
