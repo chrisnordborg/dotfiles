@@ -11,8 +11,8 @@ always:
 OS:
   pacman:
     CachyOS:
-      - linux-cachyos
-      - linux-cachyos-headers
+      - linux-cachyos-lts
+      - linux-cachyos-lts-headers
       - dosfstools
     Arch-Linux:
       - linux
