@@ -10,8 +10,8 @@ profiles:
   laptop:
     WM:
       - Hyprland
-#      - MangoWC
-#  NVIDIA: LatestRelease
+      - MangoWC
+    NVIDIA: LatestRelease
     GAMING: no
     BLUETOOTH: yes
     ANDROID: yes

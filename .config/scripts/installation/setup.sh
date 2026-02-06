@@ -8,9 +8,22 @@ FAILED_PACKAGES=()
 # ================================
 # CONFIG
 # ================================
-PROFILES_FILE="config/profiles.yaml"
-PACKAGES_FILE="config/packages.yaml"
-SOURCES_FILE="config/sources.yaml"
+# Determine the directory where setup.sh resides
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+# Reference YAML files relative to the script directory
+ACTIONS_FILE="$SCRIPT_DIR/config/actions.yaml"
+PACKAGES_FILE="$SCRIPT_DIR/config/packages.yaml"
+PROFILES_FILE="$SCRIPT_DIR/config/profiles.yaml"
+SOURCES_FILE="$SCRIPT_DIR/config/sources.yaml"
+
+PACKAGE_MANAGERS="pacman aur"
+
+# Relative to where in the filetree you run the script.
+#ACTIONS_FILE="config/actions.yaml"
+#PACKAGES_FILE="config/packages.yaml"
+#PROFILES_FILE="config/profiles.yaml"
+#SOURCES_FILE="config/sources.yaml"
 
 PM="sudo pacman --noconfirm --needed"
 YAY="yay --needed -S"
@@ -58,18 +71,27 @@ bool_val() {
 interactive_select() {
     local prompt="$1"; shift
     local options=("$@")
-    echo "$prompt"
+
+    # Print prompt to stderr so it shows even if capturing output
+    echo "$prompt" >&2
+
+    # Print options
     for i in "${!options[@]}"; do
-        echo "[$i] ${options[$i]}"
+        echo "[$i] ${options[$i]}" >&2
     done
+
     local choice
+		local default=0		# Default index if Enter is pressed
     while true; do
-        read -rp "Choose [0-${#options[@]}-1]: " choice
-        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 0 ] && [ "$choice" -lt "${#options[@]}" ]; then
-            echo "${options[$choice]}"
+			read -rp "Choose [0-$(( ${#options[@]} - 1 ))] (default=$default):" choice
+				# If Enter is pressed, use default
+        choice="${choice:-$default}"
+       
+				if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 0 ] && [ "$choice" -lt "${#options[@]}" ]; then
+            echo "${options[$choice]}"   # This goes to stdout and is captured
             return
         else
-            echo "Invalid selection."
+            echo "Invalid selection." >&2
         fi
     done
 }
@@ -156,7 +178,19 @@ if [[ -z "$PROFILE" ]] && ! $NON_INTERACTIVE; then
 fi
 
 # Read WM as an array from YAML
-mapfile -t WM < <(yq e ".profiles.\"$PROFILE\".WM[]" "$PROFILES_FILE")
+#mapfile -t WM < <(yq e ".profiles.\"$PROFILE\".WM[]" "$PROFILES_FILE")
+
+# Read WM as a clean array from YAML (trim whitespace, drop empty lines)
+mapfile -t WM < <(
+    yq e ".profiles.\"$PROFILE\".WM[]" "$PROFILES_FILE" \
+    | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
+    | grep -v '^$'
+)
+#echo "DEBUG: WM array contents:"
+#for i in "${!WM[@]}"; do
+#    printf '  [%d] -> "%s"\n' "$i" "${WM[$i]}"
+#done
+
 NVIDIA="${PROFILE_OPTIONS[$PROFILE.NVIDIA]}"
 GAMING="${PROFILE_OPTIONS[$PROFILE.GAMING]}"
 BLUETOOTH="${PROFILE_OPTIONS[$PROFILE.BLUETOOTH]}"
@@ -180,94 +214,86 @@ if $CHECK_MODE; then self_check; exit 0; fi
 # ================================
 # INSTALLATION
 # ================================
+echo "==========================================="
 echo "Installation summary for profile: $PROFILE"
+echo "==========================================="
 echo "Window Managers: ${WM[*]}"
 echo "NVIDIA variant: $NVIDIA"
 # Get the actual packages for the NVIDIA variant
 nvidia_pacman=$(yq e ".NVIDIA.\"$NVIDIA\".pacman[]" "$PACKAGES_FILE" | xargs)
 nvidia_aur=$(yq e ".NVIDIA.\"$NVIDIA\".aur[]" "$PACKAGES_FILE" | xargs)
-echo "NVIDIA packages (pacman): $nvidia_pacman"
-echo "NVIDIA packages (AUR): $nvidia_aur"
-
-echo "Gaming: $GAMING, Bluetooth: $BLUETOOTH, Android: $ANDROID, KVM: $KVM"
-echo ""
+#echo "NVIDIA packages (pacman): $nvidia_pacman"
+#echo "NVIDIA packages (AUR): $nvidia_aur"
+# Conditionally showing if any packages are to be installed
+[[ -n "$nvidia_pacman" ]] && echo "NVIDIA packages (pacman): $nvidia_pacman"
+[[ -n "$nvidia_aur" ]] && echo "NVIDIA packages (AUR): $nvidia_aur"
+echo "Gaming: $GAMING		 Bluetooth: $BLUETOOTH		 Android: $ANDROID		 KVM: $KVM"
+echo "==========================================="
 echo "Other packages to be installed per category:"
+echo ""
 
 # Loop through package categories
 for cat in "${PK_CATEGORIES[@]}"; do
-    for mgr in pacman aur; do
-        pkgs="${PACKAGES[$cat.$mgr]}"
-        [[ -z "$pkgs" ]] && continue
+    case "$cat" in
+        always)
+            PACMAN_QUEUE+=(${PACKAGES[always.pacman]})
+            AUR_QUEUE+=(${PACKAGES[always.aur]})
+            ;;
 
-        # Determine if category should install
-        install_flag=0
-        case "$cat" in
-            always) install_flag=1 ;;
-						WM) 
-    					if [[ ${#WM[@]} -gt 0 ]]; then
-        				install_flag=1
-        				# Loop over each WM in the array
-        				for wm in "${WM[@]}"; do
-            			#echo "Installing WM: $wm"
-            			echo "Queuing WM packages for: $wm"
-            			case "$wm" in
-                			Hyprland)
-                    			#safe_run $PM -S libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-desktop-portal hyprland wl-clipboard
-													PACMAN_QUEUE+=(libx11 libxcb libxrandr libxinerama libxkbcommon mesa xdg-desktop-portal hyprland wl-clipboard)
-                    			;;
-                			MangoWc)
-												AUR_QUEUE+=( mangowc-git wlroots0.18 wl-clipboard )
-                    			;;
-                			*)
-                    		echo "Unknown WM: $wm"
-                    		;;
-            			esac
-        				done
-    					fi
-    					# Skip the default $PM -S $pkgs call for WM
-    					install_flag=0
-    					;;
-           # WM) [[ -n "$WM" ]] && pkgs="$WM" && install_flag=1 ;;
-						NVIDIA)
-    					if [[ -n "$NVIDIA" ]]; then
-        				# Get the package list for the variant from packages.yaml
-        				pkgs_pacman=$(yq e ".NVIDIA.\"$NVIDIA\".pacman[]" "$PACKAGES_FILE" | xargs)
-        				pkgs_aur=$(yq e ".NVIDIA.\"$NVIDIA\".aur[]" "$PACKAGES_FILE" | xargs)
+        WM)
+            for wm in "${WM[@]}"; do
+                echo "WM: $wm"
 
-        				# Install pacman packages
-        				if [[ -n "$pkgs_pacman" ]]; then
-            			echo "Installing NVIDIA ($NVIDIA) via pacman: $pkgs_pacman"
-									PACMAN_QUEUE+=($pkgs_pacman)
-									#safe_run $PM -S $pkgs_pacman
-        				fi
+                # Pacman WMs
+                mapfile -t pkgs < <(
+                    yq e ".WM.pacman.\"$wm\"[]" "$PACKAGES_FILE" 2>/dev/null
+                )
+                [[ ${#pkgs[@]} -gt 0 ]] && PACMAN_QUEUE+=("${pkgs[@]}")
+								[[ -n "${pkgs[@]}" ]] && echo "  pacman packages: ${pkgs[@]}"
+                
+								# AUR WMs
+                mapfile -t pkgs < <(
+                    yq e ".WM.aur.\"$wm\"[]" "$PACKAGES_FILE" 2>/dev/null
+                )
+                [[ ${#pkgs[@]} -gt 0 ]] && AUR_QUEUE+=("${pkgs[@]}")
+								[[ -n "${pkgs[@]}" ]] && echo "  aur packages: ${pkgs[@]}"
+								echo ""
+            done
+            ;;
 
-        				# Install AUR packages
-        				if [[ -n "$pkgs_aur" ]]; then
-            			echo "Installing NVIDIA ($NVIDIA) via AUR: $pkgs_aur"
-            			for p in $pkgs_aur; do
-										AUR_QUEUE+=( $p )
-            			done
-        				fi
+        GAMING)
+            [[ $(bool_val "$GAMING") -eq 1 ]] || continue
+            PACMAN_QUEUE+=(${PACKAGES[GAMING.pacman]})
+            AUR_QUEUE+=(${PACKAGES[GAMING.aur]})
+						[[ -n "${PACKAGES[GAMING.pacman]}" ||  -n "${PACKAGES[GAMING.aur]}" ]] && echo "GAMING:"
+					  [[ -n "${PACKAGES[GAMING.pacman]}" ]] && echo "  pacman packages: ${PACKAGES[GAMING.pacman]}"
+					  [[ -n "${PACKAGES[GAMING.aur]}" ]] && echo "  aur packages: ${PACKAGES[GAMING.aur]}"
+								echo ""
+            ;;
 
-        				# Skip default $PM -S $pkgs call
-        				install_flag=0
-    					fi
-    				;;
-            #NVIDIA) [[ -n "$NVIDIA" ]] && pkgs="$NVIDIA" && install_flag=1 ;;
-            GAMING) [[ $(bool_val "$GAMING") -eq 1 ]] && install_flag=1 ;;
-            BLUETOOTH) [[ $(bool_val "$BLUETOOTH") -eq 1 ]] && install_flag=1 ;;
-            ANDROID) [[ $(bool_val "$ANDROID") -eq 1 ]] && install_flag=1 ;;
-            KVM) [[ $(bool_val "$KVM") -eq 1 ]] && install_flag=1 ;;
-        esac
+        BLUETOOTH)
+            [[ $(bool_val "$BLUETOOTH") -eq 1 ]] || continue
+            PACMAN_QUEUE+=(${PACKAGES[BLUETOOTH.pacman]})
+						[[ -n "${PACKAGES[BLUETOOTH.pacman]}" ]] && echo "BLUETOOTH:"
+					  [[ -n "${PACKAGES[BLUETOOTH.pacman]}" ]] && echo "  pacman packages: ${PACKAGES[BLUETOOTH.pacman]}"
+								echo ""
+            ;;
 
-        if [[ $install_flag -eq 1 ]]; then
-            echo "Installing $cat via $mgr: $pkgs"
-            case "$mgr" in
-                pacman) PACMAN_QUEUE+=($pkgs) ;;
-								aur) for p in $pkgs; do AUR_QUEUE+=( $p ); done ;;
-            esac
-        fi
-    done
+        ANDROID)
+            [[ $(bool_val "$ANDROID") -eq 1 ]] || continue
+            AUR_QUEUE+=(${PACKAGES[ANDROID.aur]})
+						[[ -n "${PACKAGES[ANDROID.aur]}" ]] && echo "ANDROID studio:"
+					  [[ -n "${PACKAGES[ANDROID.aur]}" ]] && echo "  aur packages: ${PACKAGES[ANDROID.aur]}"
+								echo ""
+            ;;
+
+        KVM)
+            [[ $(bool_val "$KVM") -eq 1 ]] || continue
+            PACMAN_QUEUE+=(${PACKAGES[KVM.pacman]})
+						[[ -n "${PACKAGES[KVM.pacman]}" ]] && echo "KVM:"
+					  [[ -n "${PACKAGES[GAMING.pacman]}" ]] && echo "  pacman packages: ${PACKAGES[KVM.pacman]}"
+            ;;
+    esac
 done
 
 echo ""
@@ -308,6 +334,72 @@ for f in "${FONTS[@]}"; do
     run sudo unzip "$f" -d "$FONTS_DEST" 
 done
 
+
+# ================================
+# ACTION FUNCTIONS
+# ================================
+setup_git() {
+		local name
+		local email
+    echo "Setting up git..."
+    save_run read -rp "Enter your name: " name
+    save_run read -rp "Enter your email: " email
+    safe_run git config --global user.name "$name"
+    safe_run git config --global user.email "$email"
+}
+
+setup_ssh() {
+    echo "Setting up SSH..."
+    [[ -f "$HOME/.ssh/id_rsa" ]] || run ssh-keygen -t rsa -b 4096 -f "$HOME/.ssh/id_rsa"
+}
+
+link_fstab_desktop() {
+    echo "Linking desktop fstab..."
+    safe_run sudo rm /etc/fstab
+		safe_run sudo ln -sf $HOME/dotfiles/etc/fstab_desktop.bak /etc/fstab
+}
+
+remove_files_before_stow() {
+		
+
+}
+
+stow_dotfiles() {
+	echo "Stowing dotfiles..."
+  command -v yq >/dev/null 2>&1 || { echo "stow required!"; safe_run $PM -S stow; }
+	safe_run cd $HOME/dotfiles 
+	safe_run stow .
+
+}
+
+# ================================
+# LOAD AND RUN ACTIONS
+# ================================
+# Always run these actions
+mapfile -t ACTIONS_ALWAYS < <(yq e '.always[]' "$ACTIONS_FILE")
+
+# Profile-specific actions
+mapfile -t ACTIONS_PROFILE < <(yq e ".\"$PROFILE\"[]?" "$ACTIONS_FILE")
+
+# Combine
+ACTIONS_TO_RUN=("${ACTIONS_ALWAYS[@]}" "${ACTIONS_PROFILE[@]}")
+
+echo "Actions to run for profile $PROFILE: ${ACTIONS_TO_RUN[*]}"
+
+# Run
+for action in "${ACTIONS_TO_RUN[@]}"; do
+    if declare -f "$action" > /dev/null; then
+        echo "Running action: $action"
+        safe_run "$action"
+    else
+        echo "Warning: action '$action' is not defined!"
+        FAILED_PACKAGES+=("action:$action")
+    fi
+done
+
+# ================================
+# END
+# ================================
 echo "Installation complete!"
 
 if [ ${#FAILED_PACKAGES[@]} -gt 0 ]; then

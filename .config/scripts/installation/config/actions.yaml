@@ -1,10 +1,8 @@
 always:
-  - ensure_aur_helper
   - setup_git
   - setup_ssh
-  - install_fonts
-  - install_dotfiles
-  - start_notification_daemon
+  - remove_files_before_stow
+  - stow_dotfiles
 
 desktop:
-  - enable_pipewire
+  - link_fstab_desktop

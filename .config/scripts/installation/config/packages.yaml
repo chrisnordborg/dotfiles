@@ -8,19 +8,6 @@ always:
     - go-yq
   aur: []
 
-fonts:
-  pacman: []
-  filesystem:
-    - ~/dotfiles/Other/DejaVuSansMono.zip
-
-dotfiles:
-  pacman: []
-  git:
-    - repo: git@github.com:chrisnordborg/dotfiles.git
-      dest: ~/
-    - repo: git@github.com:chrisnordborg/wallpapers.git
-      dest: ~/
-
 WM:
   pacman:
     Hyprland:
