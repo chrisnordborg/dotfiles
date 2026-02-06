@@ -8,6 +8,16 @@ always:
     - go-yq
   aur: []
 
+OS:
+  pacman:
+    CachyOS:
+      - linux-cachyos
+      - linux-cachyos-headers
+      - dosfstools
+    Arch-Linux:
+      - linux
+      - linux-headers
+    #- linux-firmware
 WM:
   pacman:
     Hyprland:
@@ -27,19 +37,17 @@ WM:
       - wl-clipboard
 
 NVIDIA:
-  580xx:
-    pacman:
+  pacman:
+    580xx:
       - nvidia-580xx-dkms
       - nvidia-580xx-utils
       - lib32-nvidia-580xx-utils
-    aur:
-  LatestRelease":
-    pacman:
+    LatestRelease:
       - nvidia
       - nvidia-utils
       - nvidia-settings
       - egl-gbm
-    aur:
+  aur:
 
 GAMING:
   pacman:
@@ -53,8 +61,8 @@ GAMING:
 
 BLUETOOTH:
   pacman:
-    - linux-headers
-    - linux-firmware
+    #- linux-headers
+    #- linux-firmware
     - bluez
     - bluez-utils
   aur: []

@@ -1,6 +1,7 @@
 always:
   - setup_git
   - setup_ssh
+  - git_repos_set_remote_origin
   - remove_files_before_stow
   - stow_dotfiles
 

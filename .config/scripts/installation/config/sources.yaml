@@ -10,5 +10,4 @@ dotfiles:
 fonts:
   - name: DejaVuSansMono
     path: ~/dotfiles/Other/DejaVuSansMono.zip
-    # The following was added by me, may have to be coded in the script. 
     dest: /usr/share/fonts

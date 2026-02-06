@@ -1,5 +1,6 @@
 profiles:
   desktop:
+    OS: CachyOS
     WM:
       - Hyprland
     NVIDIA: 580xx
@@ -8,6 +9,7 @@ profiles:
     ANDROID: yes
     KVM: yes
   laptop:
+    OS: CachyOS
     WM:
       - Hyprland
       - MangoWC

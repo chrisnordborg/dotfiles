@@ -18,6 +18,7 @@ PROFILES_FILE="$SCRIPT_DIR/config/profiles.yaml"
 SOURCES_FILE="$SCRIPT_DIR/config/sources.yaml"
 
 PACKAGE_MANAGERS="pacman aur"
+PACKAGE_GROUPS="OS WM NVIDIA GAMING BLUETOOTH ANDROID KVM"
 
 # Relative to where in the filetree you run the script.
 #ACTIONS_FILE="config/actions.yaml"
@@ -112,7 +113,7 @@ for arg in "$@"; do
 Usage: bash setup.sh [OPTIONS]
 
 Options:
-  --profile [desktop|laptop]   Use predefined profile
+  --profile [desktop|laptop]    Use predefined profile
   --non-interactive             Install without prompts
   --dry-run                     Show commands without executing
   --check                       Run self-checks only
@@ -139,7 +140,8 @@ fi
 # Load profile options
 declare -A PROFILE_OPTIONS
 for p in "${PROFILES[@]}"; do
-    for key in WM NVIDIA GAMING BLUETOOTH ANDROID KVM; do
+    for key in ${PACKAGE_GROUPS[@]}; do
+    #for key in OS WM NVIDIA GAMING BLUETOOTH ANDROID KVM; do
         PROFILE_OPTIONS["$p.$key"]=$(yq e ".profiles.\"$p\".\"$key\"" "$PROFILES_FILE")
     done
 done
@@ -156,7 +158,7 @@ done
 DOTFILES=($(yq e '.dotfiles[].repo' "$SOURCES_FILE"))
 DOTFILES_DEST=($(yq e '.dotfiles[].dest' "$SOURCES_FILE"))
 FONTS=($(yq e '.fonts[]' "$SOURCES_FILE"))
-DOTFILES_DEST=($(yq e '.fonts[].dest' "$SOURCES_FILE"))
+FONTS_DEST=($(yq e '.fonts[].dest' "$SOURCES_FILE"))
 
 if $LIST_OPTIONS; then
     echo "Profiles: ${PROFILES[*]}"
@@ -191,6 +193,7 @@ mapfile -t WM < <(
 #    printf '  [%d] -> "%s"\n' "$i" "${WM[$i]}"
 #done
 
+OS="${PROFILE_OPTIONS[$PROFILE.OS]}"
 NVIDIA="${PROFILE_OPTIONS[$PROFILE.NVIDIA]}"
 GAMING="${PROFILE_OPTIONS[$PROFILE.GAMING]}"
 BLUETOOTH="${PROFILE_OPTIONS[$PROFILE.BLUETOOTH]}"
@@ -217,13 +220,12 @@ if $CHECK_MODE; then self_check; exit 0; fi
 echo "==========================================="
 echo "Installation summary for profile: $PROFILE"
 echo "==========================================="
+echo "Operating System: ${OS[*]}"
 echo "Window Managers: ${WM[*]}"
 echo "NVIDIA variant: $NVIDIA"
 # Get the actual packages for the NVIDIA variant
 nvidia_pacman=$(yq e ".NVIDIA.\"$NVIDIA\".pacman[]" "$PACKAGES_FILE" | xargs)
 nvidia_aur=$(yq e ".NVIDIA.\"$NVIDIA\".aur[]" "$PACKAGES_FILE" | xargs)
-#echo "NVIDIA packages (pacman): $nvidia_pacman"
-#echo "NVIDIA packages (AUR): $nvidia_aur"
 # Conditionally showing if any packages are to be installed
 [[ -n "$nvidia_pacman" ]] && echo "NVIDIA packages (pacman): $nvidia_pacman"
 [[ -n "$nvidia_aur" ]] && echo "NVIDIA packages (AUR): $nvidia_aur"
@@ -239,6 +241,52 @@ for cat in "${PK_CATEGORIES[@]}"; do
             PACMAN_QUEUE+=(${PACKAGES[always.pacman]})
             AUR_QUEUE+=(${PACKAGES[always.aur]})
             ;;
+				OS)
+            for os in "${OS[@]}"; do
+                echo "OS: $os"
+
+                # Pacman OSs
+                mapfile -t pkgs < <(
+                    yq e ".OS.pacman.\"$os\"[]" "$PACKAGES_FILE" 2>/dev/null
+                )
+                [[ ${#pkgs[@]} -gt 0 ]] && PACMAN_QUEUE+=("${pkgs[@]}")
+								[[ -n "${pkgs[@]}" ]] && echo "  pacman packages: ${pkgs[@]}"
+                
+								# AUR OSs
+                mapfile -t pkgs < <(
+                    yq e ".OS.aur.\"$os\"[]" "$PACKAGES_FILE" 2>/dev/null
+                )
+                [[ ${#pkgs[@]} -gt 0 ]] && AUR_QUEUE+=("${pkgs[@]}")
+								[[ -n "${pkgs[@]}" ]] && echo "  aur packages: ${pkgs[@]}"
+								echo ""
+            done
+						;;
+
+        NVIDIA)
+            for version in "${NVIDIA[@]}"; do
+                echo "NVIDIA version: $version"
+
+                # Pacman NVIDIAs
+                mapfile -t pkgs < <(
+                    yq e ".NVIDIA.pacman.\"$version\"[]" "$PACKAGES_FILE" 2>/dev/null
+                )
+                [[ ${#pkgs[@]} -gt 0 ]] && PACMAN_QUEUE+=("${pkgs[@]}")
+								[[ -n "${pkgs[@]}" ]] && echo "  pacman packages: ${pkgs[@]}"
+                
+								# AUR NVIDIAs
+                mapfile -t pkgs < <(
+                    yq e ".NVIDIA.aur.\"$version\"[]" "$PACKAGES_FILE" 2>/dev/null
+                )
+                [[ ${#pkgs[@]} -gt 0 ]] && AUR_QUEUE+=("${pkgs[@]}")
+								[[ -n "${pkgs[@]}" ]] && echo "  aur packages: ${pkgs[@]}"
+								echo ""
+            done
+ 
+						#nvidia_pacman=$(yq e ".NVIDIA.\"$NVIDIA\".pacman[]" "$PACKAGES_FILE" | xargs)
+						#nvidia_aur=$(yq e ".NVIDIA.\"$NVIDIA\".aur[]" "$PACKAGES_FILE" | xargs)
+						#[[ -n "$nvidia_pacman" ]] && echo "NVIDIA packages (pacman): $nvidia_pacman"
+						#[[ -n "$nvidia_aur" ]] && echo "NVIDIA packages (AUR): $nvidia_aur"
+						;;
 
         WM)
             for wm in "${WM[@]}"; do
@@ -307,6 +355,9 @@ AUR_QUEUE=($(printf "%s\n" "${AUR_QUEUE[@]}" | sort -u))
 # Filter PACMAN_QUEUE to include only packages not currently installed
 #PACMAN_QUEUE=($(pacman -Qq "${PACMAN_QUEUE[@]}" 2>/dev/null | grep -Fxv -f - <(printf "%s\n" "${PACMAN_QUEUE[@]}")))
 
+# ================================
+# INSTALLATION PACKAGES
+# ================================
 # Install everything in one pacman transaction
 if [ ${#PACMAN_QUEUE[@]} -gt 0 ]; then
     echo "Installing all pacman packages in one transaction: ${PACMAN_QUEUE[*]}"
@@ -322,9 +373,13 @@ for p in "${AUR_QUEUE[@]}"; do
     fi
 done
 
-
+# ================================
+# INSTALLATION DOTFILES & FONTS
+# ================================
+###########################FIX ME DOTFILES AND FONTS
 # Dotfiles
 for i in "${!DOTFILES[@]}"; do
+	echo "$i      ${DOTFILES[$i]}      ${DOTFILES_DEST[$i]}"
     [[ -d "${DOTFILES_DEST[$i]}" ]] || run git clone "${DOTFILES[$i]}" "${DOTFILES_DEST[$i]}"
 done
 
@@ -351,6 +406,12 @@ setup_git() {
 setup_ssh() {
     echo "Setting up SSH..."
     [[ -f "$HOME/.ssh/id_rsa" ]] || run ssh-keygen -t rsa -b 4096 -f "$HOME/.ssh/id_rsa"
+		read -rp "Validate a new SSH in your github account, then procced further" 
+	}
+
+git_repos_set_remote_origin() {
+		safe_run cd $HOME/dotfiles && safe_run git remote set-url origin git@github.com:chrisnordborg/dotfiles.git
+		safe_run cd $HOME/wallpapers && safe_run git remote set-url origin git@github.com:chrisnordborg/wallpapers.git
 }
 
 link_fstab_desktop() {
@@ -360,8 +421,7 @@ link_fstab_desktop() {
 }
 
 remove_files_before_stow() {
-		
-
+		echo "No files to be removed before stow. Add this later!"		
 }
 
 stow_dotfiles() {
