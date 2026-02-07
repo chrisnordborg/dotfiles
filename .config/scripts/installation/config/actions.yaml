@@ -7,3 +7,6 @@ always:
 
 desktop:
   - link_fstab_desktop
+
+unused:
+  - ram_diagnostics_efi

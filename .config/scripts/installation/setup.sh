@@ -432,6 +432,13 @@ stow_dotfiles() {
 
 }
 
+
+ram_diagnostics_efi(){
+		safe_run sudo $PM -S memtest86+-efi
+		safe_run sudo grub-mkconfig -o /boot/grub/grub.cfg
+}
+
+
 # ================================
 # LOAD AND RUN ACTIONS
 # ================================
