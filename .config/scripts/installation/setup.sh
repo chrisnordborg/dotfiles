@@ -438,7 +438,6 @@ ram_diagnostics_efi(){
 		safe_run sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-
 dual_kernel_configurations() {
     local mode="vanilla"
     [ "$1" = "--revert" ] && mode="cachyos"
@@ -518,7 +517,6 @@ dual_kernel_configurations() {
     echo "GRUB default is now:"
     sudo grub-editenv list
 }
-
 # ================================
 # LOAD AND RUN ACTIONS
 # ================================
