@@ -149,7 +149,7 @@ alias backupdot="bash ~/dotfiles/.config/scripts/backupdotfiles.sh"
 alias backupmusic="bash ~/dotfiles/.config/scripts/backupmusic.sh"
 alias backupall="bash ~/dotfiles/.config/scripts/backup.sh" 
 alias cppoefilter="cp ~/Downloads/*.filter ~/.local/share/Steam/steamapps/compatdata/238960/pfx/drive_c/users/steamuser/My\ Documents/My\ Games/Path\ of\ Exile/"
-
+alias setupconf="nvim ~/dotfiles/.config/scripts/installation/setup.sh"
 
 alias ga="git add ."
 alias gc="git commit -m"

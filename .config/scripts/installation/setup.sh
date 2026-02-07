@@ -439,6 +439,86 @@ ram_diagnostics_efi(){
 }
 
 
+dual_kernel_configurations() {
+    local mode="vanilla"
+    [ "$1" = "--revert" ] && mode="cachyos"
+
+    echo "Configuring GRUB default kernel (mode: $mode)"
+    echo
+
+    echo "Ensure /etc/default/grub contains:"
+    echo "  GRUB_DISABLE_SUBMENU=true"
+    echo
+
+    # Terminal selection
+    if [ -n "$TERMINAL" ] && command -v "$TERMINAL" >/dev/null; then
+        TERM_CMD="$TERMINAL"
+    elif command -v kitty >/dev/null; then
+        TERM_CMD="kitty"
+    elif command -v alacritty >/dev/null; then
+        TERM_CMD="alacritty"
+    else
+        echo "No supported terminal found"
+        return 1
+    fi
+
+    # Open editor
+    $TERM_CMD bash -c "sudo vim /etc/default/grub; exec bash" &
+
+    read -rp "Save and close the file, then press Enter to continue..."
+
+    safe_run sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+    echo
+    echo "Scanning kernel menu entries..."
+    mapfile -t entries < <(grep "^menuentry '" /boot/grub/grub.cfg | sed "s/^menuentry '\(.*\)' .*/\1/")
+
+    vanilla_entry=""
+    cachyos_entry=""
+
+    for entry in "${entries[@]}"; do
+        case "$entry" in
+            *CachyOS*LTS*|*cachyos*LTS*)
+                cachyos_entry="$entry"
+                ;;
+            *Linux*)
+                [[ "$entry" != *CachyOS* ]] && vanilla_entry="$entry"
+                ;;
+        esac
+    done
+
+    echo
+    echo "Detected kernels:"
+    [ -n "$vanilla_entry" ] && echo "  Vanilla:  $vanilla_entry"
+    [ -n "$cachyos_entry" ] && echo "  CachyOS:  $cachyos_entry"
+    echo
+
+    # Decide default
+    if [ "$mode" = "vanilla" ] && [ -n "$vanilla_entry" ]; then
+        target="$vanilla_entry"
+    elif [ "$mode" = "cachyos" ] && [ -n "$cachyos_entry" ]; then
+        target="$cachyos_entry"
+    else
+        echo "Automatic detection failed."
+        echo "Available entries:"
+        printf '  %s\n' "${entries[@]}"
+        echo
+        read -rp "Type exact menuentry to set as default: " target
+    fi
+
+    # Validate
+    if ! grep -F "menuentry '$target'" /boot/grub/grub.cfg >/dev/null; then
+        echo "Error: selected entry not found in grub.cfg"
+        return 1
+    fi
+
+    safe_run sudo grub-set-default "$target"
+
+    echo
+    echo "GRUB default is now:"
+    sudo grub-editenv list
+}
+
 # ================================
 # LOAD AND RUN ACTIONS
 # ================================
