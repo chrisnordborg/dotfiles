@@ -10,3 +10,4 @@ desktop:
 
 unused:
   - ram_diagnostics_efi
+  - dual_kernel_configurations
