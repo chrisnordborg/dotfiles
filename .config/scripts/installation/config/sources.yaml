@@ -1,4 +1,4 @@
-# Optional: external references for dotfiles or font zips
+# Optional: external references for dotfiles, font zips and others
 dotfiles:
   - name: dotfiles
     repo: git@github.com:chrisnordborg/dotfiles.git

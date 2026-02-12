@@ -70,7 +70,7 @@ export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 
 # auto set NUM LOCK to OFF
-#numlockx on
+numlockx on
 
 # Autostart mangowc on tty1
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then

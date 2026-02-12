@@ -101,7 +101,6 @@ bindkey "^K" history-search-backward
 #####################
 #####  ALIASES  #####
 #####################
-
 alias po="poweroff"
 alias c="clear"
 alias v="nvim"
@@ -112,6 +111,7 @@ alias ls="ls -h --color=auto --group-directories-first"
 alias la="ls -lah --color=auto --group-directories-first"
 alias diff='diff --color=auto'
 alias grep="grep --color=auto"
+alias fi="find . -iname"
 alias ip='ip -c=auto'
 alias shell="exec $SHELL -l"
 alias fk="sudo !!"

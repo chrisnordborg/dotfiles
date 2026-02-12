@@ -160,6 +160,7 @@ DOTFILES_DEST=($(yq e '.dotfiles[].dest' "$SOURCES_FILE"))
 FONTS=($(yq e '.fonts[]' "$SOURCES_FILE"))
 FONTS_DEST=($(yq e '.fonts[].dest' "$SOURCES_FILE"))
 
+
 if $LIST_OPTIONS; then
     echo "Profiles: ${PROFILES[*]}"
     echo "Packages:"
@@ -415,9 +416,10 @@ git_repos_set_remote_origin() {
 }
 
 link_fstab_desktop() {
-    echo "Linking desktop fstab..."
+    # Symlinking is not possible, errors out on boot. Have to copy the file over.
+	  echo "Copying desktop fstab for desktop..."
     safe_run sudo rm /etc/fstab
-		safe_run sudo ln -sf $HOME/dotfiles/etc/fstab_desktop.bak /etc/fstab
+	  safe_run sudo cp $HOME/dotfiles/etc/fstab_desktop.bak /etc/fstab
 }
 
 remove_files_before_stow() {
