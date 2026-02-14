@@ -111,6 +111,7 @@ run_snapshot() {
     rm -f "$LATEST_LINK"
     ln -s "$NEW_SNAPSHOT" "$LATEST_LINK"
 
+		notify-send "Snapshot created: $DATE"
     log "Snapshot created: $DATE"
 }
 
