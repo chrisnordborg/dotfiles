@@ -12,7 +12,11 @@ SOURCE="/mnt/HDD_1/"
 DOTS_DOTFILES="$HOME/dotfiles/"
 DOTS_WALLPAPERS="$HOME/wallpapers/"
 ONEDRIVE="$HOME/OneDrive/"
-SCREENSHOTS="$HOME/pictures/screenshots"
+SCREENSHOTS="$HOME/pictures/screenshots/"
+
+# ADDITIONALS DESTINATIONS
+ADDITIONALS_DEST="$SOURCE/additionals/"
+SCREENSHOTS_DEST="$SOURCE/media/images/screenshots/"
 
 # MIRROR DESTINATION (fast recovery drive)
 MIRROR_DEST="/mnt/HDD_2/mirror/"
@@ -71,10 +75,10 @@ sync_additionals() {
 
 		echo "Syncing additionals..."
 	
-		rsync -av --delete "$DOTS_DOTFILES" "$SOURCE/additionals/dotfiles/"
-		rsync -av --delete "$DOTS_WALLPAPERS" "$SOURCE/additionals/wallpapers/"
-		rsync -av --delete "$ONEDRIVE" "$SOURCE/additionals/onedrive/"
-		rsync -av --delete "$SCREENSHOTS" "$SOURCE/media/images/screenshots/"
+		rsync -av --delete "$DOTS_DOTFILES" "$ADDITIONALS_DEST/dotfiles/"
+		rsync -av --delete "$DOTS_WALLPAPERS" "$ADDITIONALS_DEST/wallpapers/"
+		rsync -av --delete "$ONEDRIVE" "$ADDITIONALS_DEST/onedrive/"
+		rsync -av --delete "$SCREENSHOTS" "$SCREENSHOTS_DEST"
 
 	}
 
@@ -89,27 +93,20 @@ run_snapshot() {
     check_mount "$(dirname "$SNAPSHOT_BASE")"
 
     DATE=$(date +%Y-%m-%d)
-    NEW_SNAPSHOT="$SNAPSHOT_BASE/$DATE"
-    LATEST_LINK="$SNAPSHOT_BASE/latest"
+		NEW_SNAPSHOT="$SNAPSHOT_BASE/$DATE"
+		LATEST_LINK="$SNAPSHOT_BASE/latest"
 
     mkdir -p "$SNAPSHOT_BASE"
 
-    if [ -L "$LATEST_LINK" ]; then
+		if [ -e "$LATEST_LINK" ]; then
+    		# latest exists (symlink or directory)
+    		LATEST=$(readlink -f "$LATEST_LINK")
+    		rsync -av --delete --link-dest="$LATEST" "$SOURCE" "$NEW_SNAPSHOT"
+		else
+    		# latest does not exist
+    		rsync -av "$SOURCE" "$NEW_SNAPSHOT"
+		fi
 
-        LATEST=$(readlink -f "$LATEST_LINK")
-
-        rsync -av --delete \
-            --link-dest="$LATEST" \
-            --human-readable \
-            "$SOURCE" "$NEW_SNAPSHOT"
-
-    else
-
-        rsync -av \
-            --human-readable \
-            "$SOURCE" "$NEW_SNAPSHOT"
-
-    fi
 
     rm -f "$LATEST_LINK"
     ln -s "$NEW_SNAPSHOT" "$LATEST_LINK"
