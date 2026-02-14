@@ -5,8 +5,9 @@ set -euo pipefail
 # CONFIGURATION
 ########################################
 
-# SOURCE (your main data)
+# SOURCES (your main data)
 SOURCE="/mnt/HDD_1/"
+EXTERNAL_MOUNT="/mnt/external"
 
 # ADDITIONAL SOURCES (configs, Obsidian notes etc)
 DOTS_DOTFILES="$HOME/dotfiles/"
@@ -20,6 +21,7 @@ SCREENSHOTS_DEST="$SOURCE/media/images/screenshots/"
 
 # MIRROR DESTINATION (fast recovery drive)
 MIRROR_DEST="/mnt/HDD_2/mirror/"
+EXTERNAL_DEST="/mnt/external/mirror"
 
 # SNAPSHOT DESTINATION (history drive)
 SNAPSHOT_BASE="/mnt/HDD_2/snapshots"
@@ -64,6 +66,30 @@ run_mirror() {
         "$SOURCE" "$MIRROR_DEST"
 
     log "Mirror backup complete."
+}
+
+
+########################################
+# EXTERNAL BACKUP
+########################################
+
+run_external() {
+
+    log "Starting external mirror backup..."
+
+    check_mount "$(dirname "$EXTERNAL_DEST")"
+    DATE=$(date +%Y-%m-%d) 
+
+		# Remove old mirror-* directories
+    find "$EXTERNAL_MOUNT" -maxdepth 1 -type d -name "mirror-*" -exec rm -rf {} +
+
+
+    rsync -av --delete \
+        --human-readable \
+        --info=progress2 \
+        "$SOURCE" "$EXTERNAL_DEST-$DATE"
+
+    log "External mirror backup complete."
 }
 
 
@@ -177,10 +203,12 @@ cleanup_snapshots() {
 ########################################
 
 usage() {
-    echo "Usage: $0 {mirror|snapshot|cleanup|all}"
-		echo "	mirror   -  create an exact copy of your files."
-		echo "	snapshot -  create a new, or overwrite an existing daily snapshot of current files (also runs cleanup)."
-		echo "	cleanup  -  remove all snapshots except 7 daily snapshots, 2 weekly and 2 monthly."
+	echo "Usage: $0 {1. mirror|2. snapshot|3. cleanup|4. all (1, 2 and 3)|5. external}"
+		echo "	1. mirror   -  create an exact copy of your files."
+		echo "	2. snapshot -  create a new, or overwrite an existing daily snapshot of current files (also runs cleanup)."
+		echo "	3. cleanup  -  remove all snapshots except 7 daily snapshots, 2 weekly and 2 monthly."
+		echo "	4. all      -  create a mirror, snapshot and run cleanup afterwards."
+		echo "	5. external -  create a exact copy (mirror) of your files on an external drives (this requires manual mounting of the device to /mnt/external)."
     exit 1
 }
 
@@ -188,26 +216,30 @@ main() {
 
     case "${1:-}" in
 
-        mirror)
+        1|m|mirror)
 						sync_additionals
             run_mirror
             ;;
 
-        snapshot)
+        2|s|snapshot)
 						sync_additionals
             run_snapshot
             cleanup_snapshots
             ;;
 
-        cleanup)
+        3|c|cleanup)
             cleanup_snapshots
             ;;
 
-        all)
+        4|a|all)
             run_mirror
             run_snapshot
             cleanup_snapshots
             ;;
+
+				5|e|external)
+						run_external
+						;;
 
         *)
             usage
