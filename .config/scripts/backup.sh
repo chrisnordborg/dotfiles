@@ -12,6 +12,7 @@ SOURCE="/mnt/HDD_1/"
 DOTS_DOTFILES="$HOME/dotfiles/"
 DOTS_WALLPAPERS="$HOME/wallpapers/"
 ONEDRIVE="$HOME/OneDrive/"
+SCREENSHOTS="$HOME/pictures/screenshots"
 
 # MIRROR DESTINATION (fast recovery drive)
 MIRROR_DEST="/mnt/HDD_2/mirror/"
@@ -73,6 +74,7 @@ sync_additionals() {
 		rsync -av --delete "$DOTS_DOTFILES" "$SOURCE/additionals/dotfiles/"
 		rsync -av --delete "$DOTS_WALLPAPERS" "$SOURCE/additionals/wallpapers/"
 		rsync -av --delete "$ONEDRIVE" "$SOURCE/additionals/onedrive/"
+		rsync -av --delete "$SCREENSHOTS" "$SOURCE/media/images/screenshots/"
 
 	}
 

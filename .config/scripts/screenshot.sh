@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-DIR="$HOME/Pictures/screenshots"
+DIR="$HOME/pictures/screenshots"
 mkdir -p "$DIR"
 
 FILE="$DIR/$(date '+%Y-%m-%d_%H-%M-%S').png"
