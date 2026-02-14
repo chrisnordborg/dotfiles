@@ -179,7 +179,7 @@ cleanup_snapshots() {
 usage() {
     echo "Usage: $0 {mirror|snapshot|cleanup|all}"
 		echo "	mirror   -  create an exact copy of your files."
-		echo "	snapshot -  create a snapshot of current files (also runs cleanup)."
+		echo "	snapshot -  create a new, or overwrite an existing daily snapshot of current files (also runs cleanup)."
 		echo "	cleanup  -  remove all snapshots except 7 daily snapshots, 2 weekly and 2 monthly."
     exit 1
 }
