@@ -32,7 +32,10 @@ WM:
       - xdg-desktop-portal
       - hyprland
       - wl-clipboard
+      - yt-dlp
   aur:
+    Hyprland:
+      - 4kvideodownloaderplus
     MangoWc:
       - mangowc-git
       - wlroots0.18
