@@ -6,6 +6,7 @@ always:
     - unzip
     - zen-browser
     - go-yq
+    - yt-dlp
   aur: []
 
 OS:
