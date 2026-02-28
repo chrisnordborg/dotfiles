@@ -21,6 +21,8 @@ OS:
       - linux
       - linux-headers
     #- linux-firmware
+  aur:
+    
 WM:
   pacman:
     Hyprland:
@@ -87,3 +89,9 @@ KVM:
     - swtpm
     - dnsmasq
   aur: []
+
+MEDIA:
+  pacman:
+    - vlc
+  aur:
+    - spotify

@@ -8,6 +8,7 @@ profiles:
     BLUETOOTH: yes
     ANDROID: yes
     KVM: yes
+    MEDIA: yes
   laptop:
     OS: CachyOS
     WM:
@@ -18,3 +19,4 @@ profiles:
     BLUETOOTH: yes
     ANDROID: yes
     KVM: no
+    MEDIA: no

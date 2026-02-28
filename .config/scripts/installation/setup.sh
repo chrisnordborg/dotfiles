@@ -200,6 +200,7 @@ GAMING="${PROFILE_OPTIONS[$PROFILE.GAMING]}"
 BLUETOOTH="${PROFILE_OPTIONS[$PROFILE.BLUETOOTH]}"
 ANDROID="${PROFILE_OPTIONS[$PROFILE.ANDROID]}"
 KVM="${PROFILE_OPTIONS[$PROFILE.KVM]}"
+MEDIA="${PROFILE_OPTIONS[$PROFILE.MEDIA]}"
 
 # ================================
 # SELF CHECK
@@ -230,7 +231,7 @@ nvidia_aur=$(yq e ".NVIDIA.\"$NVIDIA\".aur[]" "$PACKAGES_FILE" | xargs)
 # Conditionally showing if any packages are to be installed
 [[ -n "$nvidia_pacman" ]] && echo "NVIDIA packages (pacman): $nvidia_pacman"
 [[ -n "$nvidia_aur" ]] && echo "NVIDIA packages (AUR): $nvidia_aur"
-echo "Gaming: $GAMING		 Bluetooth: $BLUETOOTH		 Android: $ANDROID		 KVM: $KVM"
+echo "Gaming: $GAMING		 Bluetooth: $BLUETOOTH		 Android: $ANDROID		 KVM: $KVM    MEDIA: $MEDIA"
 echo "==========================================="
 echo "Other packages to be installed per category:"
 echo ""
@@ -341,6 +342,15 @@ for cat in "${PK_CATEGORIES[@]}"; do
             PACMAN_QUEUE+=(${PACKAGES[KVM.pacman]})
 						[[ -n "${PACKAGES[KVM.pacman]}" ]] && echo "KVM:"
 					  [[ -n "${PACKAGES[GAMING.pacman]}" ]] && echo "  pacman packages: ${PACKAGES[KVM.pacman]}"
+            ;;
+
+        MEDIA)
+            [[ $(bool_val "$MEDIA") -eq 1 ]] || continue
+            PACMAN_QUEUE+=(${PACKAGES[MEDIA.pacman]})
+            AUR_QUEUE+=(${PACKAGES[ANDROID.aur]})
+						[[ -n "${PACKAGES[MEDIA.pacman]}" ||  -n "${PACKAGES[MEDIA.aur]}" ]] && echo "MEDIA:"
+					  [[ -n "${PACKAGES[MEDIA.pacman]}" ]] && echo "  pacman packages: ${PACKAGES[MEDIA.pacman]}"
+					  [[ -n "${PACKAGES[ANDROID.aur]}" ]] && echo "  aur packages: ${PACKAGES[MEDIA.aur]}"
             ;;
     esac
 done

@@ -246,7 +246,8 @@ main() {
             ;;
 
     esac
-
+		
+		notify-send "Backup finished"
     log "Backup operation finished."
 }
 
