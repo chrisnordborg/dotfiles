@@ -18,7 +18,7 @@
     "modules-right": [
         "cpu",
 	"memory",
-        "disk",
+   //     "disk",
 	"network",
         "battery",
         "backlight",

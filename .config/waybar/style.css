@@ -1,6 +1,7 @@
 @define-color bg    #1a1b26; 
 /* @fg format text color of all who doesn't have a custom color */
 @define-color fg    #a9b1d6; 
+
 @define-color blk   #32344a; 
 @define-color gold  #EFBF04;
 @define-color red   #f7768e; 
@@ -90,13 +91,18 @@ window#waybar.top label.module {
     color: @grn;
 }
 
-#network,
+#network {
+		color: @red
+}
+
+#network.disconnected {
+    color: @blk;
+		background-color: @red;
+}
+
 #pulseaudio,
 #pulseaudio#microphone {
-    color: @red;
-}
-#network.disconnected {
-    background-color: @red;
+    color: @gold;
 }
 
 #battery {
