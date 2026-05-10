@@ -16,11 +16,13 @@ UUID=e0b6d22f-216c-4f17-b750-d37715b4cb15	none      	swap      	defaults  	0 0
 
 # /dev/sda1
 #UUID=6C0A318F0A315774	/mnt/HDD	ntfs-3g	defaults,noatime	0 0
-UUID=6C0A318F0A315774 /mnt/HDD_1 ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
+#UUID=6C0A318F0A315774 /mnt/HDD_1 ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
+UUID=0e70a651-e8cb-4bbe-9c6c-fa27a3209215	/mnt/HDD_DATA ext4			rw,relatime 0 3
 
 # /dev/sdb1
 #UUID=3C2C9B6E2C9B21C6	/mnt/HDD\040II	ntfs-3g	defaults,noatime	0 0
-UUID=3C2C9B6E2C9B21C6 /mnt/HDD_2 ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
+#UUID=3C2C9B6E2C9B21C6 /mnt/HDD_2 ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
+UUID=3C2C9B6E2C9B21C6 /mnt/HDD_DATA ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
 
 
 

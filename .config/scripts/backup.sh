@@ -6,7 +6,7 @@ set -euo pipefail
 ########################################
 
 # SOURCES (your main data)
-SOURCE="/mnt/HDD_1/"
+SOURCE="/mnt/HDD_DATA/"
 EXTERNAL_MOUNT="/mnt/external"
 
 # ADDITIONAL SOURCES (configs, Obsidian notes etc)
@@ -20,11 +20,11 @@ ADDITIONALS_DEST="$SOURCE/additionals/"
 SCREENSHOTS_DEST="$SOURCE/media/images/screenshots/"
 
 # MIRROR DESTINATION (fast recovery drive)
-MIRROR_DEST="/mnt/HDD_2/mirror/"
+MIRROR_DEST="/mnt/HDD_BACKUP/mirror/"
 EXTERNAL_DEST="/mnt/external/mirror"
 
 # SNAPSHOT DESTINATION (history drive)
-SNAPSHOT_BASE="/mnt/HDD_2/snapshots"
+SNAPSHOT_BASE="/mnt/HDD_BACKUP/snapshots"
 
 # LOG FILE
 LOGFILE="$HOME/backup.log"

@@ -9,9 +9,9 @@ sync_contents() {
 		ONEDRIVE="$HOME/OneDrive/"
 		
 		# Destination directories
-		DEST_BACKUPS="/mnt/HDD_1/additionals"
+		DEST_BACKUPS="/mnt/HDD_DATA/additionals"
 
-		if ! mountpoint -q /mnt/HDD_1; then
+		if ! mountpoint -q /mnt/HDD_DATA; then
     		echo "Error: $DEST_BACKUPS is not mounted."
     		exit 1
 		fi
@@ -31,11 +31,11 @@ sync_contents() {
 sync_total() {
 		echo "Syncing total backup..."
 
-		SOURCE="/mnt/HDD_1/"
-		BACKUP_BASE="/mnt/HDD_2/data_backups"
+		SOURCE="/mnt/HDD_DATA/"
+		BACKUP_BASE="/mnt/HDD_BACKUP/hdd_backups"
 		
 		if ! mountpoint -q $SOURCE; then
-    		echo "Error: /mnt/HDD_1 is not mounted."
+    		echo "Error: /mnt/HDD_DATA is not mounted."
     		exit 1
 		fi
 
