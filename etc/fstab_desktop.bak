@@ -22,7 +22,7 @@ UUID=0e70a651-e8cb-4bbe-9c6c-fa27a3209215	/mnt/HDD_DATA ext4			rw,relatime 0 3
 # /dev/sdb1
 #UUID=3C2C9B6E2C9B21C6	/mnt/HDD\040II	ntfs-3g	defaults,noatime	0 0
 #UUID=3C2C9B6E2C9B21C6 /mnt/HDD_2 ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
-UUID=3C2C9B6E2C9B21C6 /mnt/HDD_DATA ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
+UUID=3C2C9B6E2C9B21C6 /mnt/HDD_BACKUP ntfs3 defaults,noatime,uid=1000,gid=1000,nofail,x-systemd.automount 0 0
 
 
 
