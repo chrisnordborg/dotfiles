@@ -51,6 +51,21 @@ check_mount() {
 }
 
 ########################################
+# RSYNC WRAPPER
+########################################
+
+run_rsync() {
+
+    rsync \
+        -aH \
+        --delete \
+        --human-readable \
+        --info=progress2 \
+        "$@" \
+        2>&1 | tee -a "$LOGFILE"
+}
+
+########################################
 # MIRROR BACKUP
 ########################################
 
@@ -60,14 +75,12 @@ run_mirror() {
 
     check_mount "$(dirname "$MIRROR_DEST")"
 
-    rsync -av --delete \
-        --human-readable \
-        --info=progress2 \
-        "$SOURCE" "$MIRROR_DEST"
+    run_rsync \
+        "$SOURCE" \
+        "$MIRROR_DEST"
 
     log "Mirror backup complete."
 }
-
 
 ########################################
 # EXTERNAL BACKUP
@@ -77,21 +90,23 @@ run_external() {
 
     log "Starting external mirror backup..."
 
-    check_mount "$(dirname "$EXTERNAL_DEST")"
-    DATE=$(date +%Y-%m-%d) 
+    check_mount "$EXTERNAL_MOUNT"
 
-		# Remove old mirror-* directories
-    find "$EXTERNAL_MOUNT" -maxdepth 1 -type d -name "mirror-*" -exec rm -rf {} +
+    DATE=$(date +%Y-%m-%d_%H-%M-%S)
 
+    # Remove old mirror-* directories
+    find "$EXTERNAL_MOUNT" \
+        -maxdepth 1 \
+        -type d \
+        -name "mirror-*" \
+        -exec rm -rf -- {} +
 
-    rsync -av --delete \
-        --human-readable \
-        --info=progress2 \
-        "$SOURCE" "$EXTERNAL_DEST-$DATE"
+    run_rsync \
+        "$SOURCE" \
+        "$EXTERNAL_DEST-$DATE"
 
     log "External mirror backup complete."
 }
-
 
 ########################################
 # ADDITIONALS BACKUP
@@ -99,14 +114,26 @@ run_external() {
 
 sync_additionals() {
 
-		echo "Syncing additionals..."
-	
-		rsync -av --delete "$DOTS_DOTFILES" "$ADDITIONALS_DEST/dotfiles/"
-		rsync -av --delete "$DOTS_WALLPAPERS" "$ADDITIONALS_DEST/wallpapers/"
-		rsync -av --delete "$ONEDRIVE" "$ADDITIONALS_DEST/onedrive/"
-		rsync -av --delete "$SCREENSHOTS" "$SCREENSHOTS_DEST"
+    log "Syncing additionals..."
 
-	}
+    run_rsync \
+        "$DOTS_DOTFILES" \
+        "$ADDITIONALS_DEST/dotfiles/"
+
+    run_rsync \
+        "$DOTS_WALLPAPERS" \
+        "$ADDITIONALS_DEST/wallpapers/"
+
+    run_rsync \
+        "$ONEDRIVE" \
+        "$ADDITIONALS_DEST/onedrive/"
+
+    run_rsync \
+        "$SCREENSHOTS" \
+        "$SCREENSHOTS_DEST"
+
+    log "Additionals sync complete."
+}
 
 ########################################
 # SNAPSHOT BACKUP
@@ -118,26 +145,42 @@ run_snapshot() {
 
     check_mount "$(dirname "$SNAPSHOT_BASE")"
 
-    DATE=$(date +%Y-%m-%d)
-		NEW_SNAPSHOT="$SNAPSHOT_BASE/$DATE"
-		LATEST_LINK="$SNAPSHOT_BASE/latest"
+    DATE=$(date +%Y-%m-%d_%H-%M-%S)
+
+    NEW_SNAPSHOT="$SNAPSHOT_BASE/$DATE"
+    LATEST_LINK="$SNAPSHOT_BASE/latest"
 
     mkdir -p "$SNAPSHOT_BASE"
 
-		if [ -e "$LATEST_LINK" ]; then
-    		# latest exists (symlink or directory)
-    		LATEST=$(readlink -f "$LATEST_LINK")
-    		rsync -av --delete --link-dest="$LATEST" "$SOURCE" "$NEW_SNAPSHOT"
-		else
-    		# latest does not exist
-    		rsync -av "$SOURCE" "$NEW_SNAPSHOT"
-		fi
+    if [ -L "$LATEST_LINK" ]; then
 
+        LATEST=$(readlink -f "$LATEST_LINK")
 
-    rm -f "$LATEST_LINK"
+        log "Using link-dest snapshot: $LATEST"
+
+        run_rsync \
+            --link-dest="$LATEST" \
+            "$SOURCE" \
+            "$NEW_SNAPSHOT"
+
+    else
+
+        log "No previous snapshot found. Creating full snapshot."
+
+        run_rsync \
+            "$SOURCE" \
+            "$NEW_SNAPSHOT"
+    fi
+
+    # Update latest symlink safely
+    if [ -L "$LATEST_LINK" ]; then
+        rm -- "$LATEST_LINK"
+    fi
+
     ln -s "$NEW_SNAPSHOT" "$LATEST_LINK"
 
-		notify-send "Snapshot created: $DATE"
+    notify-send "Snapshot created: $DATE"
+
     log "Snapshot created: $DATE"
 }
 
@@ -151,7 +194,14 @@ cleanup_snapshots() {
 
     cd "$SNAPSHOT_BASE"
 
-    mapfile -t SNAPSHOTS < <(ls -1d ????-??-?? 2>/dev/null | sort -r)
+    mapfile -t SNAPSHOTS < <(
+        find . \
+            -maxdepth 1 \
+            -mindepth 1 \
+            -type d \
+            -name "????-??-??_??-??-??" \
+            -printf "%f\n" | sort -r
+    )
 
     KEEP=()
 
@@ -162,24 +212,28 @@ cleanup_snapshots() {
 
         SNAP="${SNAPSHOTS[$i]}"
 
-        # Keep last 7 daily
+        # Keep last 7 daily snapshots
         if [ "$i" -lt 7 ]; then
             KEEP+=("$SNAP")
             continue
         fi
 
-        YEAR_WEEK=$(date -d "$SNAP" +%Y-%V)
-        YEAR_MONTH=$(date -d "$SNAP" +%Y-%m)
+        YEAR_WEEK=$(date -d "${SNAP%%_*}" +%Y-%V)
+        YEAR_MONTH=$(date -d "${SNAP%%_*}" +%Y-%m)
 
-        # Keep 4 weekly
-        if [ "${#WEEK_KEPT[@]}" -lt 4 ] && [ -z "${WEEK_KEPT[$YEAR_WEEK]+x}" ]; then
+        # Keep 4 weekly snapshots
+        if [ "${#WEEK_KEPT[@]}" -lt 4 ] &&
+           [ -z "${WEEK_KEPT[$YEAR_WEEK]+x}" ]; then
+
             KEEP+=("$SNAP")
             WEEK_KEPT[$YEAR_WEEK]=1
             continue
         fi
 
-        # Keep 6 monthly
-        if [ "${#MONTH_KEPT[@]}" -lt 6 ] && [ -z "${MONTH_KEPT[$YEAR_MONTH]+x}" ]; then
+        # Keep 6 monthly snapshots
+        if [ "${#MONTH_KEPT[@]}" -lt 6 ] &&
+           [ -z "${MONTH_KEPT[$YEAR_MONTH]+x}" ]; then
+
             KEEP+=("$SNAP")
             MONTH_KEPT[$YEAR_MONTH]=1
             continue
@@ -189,10 +243,11 @@ cleanup_snapshots() {
     for SNAP in "${SNAPSHOTS[@]}"; do
 
         if [[ ! " ${KEEP[*]} " =~ " ${SNAP} " ]]; then
+
             log "Deleting old snapshot: $SNAP"
+
             rm -rf -- "$SNAP"
         fi
-
     done
 
     log "Snapshot cleanup complete."
@@ -203,12 +258,15 @@ cleanup_snapshots() {
 ########################################
 
 usage() {
-	echo "Usage: $0 {1. mirror|2. snapshot|3. cleanup|4. all (1, 2 and 3)|5. external}"
-		echo "	1. mirror   -  create an exact copy of your files."
-		echo "	2. snapshot -  create a new, or overwrite an existing daily snapshot of current files (also runs cleanup)."
-		echo "	3. cleanup  -  remove all snapshots except 7 daily snapshots, 2 weekly and 2 monthly."
-		echo "	4. all      -  create a mirror, snapshot and run cleanup afterwards."
-		echo "	5. external -  create a exact copy (mirror) of your files on an external drives (this requires manual mounting of the device to /mnt/external)."
+
+    echo "Usage: $0 {1. mirror|2. snapshot|3. cleanup|4. all|5. external}"
+    echo
+    echo "1. mirror   - create exact mirror backup"
+    echo "2. snapshot - create hardlinked historical snapshot"
+    echo "3. cleanup  - remove old snapshots"
+    echo "4. all      - mirror + snapshot + cleanup"
+    echo "5. external - external removable-drive mirror backup"
+
     exit 1
 }
 
@@ -217,37 +275,44 @@ main() {
     case "${1:-}" in
 
         1|m|mirror)
-						sync_additionals
+
+            sync_additionals
             run_mirror
             ;;
 
         2|s|snapshot)
-						sync_additionals
+
+            sync_additionals
             run_snapshot
             cleanup_snapshots
             ;;
 
         3|c|cleanup)
+
             cleanup_snapshots
             ;;
 
         4|a|all)
+
+            sync_additionals
             run_mirror
             run_snapshot
             cleanup_snapshots
             ;;
 
-				5|e|external)
-						run_external
-						;;
+        5|e|external)
 
-        *)
-            usage
+            run_external
             ;;
 
+        *)
+
+            usage
+            ;;
     esac
-		
-		notify-send "Backup finished"
+
+    notify-send "Backup finished"
+
     log "Backup operation finished."
 }
 
