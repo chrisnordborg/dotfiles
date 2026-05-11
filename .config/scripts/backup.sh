@@ -59,7 +59,8 @@ run_rsync() {
     rsync \
         -aH \
         --delete \
-        --human-readable \
+        --exclude='lost+found' \
+				--human-readable \
         --info=progress2 \
         "$@" \
         2>&1 | tee -a "$LOGFILE"
