@@ -154,9 +154,16 @@ run_snapshot() {
 
     if [ -L "$LATEST_LINK" ]; then
 
-        LATEST=$(readlink -f "$LATEST_LINK")
-
-        log "Using link-dest snapshot: $LATEST"
+				
+				if ! LATEST=$(realpath "$LATEST_LINK"); then
+    			log "ERROR: latest symlink is broken"
+    			exit 1
+				fi
+        
+        #LATEST=$(readlink -f "$LATEST_LINK")
+				LATEST=$(realpath "$LATEST_LINK")
+				
+				log "Using link-dest snapshot: $LATEST"
 
         run_rsync \
             --link-dest="$LATEST" \
