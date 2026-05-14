@@ -155,6 +155,10 @@ alias ytdl="echo 'See available formats: yt-dlp -F URL\nDownload video and audio
 alias ytdlv="yt-dlp -f 399"
 alias ytdla="yt-dlp -f 140"
 alias ytdlav="yt-dlp -f 399+140"
+alias tytdl="python ~/git/yt-dlp/yt_dlp/__main__.py"
+alias tytdlv="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399"
+alias tytdla="python ~/git/yt-dlp/yt_dlp/__main__.py -f 140"
+alias tytdlav="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399+140"
 
 alias ga="git add ."
 alias gc="git commit -m"

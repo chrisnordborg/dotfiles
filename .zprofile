@@ -70,10 +70,12 @@ export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 
 # auto set NUM LOCK to OFF
-numlockx on
+#numlockx on
+numlockx off
 
 # Autostart mangowc on tty1
-if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+#if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+if [[ -z "$WAYLAND_DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
     #exec mango
     exec start-hyprland
 fi
