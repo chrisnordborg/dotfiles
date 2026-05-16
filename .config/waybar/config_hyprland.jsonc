@@ -6,26 +6,30 @@
     "passthrough": false,
     "gtk-layer-shell": true,
     "height": 10,
+
     "modules-left": [
-        "hyprland/workspaces",
-	"hyprland/window"
+      "hyprland/workspaces",
+			"hyprland/window"
     ],
+
     "modules-center": [
-	"custom/timer",
-	"clock",
-	"custom/pomodoro"
+  	"custom/timer",
+		"clock",
+		"custom/pomodoro",
+    "custom/backup" 
     ],
+
     "modules-right": [
-        "cpu",
-	"memory",
-   //     "disk",
-	"network",
-        "battery",
-        "backlight",
-        "pulseaudio",
-        "pulseaudio#microphone",
-	"custom/systemprompt",
-	"tray"
+			"cpu",
+			"memory",
+   		/*     "disk", */
+			"network",
+      "battery",
+      "backlight",
+      "pulseaudio",
+      "pulseaudio#microphone",
+			"custom/systemprompt",
+			"tray"
     ],
 
     "hyprland/window": {
@@ -46,19 +50,19 @@
 	//	"10": "X"	
 	//},
 	
-        "disable-scroll": true,
-        "all-outputs": true,
-        "on-click": "activate",
-        "format": "{icon}",
-	"format-window-separator": " | ",
-	"persistent-workspaces": {"*": 10 }
+      "disable-scroll": true,
+      "all-outputs": true,
+      "on-click": "activate",
+      "format": "{icon}",
+			"format-window-separator": " | ",
+			"persistent-workspaces": {"*": 10 }
     },
 
     "custom/timer": {
-        "exec": "cat /tmp/status_bar_timer.txt",
-        "interval": 1,
-        "format": "⏱ {text} ",
-        "on-click": "~/.config/scripts/toolbar/timer.sh"
+      "exec": "cat /tmp/status_bar_timer.txt",
+      "interval": 1,
+      "format": "⏱ {text} ",
+      "on-click": "~/.config/scripts/toolbar/timer.sh"
     },
 
     "custom/pomodoro": {
@@ -68,7 +72,18 @@
         "return-type": "json",
         "on-click": "~/.config/scripts/toolbar/pomodoro.sh"
     },
-    
+
+		"custom/backup": {
+  			"return-type": "json",
+  			"exec": "cat /tmp/backup-status.json 2>/dev/null || echo '{\"text\":\"Idle\",\"class\":\"idle\"}'",
+  			"interval": 1
+		},
+
+		//"custom/backup": {
+  	//		"return-type": "json",
+  	//		"exec": "cat /tmp/backup-status.json",
+  	//		"interval": 0.5 
+		//},
 
     "clock": {
         // English/American format (20:05:00 AM).

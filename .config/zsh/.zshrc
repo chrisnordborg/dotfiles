@@ -117,6 +117,7 @@ alias shell="exec $SHELL -l"
 alias fk="sudo !!"
 alias mv="mv -i"
 alias rm="rm -Iv"
+alias rmr="sudo rm -rIv"
 alias df="df -h"
 alias du="du -h -d 1"
 alias k="killall"
@@ -159,6 +160,13 @@ alias tytdl="python ~/git/yt-dlp/yt_dlp/__main__.py"
 alias tytdlv="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399"
 alias tytdla="python ~/git/yt-dlp/yt_dlp/__main__.py -f 140"
 alias tytdlav="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399+140"
+
+#see keyd keynames
+alias keymon="keyd monitor"
+alias keyreload="sudo keyd reload"
+alias archupdate='sudo timeshift --snapshot-device /dev/sda1 --create --comments "pre-system-update" & sudo pacman -Syu'
+
+alias cleanhdd="sudo ntfsfix /dev/sdb2"
 
 alias ga="git add ."
 alias gc="git commit -m"

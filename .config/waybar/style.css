@@ -78,6 +78,24 @@ window#waybar.top label.module {
   font-weight: bold;
 }
 
+#custom-backup {
+    color: #88c0d0;
+}
+/*
+#custom-backup.running {
+    color: #88c0d0;
+}
+
+#custom-backup.complete {
+    color: #a3be8c;
+}
+
+#custom-backup.error {
+    color: #bf616a;
+}
+*/
+
+
 
 #disk {
     color: @ylw;

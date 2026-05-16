@@ -29,6 +29,47 @@ SNAPSHOT_BASE="/mnt/HDD_BACKUP/snapshots"
 # LOG FILE
 LOGFILE="$HOME/backup.log"
 
+# TOOLBAR PROGRESS FILE
+TMP_FILE="/tmp/backup-status.json"
+
+########################################
+# WRITE INTO TOOLBAR FUNCTION
+########################################
+
+write_status() {
+    local text="$1"
+    local percent="${2:-0}"
+    local class="${3:-running}"
+
+    local tmp
+    tmp=$(mktemp)
+
+    cat > "$tmp" <<EOF
+{
+  "text": "$text",
+  "percentage": $percent,
+  "class": "$class"
+}
+EOF
+
+    mv "$tmp" "$TMP_FILE"
+}
+
+#write_status() {
+#    local text="$1"
+#    local percent="${2:-0}"
+#    local class="${3:-running}"
+#
+#    cat > "$TMP_FILE" <<EOF
+#{
+#  "text": "$text",
+#  "percentage": $percent,
+#  "class": "$class"
+#}
+#EOF
+
+#}
+
 ########################################
 # LOGGING FUNCTION
 ########################################
@@ -55,15 +96,46 @@ check_mount() {
 ########################################
 
 run_rsync() {
+    local task="$1"
+    shift
 
-    rsync \
+    local opts=()
+    local paths=()
+
+    while (($#)); do
+        [[ "$1" == --* ]] && opts+=("$1") || paths+=("$1")
+        shift
+    done
+    write_status "$task: running" 0 running
+    
+		# run rsync without parsing chaos as primary source of truth
+    stdbuf -oL rsync \
         -aH \
         --delete \
         --exclude='lost+found' \
-				--human-readable \
-        --info=progress2 \
-        "$@" \
-        2>&1 | tee -a "$LOGFILE"
+        --exclude='timeshift/' \
+				--exclude='.trash/' \
+				--info=progress2 \
+				--out-format='%i %n%L' \
+       "${opts[@]}" \
+        "${paths[@]}" \
+        #>>"$LOGFILE" 2>&1 || {
+    		2>&1 |
+			while IFS= read -r line; do
+
+    	echo "$line" | tee -a "$LOGFILE"
+
+    	if [[ "$line" =~ ([0-9]{1,3})% ]]; then
+        p="${BASH_REMATCH[1]}"
+        write_status "$task: $p%" "$p" running
+    	fi
+		done
+#				2>&1 | tee -a "$LOGFILE" {
+ #           write_status "$task: failed" 0 error
+ #           return 1
+ #       }
+    
+		write_status "$task: done" 100 complete
 }
 
 ########################################
@@ -77,14 +149,14 @@ run_mirror() {
     check_mount "$(dirname "$MIRROR_DEST")"
 
     run_rsync \
+				"Backing up a mirror..."
         "$SOURCE" \
         "$MIRROR_DEST"
 
     log "Mirror backup complete."
 }
 
-########################################
-# EXTERNAL BACKUP
+######################################## EXTERNAL BACKUP
 ########################################
 
 run_external() {
@@ -103,6 +175,7 @@ run_external() {
         -exec rm -rf -- {} +
 
     run_rsync \
+				"Backing up to external..." \
         "$SOURCE" \
         "$EXTERNAL_DEST-$DATE"
 
@@ -116,22 +189,29 @@ run_external() {
 sync_additionals() {
 
     log "Syncing additionals..."
-
     run_rsync \
+				"Dotfiles backing up..." \
         "$DOTS_DOTFILES" \
         "$ADDITIONALS_DEST/dotfiles/"
+    log "--- Doftfiles backup finished."
 
     run_rsync \
+				"Wallpapers backing up..." \
         "$DOTS_WALLPAPERS" \
         "$ADDITIONALS_DEST/wallpapers/"
+    log "--- Wallpapers backup finished."
 
     run_rsync \
+				"Onedrive backing up..." \
         "$ONEDRIVE" \
         "$ADDITIONALS_DEST/onedrive/"
+    log "--- Onedrive backup finished."
 
     run_rsync \
+				"Screenshots backing up..." \
         "$SCREENSHOTS" \
         "$SCREENSHOTS_DEST"
+    log "--- Screenshots backup finished."
 
     log "Additionals sync complete."
 }
@@ -143,7 +223,6 @@ sync_additionals() {
 run_snapshot() {
 
     log "Starting snapshot backup..."
-
     check_mount "$(dirname "$SNAPSHOT_BASE")"
 
     DATE=$(date +%Y-%m-%d_%H-%M-%S)
@@ -161,21 +240,24 @@ run_snapshot() {
     			exit 1
 				fi
         
-        #LATEST=$(readlink -f "$LATEST_LINK")
 				LATEST=$(realpath "$LATEST_LINK")
 				
+				write_status "snapshot: preparing" 0 running
 				log "Using link-dest snapshot: $LATEST"
-
-        run_rsync \
-            --link-dest="$LATEST" \
+        
+				run_rsync \
+						"Home backing up..." \
             "$SOURCE" \
-            "$NEW_SNAPSHOT"
-
-    else
+            "$NEW_SNAPSHOT" \
+            --link-dest="$LATEST" \
+						--verbose
+    
+		else
 
         log "No previous snapshot found. Creating full snapshot."
 
         run_rsync \
+						"Home backing up..." \
             "$SOURCE" \
             "$NEW_SNAPSHOT"
     fi
@@ -257,7 +339,7 @@ cleanup_snapshots() {
             rm -rf -- "$SNAP"
         fi
     done
-
+		
     log "Snapshot cleanup complete."
 }
 
@@ -318,6 +400,7 @@ main() {
             usage
             ;;
     esac
+		rm $TMP_FILE
 
     notify-send "Backup finished"
 
