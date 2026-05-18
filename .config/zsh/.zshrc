@@ -126,6 +126,7 @@ alias zshconf="nvim ~/.config/zsh/.zshrc"
 #alias zshconf="nvim ~/.zshrc"
 #alias zshsource="source ~/.zshrc"
 alias zshsource="source ~/.config/zsh/.zshrc"
+alias zshhist="nvim ~/.config/zsh/.histfile"
 alias dmconf="nvim ~/dmenu/config.def.h"
 alias dmmake="sudo make --directory=/home/archer/dmenu/ clean install"
 alias nvimconf="nvim ~/.config/nvim/init.lua"
@@ -161,13 +162,16 @@ alias tytdlv="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399"
 alias tytdla="python ~/git/yt-dlp/yt_dlp/__main__.py -f 140"
 alias tytdlav="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399+140"
 
-#see keyd keynames
+alias rs="rsync -av --delete --info=progress2"
+alias rsdr="rsync -av --delete --info=progress2 --dry-run"
+
+# see keyd keynames
 alias keymon="keyd monitor"
 alias keyreload="sudo keyd reload"
 alias archupdate='sudo timeshift --snapshot-device /dev/sda1 --create --comments "pre-system-update" & sudo pacman -Syu'
 
 alias cleanhdd="sudo ntfsfix /dev/sdb2"
-
+alias mnthdd="sudo mount -t ntfs3 -o force /dev/sdb2 /mnt/HDD_BACKUP"
 alias ga="git add ."
 alias gc="git commit -m"
 alias gp="git push"

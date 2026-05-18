@@ -6,7 +6,8 @@ always:
   - stow_dotfiles
 
 desktop:
-  - link_fstab_desktop
+  - move_fstab_desktop
+  - move_keyd_config
 
 unused:
   - ram_diagnostics_efi

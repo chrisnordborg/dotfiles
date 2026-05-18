@@ -75,8 +75,9 @@
 
 		"custom/backup": {
   			"return-type": "json",
-  			"exec": "cat /tmp/backup-status.json 2>/dev/null || echo '{\"text\":\"Idle\",\"class\":\"idle\"}'",
-  			"interval": 1
+  			"exec": "cat /tmp/backup-status.json 2>/dev/null",
+  			//"exec": "cat /tmp/backup-status.json 2>/dev/null || echo '{\"text\":\"Idle\",\"class\":\"idle\"}'"
+				"interval": 0.5
 		},
 
 		//"custom/backup": {

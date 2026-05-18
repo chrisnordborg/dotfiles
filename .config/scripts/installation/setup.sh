@@ -425,12 +425,22 @@ git_repos_set_remote_origin() {
 		safe_run cd $HOME/wallpapers && safe_run git remote set-url origin git@github.com:chrisnordborg/wallpapers.git
 }
 
-link_fstab_desktop() {
+move_fstab_desktop() {
     # Symlinking is not possible, errors out on boot. Have to copy the file over.
 	  echo "Copying desktop fstab for desktop..."
     safe_run sudo rm /etc/fstab
 	  safe_run sudo cp $HOME/dotfiles/etc/fstab_desktop.bak /etc/fstab
 }
+
+move_keyd_config() {
+    # Symlinking is not possible, errors out on boot. Have to copy the file over.
+	  echo "Copying keyd config file for keyboard remapping for desktop..."
+    safe_run sudo mkdir /etc/keyd
+		safe_run sudo rm /etc/keyd/default.conf
+	  safe_run sudo cp $HOME/dotfiles/etc/keyd/default.config /etc/keyd/default.config
+	  safe_run sudo cp $HOME/dotfiles/etc/keyd/default_original.config /etc/keyd/default_original.config
+}
+
 
 remove_files_before_stow() {
 		echo "No files to be removed before stow. Add this later!"		
@@ -443,6 +453,8 @@ stow_dotfiles() {
 	safe_run stow .
 
 }
+
+
 
 
 ram_diagnostics_efi(){
