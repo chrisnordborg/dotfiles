@@ -55,21 +55,6 @@ EOF
     mv "$tmp" "$TMP_FILE"
 }
 
-#write_status() {
-#    local text="$1"
-#    local percent="${2:-0}"
-#    local class="${3:-running}"
-#
-#    cat > "$TMP_FILE" <<EOF
-#{
-#  "text": "$text",
-#  "percentage": $percent,
-#  "class": "$class"
-#}
-#EOF
-
-#}
-
 ########################################
 # LOGGING FUNCTION
 ########################################
