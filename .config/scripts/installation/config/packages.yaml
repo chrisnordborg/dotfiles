@@ -69,6 +69,13 @@ GAMING:
     - pipewire-pulse
   aur: []
 
+GAMEDEV:
+  pacman: []
+  aur:
+    - godot
+    - pixieditor
+
+
 BLUETOOTH:
   pacman:
     #- linux-headers

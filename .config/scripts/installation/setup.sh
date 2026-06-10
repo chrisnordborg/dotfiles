@@ -18,7 +18,7 @@ PROFILES_FILE="$SCRIPT_DIR/config/profiles.yaml"
 SOURCES_FILE="$SCRIPT_DIR/config/sources.yaml"
 
 PACKAGE_MANAGERS="pacman aur"
-PACKAGE_GROUPS="OS WM NVIDIA GAMING BLUETOOTH ANDROID KVM"
+PACKAGE_GROUPS="OS WM NVIDIA GAMING GAMEDEV BLUETOOTH ANDROID KVM"
 
 # Relative to where in the filetree you run the script.
 #ACTIONS_FILE="config/actions.yaml"
@@ -197,6 +197,7 @@ mapfile -t WM < <(
 OS="${PROFILE_OPTIONS[$PROFILE.OS]}"
 NVIDIA="${PROFILE_OPTIONS[$PROFILE.NVIDIA]}"
 GAMING="${PROFILE_OPTIONS[$PROFILE.GAMING]}"
+GAMEDEV="${PROFILE_OPTIONS[$PROFILE.GAMEDEV]}"
 BLUETOOTH="${PROFILE_OPTIONS[$PROFILE.BLUETOOTH]}"
 ANDROID="${PROFILE_OPTIONS[$PROFILE.ANDROID]}"
 KVM="${PROFILE_OPTIONS[$PROFILE.KVM]}"
@@ -211,6 +212,7 @@ self_check() {
     echo "Profile: $PROFILE"
     echo "WM: ${WM[*]}, NVIDIA: $NVIDIA"
     echo "Gaming: $GAMING, Bluetooth: $BLUETOOTH"
+    echo "GameDev: $GAMEDEV"
     echo "Android: $ANDROID, KVM: $KVM"
 }
 
@@ -231,7 +233,7 @@ nvidia_aur=$(yq e ".NVIDIA.\"$NVIDIA\".aur[]" "$PACKAGES_FILE" | xargs)
 # Conditionally showing if any packages are to be installed
 [[ -n "$nvidia_pacman" ]] && echo "NVIDIA packages (pacman): $nvidia_pacman"
 [[ -n "$nvidia_aur" ]] && echo "NVIDIA packages (AUR): $nvidia_aur"
-echo "Gaming: $GAMING		 Bluetooth: $BLUETOOTH		 Android: $ANDROID		 KVM: $KVM    MEDIA: $MEDIA"
+echo "Gaming: $GAMING   GameDev: $GAMEDEV		 Bluetooth: $BLUETOOTH		 Android: $ANDROID		 KVM: $KVM    MEDIA: $MEDIA"
 echo "==========================================="
 echo "Other packages to be installed per category:"
 echo ""
@@ -318,6 +320,16 @@ for cat in "${PK_CATEGORIES[@]}"; do
 						[[ -n "${PACKAGES[GAMING.pacman]}" ||  -n "${PACKAGES[GAMING.aur]}" ]] && echo "GAMING:"
 					  [[ -n "${PACKAGES[GAMING.pacman]}" ]] && echo "  pacman packages: ${PACKAGES[GAMING.pacman]}"
 					  [[ -n "${PACKAGES[GAMING.aur]}" ]] && echo "  aur packages: ${PACKAGES[GAMING.aur]}"
+								echo ""
+            ;;
+
+        GAMEDEV)
+            [[ $(bool_val "$GAMEDEV") -eq 1 ]] || continue
+            PACMAN_QUEUE+=(${PACKAGES[GAMEDEV.pacman]})
+            AUR_QUEUE+=(${PACKAGES[GAMEDEV.aur]})
+						[[ -n "${PACKAGES[GAMEDEV.pacman]}" ||  -n "${PACKAGES[GAMEDEV.aur]}" ]] && echo "GAMING:"
+					  [[ -n "${PACKAGES[GAMEDEV.pacman]}" ]] && echo "  pacman packages: ${PACKAGES[GAMEDEV.pacman]}"
+					  [[ -n "${PACKAGES[GAMEDEV.aur]}" ]] && echo "  aur packages: ${PACKAGES[GAMEDEV.aur]}"
 								echo ""
             ;;
 

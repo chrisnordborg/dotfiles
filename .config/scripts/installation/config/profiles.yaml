@@ -5,6 +5,7 @@ profiles:
       - Hyprland
     NVIDIA: 580xx
     GAMING: yes
+    GAMEDEV: yes
     BLUETOOTH: yes
     ANDROID: yes
     KVM: yes
@@ -16,6 +17,7 @@ profiles:
       - MangoWC
     NVIDIA: LatestRelease
     GAMING: no
+    GAMEDEV: no
     BLUETOOTH: yes
     ANDROID: yes
     KVM: no
