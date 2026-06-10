@@ -12,11 +12,13 @@ EXTERNAL_MOUNT="/mnt/external"
 # ADDITIONAL SOURCES (configs, Obsidian notes etc)
 DOTS_DOTFILES="$HOME/dotfiles/"
 DOTS_WALLPAPERS="$HOME/wallpapers/"
+GAMEDEV_FILES="$HOME/gamedev/"
 ONEDRIVE="$HOME/OneDrive/"
 SCREENSHOTS="$HOME/pictures/screenshots/"
 
 # ADDITIONALS DESTINATIONS
 ADDITIONALS_DEST="$SOURCE/additionals/"
+GAMEDEV_DEST="$SOURCE/tech/gamedev/"
 SCREENSHOTS_DEST="$SOURCE/media/images/screenshots/"
 
 # MIRROR DESTINATION (fast recovery drive)
@@ -187,6 +189,12 @@ sync_additionals() {
     log "--- Wallpapers backup finished."
 
     run_rsync \
+				"GameDev backing up..." \
+        "$GAMEDEV_FILES" \
+        "$GAMEDEV_DEST"
+    log "--- GameDev backup finished."
+    
+		run_rsync \
 				"Onedrive backing up..." \
         "$ONEDRIVE" \
         "$ADDITIONALS_DEST/onedrive/"

@@ -70,7 +70,8 @@ GAMING:
   aur: []
 
 GAMEDEV:
-  pacman: []
+  pacman:
+    - inkscape
   aur:
     - godot
     - pixieditor
@@ -102,5 +103,6 @@ KVM:
 MEDIA:
   pacman:
     - vlc
+    - kid3
   aur:
     - spotify
