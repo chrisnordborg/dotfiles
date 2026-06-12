@@ -165,6 +165,8 @@ alias tytdlav="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399+140"
 alias rs="rsync -av --delete --info=progress2"
 alias rsdr="rsync -av --delete --info=progress2 --dry-run"
 
+alias getgodotvim="ln -s ~/dotfiles/gamedev/godot_projects/godot-vim*/* ./" 
+
 # see keyd keynames
 alias keymon="keyd monitor"
 alias keyreload="sudo keyd reload"
