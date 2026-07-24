@@ -466,6 +466,17 @@ stow_dotfiles() {
 
 }
 
+setup_onedrive_sync() {
+	echo "Setting up onedrive sync..."
+  command -v yq >/dev/null 2>&1 || { echo "dmd required!"; safe_run $PM -S dmd; }
+	safe_run cd $HOME
+	safe_run git clone https://github.com/abraunegg/onedrive.git
+	safe_run cd $HOME/onedrive
+	safe_run ./configure
+	safe_run make
+	safe_run sudo make install
+	safe_run mkdir -p $HOME/OneDrive
+}
 
 
 
