@@ -21,8 +21,9 @@
     "disk",                         "custom/sep",
     "pulseaudio",            	    "custom/sep",
     "pulseaudio#microphone", 	    "custom/sep",
-    "systemprompt",                 "custom/sep",
-    "tray"
+    systemprompt
+		//systemprompt",                 "custom/sep",
+    //"tray"
   ],
 
   "ext/workspaces": {
