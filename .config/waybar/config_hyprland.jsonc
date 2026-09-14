@@ -8,14 +8,24 @@
     "gtk-layer-shell": true,
     "height": 4,
 
-    "modules-left": [
-      "hyprland/workspaces",
-			"hyprland/window"
-    ],
+//    "modules-left": [
+//      "hyprland/workspaces",
+//			"hyprland/window"
+//    ],
 
     "modules-center": [
   	"custom/timer",
-		"clock",
+		"custom/workspace1",
+		"custom/workspace2",
+		"custom/workspace3",
+		"custom/workspace4",
+		"custom/workspace5",
+    "clock",
+		"custom/workspace6",
+		"custom/workspace7",
+		"custom/workspace8",
+		"custom/workspace9",
+		"custom/workspace10",
 		"custom/pomodoro",
     "custom/backup" 
     ],
@@ -33,32 +43,81 @@
 			"tray"
     ],
 
-    "hyprland/window": {
-        "format": " 󰣇 {}"
-    },
-    
-    "hyprland/workspaces": {
-	//    "format-icons": {
-	//	"1": "I",	
-	//	"2": "II",	
-	//	"3": "III",	
-	//	"4": "IV",	
-	//	"5": "V",	
-	//	"6": "VI",	
-	//	"7": "VII",	
-	//	"8": "VIII",	
-	//	"9": "IX",	
-	//	"10": "X"	
-	//},
-	
-      "disable-scroll": true,
-      "all-outputs": true,
-      "on-click": "activate",
-      "format": "{icon}",
-			"format-window-separator": " | ",
-			"persistent-workspaces": {"*": 10 }
-    },
+//    "hyprland/window": {
+//        "format": " 󰣇 {}"
+//    },
 
+"custom/workspace1": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 1",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 1"
+},
+
+"custom/workspace2": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 2",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 2"
+},
+
+"custom/workspace3": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 3",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 3"
+},
+
+"custom/workspace4": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 4",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 4"
+},
+
+"custom/workspace5": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 5",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 5"
+},
+
+"custom/workspace6": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 6",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 6"
+},
+
+"custom/workspace7": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 7",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 7"
+},
+
+"custom/workspace8": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 8",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 8"
+},
+
+"custom/workspace9": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 9",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 9"
+},
+
+"custom/workspace10": {
+    "exec": "bash ~/.config/scripts/toolbar/workspace.sh 10",
+    "return-type": "json",
+    "interval": 0.2,
+    "on-click": "hyprctl dispatch workspace 10"
+},
+
+    
     "custom/timer": {
       "exec": "cat /tmp/status_bar_timer.txt",
       "interval": 1,
@@ -92,7 +151,7 @@
 	//"format": "{:%A    %B-%d-%Y    %I:%M:%S %p}",
         // Swedish format
 	"format": "{:%H:%M}",
-	"format-alt": "{:%A<span size='12000'> |  %Y-%m-%d | ⏱%H:%M:%S</span>}",
+	"format-alt": "{:%A<span size='12000'> |  %Y-%m-%d | ⏱%H:%M:%S</span>} ",
 	//"format-alt": "{:<span size='11500'>%A</span> | <span size='9000'> %Y-%m-%d |  %H:%M:%S</span>}",
 	//"format-alt": "<span size='11000'>{:%A}</span> | <span size='9000'> {:%Y-%m-%d} |  {:%H:%M:%S}</span>",
 

@@ -117,29 +117,34 @@ hl.config({
         gaps_in = 5,
         gaps_out = 5,
 
-        border_size = 2,
+        --border_size = 2,
+        border_size = 0,
 
-        col = {
-            active_border = {
-                colors = {
-                    "rgb(8aadf4)",
-                    "rgb(24273A)",
-                    "rgb(24273A)",
-                    "rgb(8aadf4)",
-                },
-                angle = 45,
-            },
+--        col = {
+--            active_border = {
+--                colors = {
+                   -- "rgb(8aadf4)",
+                   -- "rgb(24273A)",
+                   -- "rgb(24273A)",
+                   -- "rgb(8aadf4)",
+--                    "rgb(24273A)",
+--                    "rgb(24273A)",
+--                    "rgb(24273A)",
+--                    "rgb(27273A)",
+--                },
+--                angle = 45,
+--            },
 
-            inactive_border = {
-                colors = {
-                    "rgb(24273A)",
-                    "rgb(24273A)",
-                    "rgb(24273A)",
-                    "rgb(27273A)",
-                },
-                angle = 45,
-            },
-        },
+--            inactive_border = {
+--                colors = {
+--                    "rgb(24273A)",
+--                    "rgb(24273A)",
+--                    "rgb(24273A)",
+--                    "rgb(27273A)",
+--                },
+--                angle = 45,
+--           },
+--        },
 
         resize_on_border = true,
         allow_tearing = false,
@@ -283,13 +288,13 @@ hl.animation({
     bezier = "liner",
 })
 
-hl.animation({
-    leaf = "borderangle",
-    enabled = true,
-    speed = 30,
-    bezier = "liner",
-    style = "loop",
-})
+--hl.animation({
+--   leaf = "borderangle",
+--    enabled = true,
+--    speed = 30,
+--    bezier = "liner",
+--    style = "loop",
+--})
 
 hl.animation({
     leaf = "fade",
@@ -299,10 +304,10 @@ hl.animation({
 })
 
 hl.animation({
-    leaf = "workspaces",
-    enabled = true,
-    speed = 5,
-    bezier = "wind",
+   leaf = "workspaces",
+   enabled = true,
+   speed = 5,
+   bezier = "wind",
 })
 
 

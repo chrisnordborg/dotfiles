@@ -1,14 +1,16 @@
 {
   "modules-left": [
-    "ext/workspaces",
+ //   "hyprland/workspaces",
 	//"dwl/tags",
-    "custom/sep",
-    "dwl/window"
+ //   "custom/sep",
+ //   "dwl/window"
   ],
 
   "modules-center":[
     "custom/timer",
+		"hyprland/workspaces#left",
     "clock",
+		"hyprland/workspaces#right",
     "custom/pomodoro"
   ],
 
@@ -21,7 +23,7 @@
     "disk",                         "custom/sep",
     "pulseaudio",            	    "custom/sep",
     "pulseaudio#microphone", 	    "custom/sep",
-    systemprompt
+    "systemprompt"
 		//systemprompt",                 "custom/sep",
     //"tray"
   ],
@@ -32,6 +34,20 @@
     "on-click": "activate",
     "sort-by-id": true
   },
+
+	"hyprland/workspaces#left": {
+    "format": "{icon}",
+    "ignore-workspaces": ["6", "7", "8", "9", "10"],
+    "on-click": "activate",
+    "sort-by-id": true
+	},
+
+	"hyprland/workspaces#right": {
+    "format": "{icon}",
+    "ignore-workspaces": ["1", "2", "3", "4", "5"],
+    "on-click": "activate",
+    "sort-by-id": true
+	},
 
     "custom/timer": {
         "exec": "cat /tmp/status_bar_timer.txt",

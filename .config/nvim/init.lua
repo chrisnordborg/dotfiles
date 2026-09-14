@@ -22,6 +22,7 @@ vim.opt.concealcursor = "nc"
 vim.g.vim_markdown_conceal = 2
 vim.g.vim_markdown_conceal_code_blocks = 0
 
+
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -171,3 +172,8 @@ map({ "v", "x", "n" }, "<C-y>", '"+y', { desc = "System clipboard yank." })
 --map({ "n" }, "<leader>f", builtin.find_files, { desc = "Telescope live grep" })
 
 vim.cmd("colorscheme vague ")
+
+-- Remove default color of nvim normal window background as well as the SignColumn background. This has to be placed after the colorscheme call.
+vim.api.nvim_set_hl(0, "Normal", { fg = "NONE", bg = "NONE" })
+vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
+

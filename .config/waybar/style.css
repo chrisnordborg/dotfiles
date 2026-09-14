@@ -29,7 +29,18 @@ window#waybar {
     color: @fg;
 }
 
+/*#custom-workspaces1,
+#custom-workspaces2,
+#custom-workspaces3,
+#custom-workspaces4,
+#custom-workspaces5,
+#custom-workspaces6,
+#custom-workspaces7,
+#custom-workspaces8,
+#custom-workspaces9,
+#custom-workspaces10,
 #workspaces,
+*/
 #window,
 window#waybar.top label.module {
     border-radius: 2px;
@@ -38,7 +49,7 @@ window#waybar.top label.module {
 /***********************************
 *********  LEFT MODULE  ************
 ************************************/
-#workspaces {
+/*#workspaces {
 		font-size: 16px;
 		margin-left: 10px;
 		padding: 0px;
@@ -66,7 +77,110 @@ window#waybar.top label.module {
 #workspaces button:hover {
     background: inherit;
     box-shadow: inset 0 -3px #ffffff;
+}*/
+
+/***********************************
+*********  WORKSPACES  *************
+************************************/
+
+#custom-workspace1,
+#custom-workspace2,
+#custom-workspace3,
+#custom-workspace4,
+#custom-workspace5,
+#custom-workspace6,
+#custom-workspace7,
+#custom-workspace8,
+#custom-workspace9,
+#custom-workspace10 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px;
+    margin-right: 8px;
+    padding: 2px;
 }
+#custom-workspace6 {
+		margin-left: 8px;
+}
+ 
+/* Workspaces containing windows */
+#custom-workspace1.occupied,
+#custom-workspace2.occupied,
+#custom-workspace3.occupied,
+#custom-workspace4.occupied,
+#custom-workspace5.occupied,
+#custom-workspace6.occupied,
+#custom-workspace7.occupied,
+#custom-workspace8.occupied,
+#custom-workspace9.occupied,
+#custom-workspace10.occupied {
+    color: @cyn;
+}
+
+/* Empty workspaces */
+#custom-workspace1.empty,
+#custom-workspace2.empty,
+#custom-workspace3.empty,
+#custom-workspace4.empty,
+#custom-workspace5.empty,
+#custom-workspace6.empty,
+#custom-workspace7.empty,
+#custom-workspace8.empty,
+#custom-workspace9.empty,
+#custom-workspace10.empty {
+    color: @brblk;
+}
+
+
+/* Active workspace */
+/*
+#custom-workspace1.active label,
+#custom-workspace2.active label,
+#custom-workspace3.active label,
+#custom-workspace4.active label,
+#custom-workspace5.active label,
+#custom-workspace6.active label,
+#custom-workspace7.active label,
+#custom-workspace8.active label,
+#custom-workspace9.active label,
+#custom-workspace10.active label {
+    color: @cyn;
+    border-bottom: 3px solid red;
+}
+*/
+
+#custom-workspace1.active,
+#custom-workspace2.active,
+#custom-workspace3.active,
+#custom-workspace4.active,
+#custom-workspace5.active,
+#custom-workspace6.active,
+#custom-workspace7.active,
+#custom-workspace8.active,
+#custom-workspace9.active,
+#custom-workspace10.active {
+		color: @ylw;
+	
+	}
+
+
+/* Hover */
+#custom-workspace1:hover,
+#custom-workspace2:hover,
+#custom-workspace3:hover,
+#custom-workspace4:hover,
+#custom-workspace5:hover,
+#custom-workspace6:hover,
+#custom-workspace7:hover,
+#custom-workspace8:hover,
+#custom-workspace9:hover,
+#custom-workspace10:hover {
+    background: #ffffff;
+   /* background: inherit;
+    box-shadow: inset 0 -3px #ffffff;
+*/
+	 }
+
 
 #window {
 		font-size: 16px;
@@ -77,11 +191,10 @@ window#waybar.top label.module {
 ************************************/
 #clock {
    /* Size for the format-alt text is set in the .jsonc file */
-   font-size: 24px; 
-   color: @cyn;
+   font-size: 28px; 
+	 font-weight: bold;
+   color: #ff0033;
 }
-
-
 #custom-timer.work {
   background: #1e1e2e;
 }
@@ -160,3 +273,4 @@ window#waybar.top label.module {
 #tray {
     background-color: #2981b9;
 }
+

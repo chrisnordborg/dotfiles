@@ -11,6 +11,8 @@ always:
     - keyd 
     - dmd
     - obsidian
+    - waybar
+    - quickshell
   aur: []
 
 OS:
