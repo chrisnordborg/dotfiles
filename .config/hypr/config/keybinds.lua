@@ -20,6 +20,11 @@ hl.bind(
 )
 
 hl.bind(
+    mainMod .. " + E",
+    hl.dsp.exec_cmd("kitty yazi")
+)
+
+hl.bind(
     mainMod .. " + O",
     hl.dsp.exec_cmd("obsidian")
 )
@@ -65,10 +70,6 @@ hl.bind(
     hl.dsp.exit()
 )
 
-hl.bind(
-    mainMod .. " + E",
-    hl.dsp.exec_cmd("nautilus")
-)
 
 hl.bind(
     mainMod .. " + W",

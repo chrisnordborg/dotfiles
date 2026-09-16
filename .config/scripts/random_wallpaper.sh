@@ -10,7 +10,7 @@ if [ -s "$theme_file" ]; then
         # Pick a random image from directory (filter for images if you like)
         img=$(find "$dir" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | shuf -n 1)
         if [ -n "$img" ]; then
-            swww img "$img" --transition-fps 60
+            awww img "$img" --transition-fps 60
             exit 0
         fi
     fi

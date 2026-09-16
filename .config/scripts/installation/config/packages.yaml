@@ -13,6 +13,7 @@ always:
     - obsidian
     - waybar
     - quickshell
+    - yazi
   aur: []
 
 OS:

@@ -152,6 +152,7 @@ alias backupmusic="bash ~/dotfiles/.config/scripts/backupmusic.sh"
 alias backupall="bash ~/dotfiles/.config/scripts/backup.sh" 
 alias cppoefilter="cp *.filter ~/.local/share/Steam/steamapps/compatdata/238960/pfx/drive_c/users/steamuser/My\ Documents/My\ Games/Path\ of\ Exile/"
 alias setupconf="nvim ~/dotfiles/.config/scripts/installation/setup.sh"
+alias qsconf="nvim ~/dotfiles/.config/quickshell/shell.qml"
 
 alias ytdl="echo 'See available formats: yt-dlp -F URL\nDownload video and audio: yt-dlp -f bestvideo+bestaudio URL\nDownload video: yt-dlp -f bestvideo URL\nDownload audio: yt-dlp -f bestaudio URL'"
 alias ytdlv="yt-dlp -f 399"
@@ -178,4 +179,3 @@ alias ga="git add ."
 alias gc="git commit -m"
 alias gp="git push"
 alias gitoverwritelocal='git stash push -u -m "backup before hard reset" && git fetch origin && git reset --hard origin'
-export QT_QPA_PLATFORM=xcb
