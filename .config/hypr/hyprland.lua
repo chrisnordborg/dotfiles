@@ -7,7 +7,7 @@
 -- PROGRAMS
 -----------------------------------------------------------
 
-local terminal = "kitty"
+local terminalj= "kitty"
 local fileManager = "nautilus"
 local menu = "tofi-drun -c ~/.config/tofi/configA --drun-launch=true"
 local browser = "zen-browser"
@@ -71,6 +71,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd(terminal)
     hl.exec_cmd("onedrive --monitor")
 end)
+
 
 
 -----------------------------------------------------------

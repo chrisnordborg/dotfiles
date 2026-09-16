@@ -1,6 +1,9 @@
 -----------------------------------------------------------
 -- WORKSPACE ASSIGNMENTS
 -----------------------------------------------------------
+-- Run the app you want, and inside a terminal, 
+-- run 'hyprctl clients -j | jq '.[] | {class, initialClass, title, initialTitle, workspace}' 
+-- to find out the class/initialClass/title/initialTitle
 
 hl.window_rule({
     name = "terminal",
@@ -8,6 +11,13 @@ hl.window_rule({
         class = "kitty",
     },
     workspace = "1",
+})
+
+
+hl.window_rule({
+	name = "yazi-on-ws2",
+	match = { class = "yazi" },
+	workspace = "2"
 })
 
 
