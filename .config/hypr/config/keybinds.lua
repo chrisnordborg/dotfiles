@@ -88,7 +88,39 @@ hl.bind(
 		hl.dsp.exec_cmd("hyprctl dispatch layoutmsg togglesplit")
 )
 
+local function move_window_to_other_monitor()
+    local monitor = hl.get_active_monitor()
 
+    if monitor == nil then
+        return
+    end
+
+    if monitor.name == "DP-2" then
+        hl.dispatch(hl.dsp.window.move({ monitor = "r" }))
+    elseif monitor.name == "DP-3" then
+        hl.dispatch(hl.dsp.window.move({ monitor = "l" }))
+    end
+end
+
+-- The following is to move the active window to the workspace currently active on the other monitor.
+local function move_window_to_other_monitor()
+    local monitor = hl.get_active_monitor()
+
+    if monitor == nil then
+        return
+    end
+
+    if monitor.name == "DP-2" then
+        hl.dispatch(hl.dsp.window.move({ monitor = "r" }))
+    elseif monitor.name == "DP-3" then
+        hl.dispatch(hl.dsp.window.move({ monitor = "l" }))
+    end
+end
+
+hl.bind(
+    main_mod .. " + SHIFT + TAB",
+    move_window_to_other_monitor
+)
 -----------------------------------------------------------
 -- EMOJI PICKER
 -----------------------------------------------------------

@@ -46,7 +46,7 @@ hl.monitor({
 
 hl.workspace_rule({
     workspace = "3",
-    monitor = "DP-3",
+   monitor = "DP-3",
 })
 
 
