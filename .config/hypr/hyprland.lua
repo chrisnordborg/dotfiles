@@ -7,7 +7,7 @@
 -- PROGRAMS
 -----------------------------------------------------------
 
-local terminalj= "kitty"
+local terminal= "kitty"
 local fileManager = "nautilus"
 local menu = "tofi-drun -c ~/.config/tofi/configA --drun-launch=true"
 local browser = "zen-browser"
@@ -67,8 +67,8 @@ hl.on("hyprland.start", function()
 
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("bash ~/dotfiles/.config/scripts/random_wallpaper.sh")
-    hl.exec_cmd(browser)
     hl.exec_cmd(terminal)
+    hl.exec_cmd(browser)
     hl.exec_cmd("onedrive --monitor")
 end)
 
