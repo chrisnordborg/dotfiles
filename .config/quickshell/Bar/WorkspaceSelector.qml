@@ -16,7 +16,7 @@ Container {
   property double rowLeftMargin: 5
   property double workspaceButtonSpacing: 4
   property double workspaceCount: WorkspaceManager.getNumberOfWorkspaces(monitor)
-  property double workspaceWidth: 17
+  property double workspaceWidth: 23
 
   boxHeight: barHeight
   boxRadius: 8

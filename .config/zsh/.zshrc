@@ -70,7 +70,9 @@ fastfetch
 # Set up prompt
 # fallback prompt is 'hostname%' in case of something wrong with the statement below.
 NEWLINE=$'\n'
-PROMPT="${NEWLINE}%K{#2E3440}%F{#E5E9F0}$(date +%_I:%M%P) %K{#3b4252}%F{#ECEFF4} %n %K{#4c566a} %~ %f%k ❯ "
+#                     |-background font------ time ------- |-background---font--------- user ----| directory | >
+# PROMPT="${NEWLINE}%K{#2E3440}%F{#E5E9F0}$(date +%_I:%M%P) %K{#3b4252}%F{#ECEFF4} %n %K{#4c566a} %~ %f%k ❯ "
+	PROMPT="${NEWLINE} %k%F{#058c4b} %~ %K%F{#058c4b}❯ %k%f"
 # PROMPT="${NEWLINE}%K{$COL0}%F{$COL1}$(date +%_I:%M%P) %K{$COL0}%F{$COL2} %n %K{$COL3} %~ %f%k ❯ " # pywal colors, from postrun script
 echo -e "${NEWLINE}\033[48;2;46;52;64;38;2;216;222;233m $0 \033[0m\033[48;2;59;66;82;38;2;216;222;233m $(uptime -p | cut -c 4-) \033[0m\033[48;2;76;86;106;38;2;216;222;233m $(uname -r) \033[0m"
 
@@ -86,7 +88,7 @@ precmd() {
 #####   BIND   #####
 #####################
 # ^ means ctrl
-#bindkey "^i" beginning-of-line   #mixes up with kittys conf saying Ctrl + i means Tab
+#bindkey "^i" beginning-of-line   #mixes up with kittys conf saying Ctrl + i means Tab. Also interferas with autocompletion.
 bindkey "^a" end-of-line
 bindkey "^k" kill-line
 bindkey "^b" backward-word
