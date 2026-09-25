@@ -1,5 +1,5 @@
 # VoidBar
-
+https://git.voidarc.co.uk/voidarc/quickshell
 _Minimal, Verbose, Clean_
 
 ## Ethos

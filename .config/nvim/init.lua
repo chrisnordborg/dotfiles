@@ -51,7 +51,7 @@ vim.pack.add({
   { src = "https://github.com/stevearc/oil.nvim" },
 
   -- Markdown
-  { src = "https://github.com/plasticboy/vim-markdown" },
+ -- { src = "https://github.com/plasticboy/vim-markdown" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 	{ src = "https://github.com/ellisonleao/glow.nvim" },
 
@@ -88,12 +88,12 @@ pcall(vim.cmd, "packadd nvim-treesitter")
 local ok, ts = pcall(require, "nvim-treesitter.configs")
 if ok then
   ts.setup({
-    ensure_installed = { "markdown", "markdown_inline" },
+    --ensure_installed = { "markdown", "markdown_inline" },
     highlight = { enable = true },
   })
 end
 
-vim.keymap.set("n", "<leader>mg", "<Cmd>Glow<CR>", { desc = "Glow markdown preview" })
+vim.keymap.set("n", "<leader>md", "<Cmd>Glow<CR>", { desc = "Glow markdown preview" })
 
 
 vim.cmd("set completeopt+=noselect")

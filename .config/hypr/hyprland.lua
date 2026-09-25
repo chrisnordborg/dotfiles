@@ -49,6 +49,11 @@ hl.workspace_rule({
    monitor = "DP-3",
 })
 
+hl.workspace_rule({
+    workspace = "10",
+   monitor = "DP-2",
+})
+
 
 -----------------------------------------------------------
 -- AUTOSTART

@@ -62,10 +62,10 @@ hl.bind(
     hl.dsp.window.close()
 )
 
-hl.bind(
-    main_mod .. " + SHIFT + Q",
-    hl.dsp.exit()
-)
+--hl.bind(
+--    main_mod .. " + SHIFT + Q",
+--    hl.dsp.exit()
+--)
 
 
 hl.bind(
