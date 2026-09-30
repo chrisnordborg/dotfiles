@@ -1,6 +1,8 @@
 # always installs with every installation.
 always:
   pacman:
+    - reflector
+    - mariadb
     - git
     - stow
     - unzip

@@ -170,6 +170,8 @@ alias rsdr="rsync -av --delete --info=progress2 --dry-run"
 
 alias getgodotvim="ln -s ~/dotfiles/gamedev/godot_projects/godot-vim*/* ./" 
 
+alias updatemirrors="sudo reflector --latest 20 --sort rate --save /etc/pacman.d/mirrorlist"
+
 # see keyd keynames
 alias keymon="keyd monitor"
 alias keyreload="sudo keyd reload"
