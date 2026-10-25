@@ -295,15 +295,15 @@ hl.bind(
 -- SCROLL THROUGH WORKSPACES
 -----------------------------------------------------------
 
-hl.bind(
-    main_mod .. " + mouse_down",
-    hl.dsp.focus({ workspace = "e+1" })
-)
+--hl.bind(
+--    main_mod .. " + mouse_down",
+--    hl.dsp.focus({ workspace = "e+1" })
+--)
 
-hl.bind(
-    main_mod .. " + mouse_up",
-    hl.dsp.focus({ workspace = "e-1" })
-)
+--hl.bind(
+--    main_mod .. " + mouse_up",
+--    hl.dsp.focus({ workspace = "e-1" })
+--)
 
 
 -----------------------------------------------------------

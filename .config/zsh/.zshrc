@@ -164,7 +164,7 @@ alias tytdl="python ~/git/yt-dlp/yt_dlp/__main__.py"
 alias tytdlv="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399"
 alias tytdla="python ~/git/yt-dlp/yt_dlp/__main__.py -f 140"
 alias tytdlav="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399+140"
-
+alias bfr="bash ~/dotfiles/.config/scripts/batch_file_rename.sh"
 alias rs="rsync -av --delete --info=progress2"
 alias rsdr="rsync -av --delete --info=progress2 --dry-run"
 
