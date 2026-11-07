@@ -5,6 +5,7 @@ always:
   - remove_files_before_stow
   - stow_dotfiles
   - setup_onedrive_sync
+  - add_symlinks
 
 desktop:
   - move_fstab_desktop

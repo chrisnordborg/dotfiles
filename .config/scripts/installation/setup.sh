@@ -478,7 +478,9 @@ setup_onedrive_sync() {
 	safe_run mkdir -p $HOME/OneDrive
 }
 
-
+add_symlinks() {
+	sudo ln -s "/run/user/$(id -u)/gvfs/mtp:host=SAMSUNG_SAMSUNG_Android_RZCXC0TYTLL" /mnt/android
+}
 
 ram_diagnostics_efi(){
 		safe_run sudo $PM -S memtest86+-efi

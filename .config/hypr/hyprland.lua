@@ -72,9 +72,12 @@ hl.on("hyprland.start", function()
 
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("bash ~/dotfiles/.config/scripts/random_wallpaper.sh")
-    hl.exec_cmd(terminal)
-    hl.exec_cmd(browser)
     hl.exec_cmd("onedrive --monitor")
+    hl.exec_cmd(browser)
+		hl.exec_cmd(terminal)
+		--hl.exec_cmd("sleep 3; " .. terminal .. " --class todo-notes nvim ~/OneDrive/Obsidian/Alpha/_NewNotes/_ToDo.md")
+		hl.exec_cmd(terminal .. " --class todo-notes nvim ~/OneDrive/Obsidian/Alpha/_NewNotes/_ToDo.md")
+		hl.exec_cmd("sleep 7; hyprctl dispatch focuswindow class:todo-notes")
 end)
 
 
@@ -133,10 +136,6 @@ hl.config({
                    -- "rgb(8aadf4)",
                    -- "rgb(24273A)",
                    -- "rgb(24273A)",
-                   -- "rgb(8aadf4)",
---                    "rgb(24273A)",
---                    "rgb(24273A)",
---                    "rgb(24273A)",
 --                    "rgb(27273A)",
 --                },
 --                angle = 45,
@@ -317,6 +316,13 @@ hl.animation({
    bezier = "wind",
 })
 
+hl.animation({
+   leaf = "workspaces",
+   enabled = true,
+	 speed = 5,
+   bezier = "wind",
+})
+
 
 -----------------------------------------------------------
 -- INPUT DEVICES
@@ -333,7 +339,6 @@ hl.device({
 -----------------------------------------------------------
 
 require("config.keybinds")
-
 require("config.workspaces")
 require("config.opacity")
 require("config.floating")

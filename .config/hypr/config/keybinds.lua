@@ -69,7 +69,7 @@ hl.bind(
 
 
 hl.bind(
-    main_mod .. " + W",
+    main_mod .. " + SHIFT + F",
     hl.dsp.window.float({ action = "toggle" })
 )
 
@@ -406,7 +406,7 @@ hl.bind(
 -----------------------------------------------------------
 
 hl.bind(
-    "SUPER + W",
+    main_mod .. " + CTRL + SHIFT + W",
     hl.dsp.exec_cmd(
         "bash ~/dotfiles/.config/scripts/select_wallpaper_theme.sh tofi"
     )
@@ -414,6 +414,13 @@ hl.bind(
 
 hl.bind(
     main_mod .. " + SHIFT + W",
+    hl.dsp.exec_cmd(
+        "bash ~/dotfiles/.config/scripts/select_wallpaper.sh"
+    )
+)
+
+hl.bind(
+    main_mod .. " + W",
     hl.dsp.exec_cmd(
         "bash ~/dotfiles/.config/scripts/random_wallpaper.sh"
     )

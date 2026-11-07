@@ -60,7 +60,10 @@ setopt hist_verify            # Show the command before executing when expanded 
 
 
 # -e to bind to EMACS mode, and -v to bind to vim mode (but thit changes ESC and TAB behaviour to break tab completion among other things.
-bindkey -e
+#bindkey -e	
+bindkey -v
+#Reduce Escape delay
+export KEYTIMEOUT=1
 # bind DEL button to delete-char instead of ~
 bindkey '\e[3~' delete-char
 
@@ -98,7 +101,7 @@ bindkey "^K" history-search-backward
 #bindkey '^R' fzf-history-widget
 
 # Load fzf key bindings (Arch Linux default path)
-[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+#[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
 
 #####################
 #####  ALIASES  #####
@@ -164,7 +167,7 @@ alias tytdl="python ~/git/yt-dlp/yt_dlp/__main__.py"
 alias tytdlv="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399"
 alias tytdla="python ~/git/yt-dlp/yt_dlp/__main__.py -f 140"
 alias tytdlav="python ~/git/yt-dlp/yt_dlp/__main__.py -f 399+140"
-alias bfr="bash ~/dotfiles/.config/scripts/batch_file_rename.sh"
+alias bfr="sudo bash ~/dotfiles/.config/scripts/batch_file_rename.sh"
 alias rs="rsync -av --delete --info=progress2"
 alias rsdr="rsync -av --delete --info=progress2 --dry-run"
 
