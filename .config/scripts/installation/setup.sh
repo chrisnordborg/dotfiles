@@ -399,7 +399,6 @@ done
 # ================================
 # INSTALLATION DOTFILES & FONTS
 # ================================
-###########################FIX ME DOTFILES AND FONTS
 # Dotfiles
 for i in "${!DOTFILES[@]}"; do
 	echo "$i      ${DOTFILES[$i]}      ${DOTFILES_DEST[$i]}"

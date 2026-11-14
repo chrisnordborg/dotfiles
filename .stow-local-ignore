@@ -1,5 +1,8 @@
 .bashrc
 .gitignore
+binaries
+etc
+docs
 gamedev/godot_projects
 Other/*
 README.MD

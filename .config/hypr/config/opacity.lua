@@ -3,13 +3,12 @@
 -----------------------------------------------------------
 
 hl.window_rule({
-    name = "core_apps",
     match = {
-        class = "Thorium-browser",
+        class = "zen",
     },
-    opacity = 0.90,
-})
-
+		-- The following line overrides the global opacity of active and inactive windows.
+    opacity = "1.0 override 1.0 override",
+	})
 
 hl.window_rule({
     name = "development_and_tools",
@@ -29,13 +28,13 @@ hl.window_rule({
 })
 
 
-hl.window_rule({
-    name = "system_utilities",
-    match = {
-        class = "pavucontrol|blueman-manager|nm-(applet|connection-editor)|org\\.kde\\.polkit-kde-authentication-agent-1|polkit-gnome-authentication-agent-1|org\\.freedesktop\\.impl\\.portal\\.desktop\\.(gtk|hyprland)",
-    },
-    opacity = 0.80,
-})
+--hl.window_rule({
+--    name = "system_utilities",
+--    match = {
+--       class = "pavucontrol|blueman-manager|nm-(applet|connection-editor)|org\\.kde\\.polkit-kde-authentication-agent-1|polkit-gnome-authentication-agent-1|org\\.freedesktop\\.impl\\.portal\\.desktop\\.(gtk|hyprland)",
+--    },
+--    opacity = 0.80,
+--})
 
 
 hl.window_rule({
