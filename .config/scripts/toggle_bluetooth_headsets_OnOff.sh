@@ -8,7 +8,14 @@ notify() {
     notify-send "Bluetooth Audio" "$1"
 }
 
+# To find a MAC-adress:
+# bluetoothctl
+# agent on
+# scan on
+# trust "MAC-address"]
+
 declare -A headsets=(
+	["00:25:D1:6E:B3:18"]="Marshall Major V"
   ["A8:F5:E1:86:64:FA"]="Shokz OpenRun Mini"
   ["84:D3:52:0B:D4:A3"]="JBL Live Pro 2"
   ["14:3F:A6:C2:9D:9A"]="Sony WF-1000XM4"
@@ -16,7 +23,7 @@ declare -A headsets=(
   ["C0:28:8D:AA:99:55"]="Jaybird Vista 2"
 )
 
-ordered_macs=("A8:F5:E1:86:64:FA" "84:D3:52:0B:D4:A3" "14:3F:A6:C2:9D:9A" "30:50:75:F2:8B:F8" "C0:28:8D:AA:99:55")
+ordered_macs=("01:25:D1:6E:B3:18" "A8:F5:E1:86:64:FA" "85:D3:52:0B:D4:A3" "14:3F:A6:C2:9D:9A" "30:50:75:F2:8B:F8" "C0:28:8D:AA:99:55")
 
 log "Unblocking Bluetooth with rfkill"
 rfkill unblock bluetooth
